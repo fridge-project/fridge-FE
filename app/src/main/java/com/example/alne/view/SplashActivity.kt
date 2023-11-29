@@ -12,9 +12,9 @@ import com.example.flo.Network.AuthApi
 import com.example.flo.Network.AuthResponse
 import com.example.flo.Network.getRetrofit
 import com.example.flo.model.User
-import com.kakao.sdk.auth.AuthApiClient
-import com.kakao.sdk.common.model.KakaoSdkError
-import com.kakao.sdk.user.UserApiClient
+//import com.kakao.sdk.auth.AuthApiClient
+//import com.kakao.sdk.common.model.KakaoSdkError
+//import com.kakao.sdk.user.UserApiClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,53 +31,46 @@ class SplashActivity : AppCompatActivity() {
 
         var handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
-            checkKakaoLogin()
+//            checkKakaoLogin()
         }
         ,1000)
     }
 
-    fun checkKakaoLogin(){
-        if(AuthApiClient.instance.hasToken()){
-            UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-                Log.d("token", tokenInfo.toString())
-                if (error != null) {
-                    if (error is KakaoSdkError && error.isInvalidTokenError() == true) {
-                        //로그인 필요
-                        startActivity(Intent(this, StartActivity::class.java))
-                    }
-                    else {
-                        //기타 에러
-                    }
-                }else {
-                    //토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
-
-
-//                    retrofit.create(AuthApi::class.java).login(User(binding.loginEmailEt.text.toString(),  binding.loginPasswordEt.text.toString())).enqueue(object:
-//                        Callback<AuthResponse>{
-//                        override fun onResponse(
-//                            call: Call<AuthResponse>,
-//                            response: Response<AuthResponse>,
-//                        ) {
+//    fun checkKakaoLogin(){
+//        UserApiClient.instance.loginWithKakaoAccount(this@SplashActivity){ token, error ->
+//            if (error != null) {
+//                Log.d("loginWithKakaoAccount", "로그인 실패", error)
+//            }
+//            else if (token != null) {
+//                Log.d("loginWithKakaoAccount", "로그인 성공 ${token.accessToken}")
+//            }
+//        }
+//        if(AuthApiClient.instance.hasToken()){
+//            UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+//                Log.d("token", tokenInfo.toString())
+//                if (error != null) {
+//                    if (error is KakaoSdkError && error.isInvalidTokenError() == true) {
+//                        //로그인 필요
 //
-//                        }
-//
-//                        override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-//
-//                        }
-//
-//                    })
-                    startActivity(Intent(this, MainActivity::class.java))
-                }
-            }
-        }else {
-            //로그인 필요
-            if(autoLogin()){
-                startActivity(Intent(this, MainActivity::class.java))
-            }else{
-                startActivity(Intent(this, StartActivity::class.java))
-            }
-        }
-    }
+//                        startActivity(Intent(this, StartActivity::class.java))
+//                    }
+//                    else {
+//                        //기타 에러
+//                    }
+//                }else {
+//                    //토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
+//                    startActivity(Intent(this, MainActivity::class.java))
+//                }
+//            }
+//        }else {
+//            //로그인 필요
+//            if(autoLogin()){
+//                startActivity(Intent(this, MainActivity::class.java))
+//            }else{
+//                startActivity(Intent(this, StartActivity::class.java))
+//            }
+//        }
+//    }
 
     fun autoLogin(): Boolean{
         val sharedPreferences = getSharedPreferences("login_setting", MODE_PRIVATE)

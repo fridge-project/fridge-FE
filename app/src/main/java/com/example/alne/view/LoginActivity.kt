@@ -13,7 +13,7 @@ import com.example.flo.Network.AuthApi
 import com.example.flo.Network.AuthResponse
 import com.example.flo.Network.getRetrofit
 import com.example.flo.model.User
-import com.kakao.sdk.user.UserApiClient
+//import com.kakao.sdk.user.UserApiClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -60,15 +60,15 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.loginGoogleBt.setOnClickListener {
-            UserApiClient.instance.me { user, error ->
-                Log.d("kakao_nickname", user?.kakaoAccount?.name.toString() )
-                Log.d("kakao_age", user?.kakaoAccount?.profile?.nickname.toString() )
-                Log.d("kakao_email", user?.kakaoAccount?.profile?.profileImageUrl.toString() )
-            }
+//            UserApiClient.instance.me { user, error ->
+//                Log.d("kakao_nickname", user?.kakaoAccount?.name.toString() )
+//                Log.d("kakao_age", user?.kakaoAccount?.profile?.nickname.toString() )
+//                Log.d("kakao_email", user?.kakaoAccount?.profile?.profileImageUrl.toString() )
+//            }
         }
 
         binding.loginLoginBt.setOnClickListener{
-            retrofit.create(AuthApi::class.java).login(User(binding.loginEmailEt.text.toString(),  binding.loginPasswordEt.text.toString())).enqueue(object: Callback<AuthResponse>{
+            retrofit.create(AuthApi::class.java).login(User(binding.loginEmailEt.text.toString(),  binding.loginPasswordEt.text.toString(), "")).enqueue(object: Callback<AuthResponse>{
                 override fun onResponse(
                     call: Call<AuthResponse>,
                     response: Response<AuthResponse>,
@@ -78,15 +78,24 @@ class LoginActivity : AppCompatActivity() {
                         when(res?.status) {
                             200 -> {
                                 Toast.makeText(this@LoginActivity, "로그인", Toast.LENGTH_LONG).show()
-                                if(autoLogin){
-                                    autoLogin()
-                                }
+                                val sharedPreferences = getSharedPreferences("user_token", MODE_PRIVATE)
+                                val edit = sharedPreferences.edit()
+                                Log.d("userId_reponse", res.data.toString())
+                                edit.putInt("userId", res.data)
+                                edit.commit()
+
+//                                if(autoLogin){
+//                                    autoLogin()
+//                                }
                                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                             }
                             401 -> {
                                 if(res.data == 10){
                                     Toast.makeText(this@LoginActivity, "비밀번호가 틀렸습니다", Toast.LENGTH_LONG).show()
                                 }
+                            }
+
+                            200 -> {
                                 if(res.data == 0) {
                                     Toast.makeText(this@LoginActivity, "아이디가 존재하지 않습니다", Toast.LENGTH_LONG).show()
                                 }
@@ -104,30 +113,30 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun kakaoLogin() {
-        UserApiClient.instance.loginWithKakaoAccount(this) { token, error ->
-            if (error != null) {
-                Log.e("kakao", "로그인 실패", error)
-            }
-            else if (token != null) {
-                Log.i("kakao", "로그인 성공 ${token.accessToken}")
-
-                retrofit.create(AuthApi::class.java).accessToken(Token(token.accessToken)).enqueue(object: Callback<AuthResponse>{
-                    override fun onResponse(
-                        call: Call<AuthResponse>,
-                        response: Response<AuthResponse>,
-                    ) {
-                        Log.d("kakaoLogin", "SUCCESS")
-                        Log.d("kakaoLogin", response.body().toString())
-                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                    }
-
-                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                        Log.d("kakaoLogin", t.message.toString())
-                    }
-
-                })
-            }
-        }
+//        UserApiClient.instance.loginWithKakaoAccount(this) { token, error ->
+//            if (error != null) {
+//                Log.e("kakao", "로그인 실패", error)
+//            }
+//            else if (token != null) {
+//                Log.i("kakao", "로그인 성공 ${token.accessToken}")
+//
+//                retrofit.create(AuthApi::class.java).accessToken(Token(token.accessToken)).enqueue(object: Callback<AuthResponse>{
+//                    override fun onResponse(
+//                        call: Call<AuthResponse>,
+//                        response: Response<AuthResponse>,
+//                    ) {
+//                        Log.d("kakaoLogin", "SUCCESS")
+//                        Log.d("kakaoLogin", response.body().toString())
+//                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+//                    }
+//
+//                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+//                        Log.d("kakaoLogin", t.message.toString())
+//                    }
+//
+//                })
+//            }
+//        }
     }
 
     override fun onResume() {

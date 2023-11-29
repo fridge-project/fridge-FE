@@ -9,8 +9,9 @@ import com.example.alne.R
 import com.example.alne.databinding.ItemFridgeBinding
 import com.example.alne.model.Food
 
-class FridgeAdapter(val items: ArrayList<Food>): RecyclerView.Adapter<FridgeAdapter.ViewHolder>() {
+class FridgeAdapter(): RecyclerView.Adapter<FridgeAdapter.ViewHolder>() {
 
+    val items: ArrayList<Food> = ArrayList()
 
     interface MyItemClickListener {
         fun onItemClick(food: Food)
@@ -24,7 +25,7 @@ class FridgeAdapter(val items: ArrayList<Food>): RecyclerView.Adapter<FridgeAdap
     inner class ViewHolder(val binding: ItemFridgeBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(food: Food){
             binding.itemFridgeTitleTv.text = food.name
-            binding.itemFridgeExpireTv.text = food.expireDate
+            binding.itemFridgeExpireTv.text = food.exp
             binding.itemFridgeIv.setImageResource(R.drawable.bibimbap)
         }
     }
@@ -46,8 +47,9 @@ class FridgeAdapter(val items: ArrayList<Food>): RecyclerView.Adapter<FridgeAdap
         }
     }
 
-    fun addFood(food: Food){
-        items.add(food)
+    fun addAllFood(item: ArrayList<Food>){
+        items.clear()
+        items.addAll(item)
         notifyDataSetChanged()
     }
 

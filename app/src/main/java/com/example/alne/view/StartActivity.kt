@@ -3,9 +3,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alne.databinding.ActivityStartBinding
-import com.kakao.sdk.auth.AuthApiClient
-import com.kakao.sdk.common.model.KakaoSdkError
-import com.kakao.sdk.user.UserApiClient
+//import com.kakao.sdk.auth.AuthApiClient
+//import com.kakao.sdk.common.model.KakaoSdkError
+//import com.kakao.sdk.user.UserApiClient
 
 class StartActivity : AppCompatActivity() {
 

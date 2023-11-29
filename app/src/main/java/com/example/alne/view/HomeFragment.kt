@@ -25,14 +25,16 @@ class HomeFragment : Fragment() {
 
 
         var textItem: ArrayList<Food> = ArrayList()
-        textItem.add(Food("바나나",0,null,null,"2022.12.21"))
-        textItem.add(Food("오렌지",0,null,null,"2022.12.21"))
-        textItem.add(Food("사과",0,null,null,"2022.12.21"))
-        textItem.add(Food("옥수수",0,null,null,"2022.12.21"))
-        textItem.add(Food("옥수수",0,null,null,"2022.12.21"))
-        textItem.add(Food("옥수수",0,null,null,"2022.12.21"))
-        textItem.add(Food("옥수수",0,null,null,"2022.12.21"))
-        textItem.add(Food("옥수수",0,null,null,"2022.12.21"))
+//        textItem.add(Food("바나나",0,null,null,"2022.12.21"))
+//        textItem.add(Food("오렌지",0,null,null,"2022.12.21"))
+//        textItem.add(Food("사과",0,null,null,"2022.12.21"))
+//        textItem.add(Food("옥수수",0,null,null,"2022.12.21"))
+//        textItem.add(Food("옥수수",0,null,null,"2022.12.21"))
+//        textItem.add(Food("옥수수",0,null,null,"2022.12.21"))
+//        textItem.add(Food("옥수수",0,null,null,"2022.12.21"))
+//        textItem.add(Food("옥수수",0,null,null,"2022.12.21"))
+
+
 
         var adapter = ExpireAdapter(textItem)
         binding.homeItemRv.adapter = adapter

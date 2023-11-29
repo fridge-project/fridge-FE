@@ -40,7 +40,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun signUp(){
-        retrofit.create(AuthApi::class.java).signUp(User(binding.signUpNameEt.text.toString(), binding.signUpPasswordEt.text.toString()))
+        retrofit.create(AuthApi::class.java).signUp(User( binding.signUpEmailEt.text.toString(), binding.signUpPasswordEt.text.toString(), binding.signUpEmailEt.text.toString()))
             .enqueue(object: Callback<AuthResponse>{
                 override fun onResponse(
                     call: Call<AuthResponse>,

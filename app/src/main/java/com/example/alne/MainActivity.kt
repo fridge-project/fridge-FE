@@ -9,7 +9,7 @@ import com.example.alne.view.FridgeFragment
 import com.example.alne.view.HomeFragment
 import com.example.alne.view.MyPageFragment
 import com.example.alne.view.RecipeFragment
-import com.kakao.sdk.common.util.Utility
+//import com.kakao.sdk.common.util.Utility
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initBottomNavigation()
 
-        Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
+//        Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
 
     }
 
