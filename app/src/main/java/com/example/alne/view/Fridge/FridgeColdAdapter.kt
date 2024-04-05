@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.alne.R
 import com.example.alne.databinding.ItemFridgeBinding
 import com.example.alne.model.Food
@@ -50,11 +51,11 @@ class FridgeColdAdapter(val context: Context): RecyclerView.Adapter<FridgeColdAd
             // 유효날짜 - 등록 날짜
             var dateLength = (expDate.time - addDate.time)/ (60 * 60 * 24 * 1000)
 
-            // 날짜 차이 (지난 시간)
-            var diff = ((calendar.time.time - addDate.time))/ (60 * 60 * 24 * 1000)
-
             // 유효기간까지 남음 시간
-            var needDiff = ((expDate.time - calendar.time.time))/ (60 * 60 * 24 * 1000)
+            var needDiff = ((expDate.time - (calendar.time.time+1)))/ (60 * 60 * 24 * 1000)
+
+            // 날짜 차이 (지난 시간)
+            var diff: Int = (dateLength - needDiff).toInt()
 
             binding.itemFridgeTitleTv.text = food.name
             binding.itemFridgeExpireTv.text = food.exp!!.split(" ")[0] + " 까지"
@@ -63,7 +64,12 @@ class FridgeColdAdapter(val context: Context): RecyclerView.Adapter<FridgeColdAd
             }else{
                 binding.itemFridgeExpireInfoTv.text = "유효기간 ${needDiff}일 남음"
             }
-            binding.itemFridgeIv.setImageResource(R.drawable.camera )
+
+            if(food.imageUrl != null){
+                Glide.with(context).load(food.imageUrl).into(binding.itemFridgeIv)
+            }else{
+                binding.itemFridgeIv.setImageResource(R.drawable.camera )
+            }
 
 
             if(food.storage == "FROZEN"){
@@ -86,8 +92,18 @@ class FridgeColdAdapter(val context: Context): RecyclerView.Adapter<FridgeColdAd
                 binding.itemFridgeExpireInfoTv.setTextColor(Color.RED)
                 binding.itemFridgePb.progressDrawable = ContextCompat.getDrawable(context, R.drawable.progressbar_border_high)
             }
-            binding.itemFridgePb.max = dateLength.toInt()
-            binding.itemFridgePb.progress = diff.toInt()
+
+            if(dateLength <= 0){
+                binding.itemFridgePb.max = 100
+                binding.itemFridgePb.progress = 100
+            }else{
+                if(diff == 0){
+                    binding.itemFridgePb.progress = 1
+                }else{
+                    var mul: Int = (100 / dateLength).toInt()
+                    binding.itemFridgePb.progress = mul*diff
+                }
+            }
 
         }
     }

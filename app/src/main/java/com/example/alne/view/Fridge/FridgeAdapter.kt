@@ -49,16 +49,12 @@ class FridgeAdapter(val context: Context,  val items: ArrayList<Food>): Recycler
 
             // 유효날짜 - 등록 날짜
             var dateLength = (expDate.time - addDate.time)/ (60 * 60 * 24 * 1000)
-            Log.d("fridge:dateLength", dateLength.toString())
-            Log.d("fridge:time", (expDate.time/ (60 * 60 * 24 * 1000)).toString() + " : " + (addDate.time/ (60 * 60 * 24 * 1000)).toString())
 
             // 유효기간까지 남음 시간
             var needDiff = ((expDate.time - (calendar.time.time+1)))/ (60 * 60 * 24 * 1000)
-            Log.d("fridge:needDiff", needDiff.toString() + "calendar time: " + ((calendar.time.time+1)/ (60 * 60 * 24 * 1000)))
 
             // 날짜 차이 (지난 시간)
             var diff: Int = (dateLength - needDiff).toInt()
-            Log.d("fridge:diff", diff.toString())
 
             binding.itemFridgeTitleTv.text = food.name
             binding.itemFridgeExpireTv.text = food.exp!!.split(" ")[0] + " 까지"

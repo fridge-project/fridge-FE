@@ -27,6 +27,10 @@ class FavoriteActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
 
+        binding.favoriteTb.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
         val gridAdapter = FavoriteGVAdapter(this)
         gridAdapter.setMyItemClickListener(object: FavoriteGVAdapter.setOnClickListener{
             override fun clickItem(favorite: Favorite) {

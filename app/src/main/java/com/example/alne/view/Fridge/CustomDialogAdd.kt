@@ -12,6 +12,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -278,13 +279,15 @@ class CustomDialogAdd(context: Context, val jwt: Jwt, myCustomDialogInterface: M
     }
 
     private fun chooserImage(){
-        Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "image/*"
-            startActivityForResult(
-                Intent.createChooser(this, "Get Album"),
-                REQUEST_IMAGE_CHOOSER
-            )
-        }
+        var intent = Intent(Intent.ACTION_PICK)
+        intent.type = MediaStore.Images.Media.CONTENT_TYPE
+        intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        intent.type = "image/*"
+
+        startActivityForResult(
+            intent,
+            REQUEST_IMAGE_CHOOSER
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -312,6 +315,15 @@ class CustomDialogAdd(context: Context, val jwt: Jwt, myCustomDialogInterface: M
         }else if( requestCode == REQUEST_IMAGE_CHOOSER && resultCode== RESULT_OK && data?.data != null){
             var albumUri: Uri = data.data!!
             bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, data.data);
+            val proj = arrayOf(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? = requireActivity().managedQuery(albumUri, proj, null,null,null)
+            var index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor?.moveToNext();
+            photoFile = File(cursor?.getString(index!!))
+
+            Log.d("onActivityResult:path", photoFile.toString())
+
+
             if(albumUri!=null){
                 binding.foodImageDetailIv.visibility = View.VISIBLE
                 binding.foodImageDetailIv.setImageBitmap(bitmap)

@@ -59,10 +59,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ingredient_choice_rv"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_below="@+id/ingredient_choice_sv"
         android:layout_alignStart="@+id/ingredient_choice_sv"
         android:layout_alignEnd="@+id/ingredient_choice_sv"
+        android:layout_alignParentBottom="true"
         tools:listitem="@layout/item_choice_ingredient" />
 
 </RelativeLayout>

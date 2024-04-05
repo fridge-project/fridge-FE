@@ -1,17 +1,16 @@
 package com.example.alne.view.MyPage
 
 import android.Manifest
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -19,6 +18,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -115,6 +115,7 @@ class UserProfileActivity : AppCompatActivity() {
                 this,
                 "com.example.alne.fileprovider", photoFile!!
             )
+
             i.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
             startActivityForResult(i, REQUEST_IMAGE_CAPTURE)
         }
@@ -164,13 +165,15 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun chooserImage(){
-        Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "image/*"
-            startActivityForResult(
-                Intent.createChooser(this, "Get Album"),
-                REQUEST_IMAGE_CHOOSER
-            )
-        }
+        var intent = Intent(Intent.ACTION_PICK)
+        intent.type = MediaStore.Images.Media.CONTENT_TYPE
+        intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        intent.type = "image/*"
+
+        startActivityForResult(
+            intent,
+            REQUEST_IMAGE_CHOOSER
+        )
     }
 
 
@@ -196,6 +199,16 @@ class UserProfileActivity : AppCompatActivity() {
         }else if( requestCode == REQUEST_IMAGE_CHOOSER && resultCode== RESULT_OK && data?.data != null){
             var albumUri: Uri = data.data!!
             bitmap = MediaStore.Images.Media.getBitmap(contentResolver, data.data);
+//            val cursor: Cursor = contentResolver.query(albumUri, null, null, null, null)!!
+//            cursor.moveToNext();
+//            val path = cursor.getString(cursor.getColumnIndex("_data"))
+//            Log.d("path" ,"onActivityResult: {${path.toString()} ")
+            val proj = arrayOf(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? = managedQuery(albumUri, proj, null,null,null)
+            var index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor?.moveToNext();
+            photoFile = File(cursor?.getString(index!!))
+
             if(albumUri!=null){
                 setImage(bitmap)
             }
