@@ -1,28 +1,32 @@
 package com.example.alne.view.Login
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
+import android.os.Handler
+import android.os.Looper
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.alne.GlobalApplication
 import com.example.alne.MainActivity
 import com.example.alne.R
 import com.example.alne.databinding.ActivityLoginBinding
-import com.example.alne.model.User
+import com.example.alne.data.model.User
+import com.example.alne.utils.REPONSE_STATUS
+import com.example.alne.utils.ToolBox
 import com.example.alne.view.SignUp.SignUpActivity
 import com.example.alne.viewmodel.LoginViewModel
 
+
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
+
     //아이디 저장
-    private var saveId: Boolean = false
+    private var saveId: String? = null
+
     //자동 로그인
     private var autoLogin: Boolean = false
-
     private lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,103 +36,105 @@ class LoginActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
-        //일반 유저 로그인 성공 여부
-        viewModel.loginRespond.observe(this, Observer { res ->
-            when(res?.status) {
-                200 -> {
-                    Toast.makeText(this@LoginActivity, "로그인", Toast.LENGTH_LONG).show()
-                    GlobalApplication.prefManager.saveJwt(res.data!!)
-                    Log.d("loginRespond", res.data.toString())
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                }
-                401 -> {
-                    Toast.makeText(this@LoginActivity, "아이디 또는 비밀번호가 틀렸습니다", Toast.LENGTH_LONG).show()
-                }
-            }
-            binding.loginPb.visibility = View.INVISIBLE
-        })
-
-
-        //카카오 로그인 성공 여부
-        viewModel.kakaoRespond.observe(this, Observer { token ->
-            Log.d("kakao_token", token.toString())
-            if(token != null){
-                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-            }
-        })
-
-        //카카오 유저 정보 서버와 통신 성공 여부
-        viewModel.kakaoMyServerRespond.observe(this, Observer { res ->
-            when(res.status){
-                200 -> {
-                    Toast.makeText(this@LoginActivity, "카카오톡 회원가입 성공", Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                }
-                401 -> {
-                    Toast.makeText(this@LoginActivity, "카카오톡 회원가입 실패", Toast.LENGTH_LONG).show()
-                }
-            }
-        })
-
-
+        //회원가입 이동
         binding.loginSignUpBt.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
         }
 
+        // 자동 로그인 설정 시
         binding.loginAutoLoginIb.setOnClickListener {
-            if(autoLogin){
+            if (autoLogin) {
                 binding.loginAutoLoginIb.setImageResource(R.drawable.circle)
-                autoLogin = !autoLogin
-            }else{
+            } else {
                 binding.loginAutoLoginIb.setImageResource(R.drawable.checked)
-                autoLogin = !autoLogin
             }
+            autoLogin = !autoLogin
         }
 
+        // 아이디 저장 설정 시
         binding.loginSaveIDIb.setOnClickListener {
-            if(saveId){
+            if (saveId != null) {
+                saveId = null
                 binding.loginSaveIDIb.setImageResource(R.drawable.circle)
-                saveId = !saveId
-            }else{
+            } else {
+                saveId = binding.loginEmailEt.text.toString()
                 binding.loginSaveIDIb.setImageResource(R.drawable.checked)
-                saveId = !saveId
             }
         }
 
-        binding.loginKakaoBt.setOnClickListener {
-            viewModel.kakaoLogin()
+        // 로그인 버튼 클릭 시
+        binding.loginLoginBt.setOnClickListener {
+            downKeyBoard()
+            ToolBox.showProgressingView(this)
+            viewModel.login(
+                User(
+                binding.loginEmailEt.text.toString(),
+                null,
+                binding.loginPasswordEt.text.toString()
+            ),
+                completion = { responseState ->
+                    when (responseState) {
+                        REPONSE_STATUS.OKAY -> {
+                            Toast.makeText(this@LoginActivity, "로그인 성공했습니다.", Toast.LENGTH_SHORT)
+                                .show()
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                // 설정 저장
+                                GlobalApplication.prefManager.saveAutoLogin(autoLogin)
+                                GlobalApplication.prefManager.saveIdLogin(binding.loginEmailEt.text.toString())
+                                ToolBox.hideProgressingView(this)
+                                finishAffinity()
+                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                            }, 1000)
+                        }
+
+                        REPONSE_STATUS.FAIL -> {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "이메일 또는 패스워드 오류입니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        REPONSE_STATUS.NETWORK_ERROR -> {
+                            Toast.makeText(this@LoginActivity, "네트워크 오류입니다.", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                })
         }
 
-        binding.loginGoogleBt.setOnClickListener {
+        // 비밀번호 찾기 클릭 시
+        binding.loginFindPasswordTv.setOnClickListener {
 
-        }
-
-        binding.loginLoginBt.setOnClickListener{
-            binding.loginPb.visibility = View.VISIBLE
-            viewModel.login(User(binding.loginEmailEt.text.toString(),null, binding.loginPasswordEt.text.toString()))
         }
 
     }
+
     override fun onResume() {
         super.onResume()
-        var loginsetting = GlobalApplication.prefManager.getLoginSetting()
-        saveId = loginsetting[0]
-        autoLogin = loginsetting[1]
-        if(autoLogin){
+        saveId = GlobalApplication.prefManager.getSaveIdLogin()
+        autoLogin = GlobalApplication.prefManager.getAutoLogin()
+        if (autoLogin) {
             binding.loginAutoLoginIb.setImageResource(R.drawable.checked)
-        }else{
+        } else {
             binding.loginAutoLoginIb.setImageResource(R.drawable.circle)
         }
-        if(saveId){
+        if (saveId != null) {
+            binding.loginEmailEt.setText(saveId)
             binding.loginSaveIDIb.setImageResource(R.drawable.checked)
-        }else{
+        } else {
+            binding.loginEmailEt.setText("")
             binding.loginSaveIDIb.setImageResource(R.drawable.circle)
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        GlobalApplication.prefManager.saveLoginSetting(saveId, autoLogin)
+    //키보드 조정
+    private fun downKeyBoard(){
+        val manager: InputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(
+            currentFocus!!.windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
     }
-
 }

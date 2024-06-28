@@ -14,7 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.alne.databinding.FragmentMyPageBinding
-import com.example.alne.model.Profile
+import com.example.alne.data.model.Profile
 import com.example.alne.view.Login.LoginActivity
 import com.example.alne.view.SignUp.SignUpActivity
 import com.example.alne.view.Splash.StartActivity
@@ -32,17 +32,18 @@ class MyPageFragment : Fragment() {
         binding = FragmentMyPageBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(requireActivity()).get(MyPageViewModel::class.java)
 
-        viewModel.userProfileLiveData.observe(viewLifecycleOwner, Observer { state ->
-            if(state != null){
-                binding.login.text = "로그아웃"
-                binding.login.setOnClickListener {
-                    LogoutCustomDialog().show(requireActivity().supportFragmentManager, LogoutCustomDialog.TAG)
-                }
-                setProfile(state)
-            }else{
-                binding.login.text = "로그인"
-            }
-        })
+//        viewModel.userProfileLiveData.observe(viewLifecycleOwner, Observer { state ->
+//            if(state != null){
+//                binding.logout.setOnClickListener {
+//                    LogoutCustomDialog().show(requireActivity().supportFragmentManager, LogoutCustomDialog.TAG)
+//                }
+//                setProfile(state)
+//            }
+//        })
+
+        binding.logout.setOnClickListener {
+            LogoutCustomDialog().show(requireActivity().supportFragmentManager, LogoutCustomDialog.TAG)
+        }
 
         binding.myPageProfileSettingCv.setOnClickListener {
             startActivity(Intent(context, UserProfileActivity::class.java))
@@ -51,12 +52,6 @@ class MyPageFragment : Fragment() {
         binding.mypageFavoriteLinear.setOnClickListener {
             startActivity(Intent(requireContext(), FavoriteActivity::class.java))
         }
-
-
-//        binding.login.setOnClickListener {
-//            startActivity(Intent(requireContext(), LoginActivity::class.java))
-//        }
-//
         return binding.root
     }
 

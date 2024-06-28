@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alne.R
 import com.example.alne.databinding.ItemFridgeBinding
-import com.example.alne.model.Food
+import com.example.alne.data.model.Food
 import java.text.SimpleDateFormat
 
 class FridgeFrozenAdapter(val context: Context): RecyclerView.Adapter<FridgeFrozenAdapter.ViewHolder>() {

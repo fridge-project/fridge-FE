@@ -14,9 +14,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alne.R
 import com.example.alne.databinding.FragmentFridgeColdBinding
-import com.example.alne.model.Food
-import com.example.alne.model.Jwt
-import com.example.alne.model.UserId
+import com.example.alne.data.model.Food
+import com.example.alne.data.model.Jwt
+import com.example.alne.data.model.UserId
 import com.example.alne.viewmodel.FridgeViewModel
 import com.google.gson.Gson
 import java.io.File

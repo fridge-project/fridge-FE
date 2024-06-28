@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.alne.databinding.FragmentFridgeBinding
-import com.example.alne.model.Food
-import com.example.alne.model.Jwt
+import com.example.alne.data.model.Food
+import com.example.alne.data.model.Jwt
 import com.example.alne.viewmodel.FridgeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson

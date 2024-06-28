@@ -28,7 +28,7 @@ import com.bumptech.glide.Glide
 import com.example.alne.GlobalApplication
 import com.example.alne.R
 import com.example.alne.databinding.ActivityUserProfileBinding
-import com.example.alne.model.Profile
+import com.example.alne.data.model.Profile
 import com.example.alne.viewmodel.MyPageViewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -234,7 +234,7 @@ class UserProfileActivity : AppCompatActivity() {
     private fun setSubmitButton() {
         binding.userProfileBt.setBackgroundColor(resources.getColor(R.color.blue))
         binding.userProfileBt.setOnClickListener {
-            viewModel.saveUserProfileImage(photoFile!!, GlobalApplication.prefManager.getUserToken()?.userId!!)
+//            viewModel.saveUserProfileImage(photoFile!!, GlobalApplication.prefManager.getUserToken()?.userId!!)
             finish()
         }
     }

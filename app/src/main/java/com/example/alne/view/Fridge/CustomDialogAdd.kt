@@ -42,8 +42,8 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import com.example.alne.databinding.ItemFoodaddBinding
-import com.example.alne.model.Food
-import com.example.alne.model.Jwt
+import com.example.alne.data.model.Food
+import com.example.alne.data.model.Jwt
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -112,7 +112,8 @@ class CustomDialogAdd(context: Context, val jwt: Jwt, myCustomDialogInterface: M
                 Toast.makeText(requireContext(), "재료를 선택해주세요.", Toast.LENGTH_SHORT).show()
 
             }else{
-                myCustomDialogInterface?.onSubmitBtnClicked(Food(jwt.userId,title,date + " " + time, addDate, binding
+                myCustomDialogInterface?.onSubmitBtnClicked(
+                    Food(jwt.userId,title,date + " " + time, addDate, binding
                     .foodMemoTv.text.toString(),storage!!), photoFile)
             }
             dismiss()

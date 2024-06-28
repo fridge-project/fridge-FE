@@ -97,7 +97,7 @@
             android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="15dp"
             android:scaleType="centerInside"
             android:src="@drawable/circle" />
 
@@ -147,125 +147,126 @@
         app:layout_constraintStart_toStartOf="@+id/login_password_tl"
         app:layout_constraintTop_toBottomOf="@+id/login_login_bt" />
 
-    <View
-        app:layout_constraintStart_toStartOf="@id/login_signUp_bt"
-        app:layout_constraintTop_toTopOf="@+id/login_or_tv"
-        app:layout_constraintBottom_toBottomOf="@+id/login_or_tv"
-        app:layout_constraintEnd_toStartOf="@+id/login_or_tv"
-        android:layout_marginEnd="15dp"
-        android:background="@color/gray"
-        android:layout_width="0dp"
-        android:layout_height="1dp"/>
-
     <TextView
-        android:id="@+id/login_or_tv"
-        android:text="Or"
-        android:textSize="16sp"
-        android:textColor="@color/gray"
-        android:layout_marginTop="20dp"
+        android:id="@+id/login_find_password_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/login_signUp_bt"
-        app:layout_constraintStart_toStartOf="@+id/login_signUp_bt"
-        app:layout_constraintEnd_toEndOf="@+id/login_signUp_bt"/>
+        android:text="비밀번호 찾기"
+        android:textSize="15sp"
+        android:layout_marginEnd="3dp"
+        app:layout_constraintBottom_toBottomOf="@+id/login_loginStyle_lienar"
+        app:layout_constraintEnd_toEndOf="@+id/login_password_tl"
+        app:layout_constraintTop_toTopOf="@+id/login_loginStyle_lienar" />
 
-    <View
-        app:layout_constraintStart_toEndOf="@+id/login_or_tv"
-        app:layout_constraintTop_toTopOf="@+id/login_or_tv"
-        app:layout_constraintBottom_toBottomOf="@+id/login_or_tv"
-        app:layout_constraintEnd_toEndOf="@+id/login_signUp_bt"
-        android:layout_marginStart="15dp"
-        android:background="@color/gray"
-        android:layout_width="0dp"
-        android:layout_height="1dp"/>
+<!--    <View-->
+<!--        app:layout_constraintStart_toStartOf="@id/login_signUp_bt"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/login_or_tv"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/login_or_tv"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/login_or_tv"-->
+<!--        android:layout_marginEnd="15dp"-->
+<!--        android:background="@color/gray"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="1dp"/>-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/login_or_tv"-->
+<!--        android:text="Or"-->
+<!--        android:textSize="16sp"-->
+<!--        android:textColor="@color/gray"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/login_signUp_bt"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/login_signUp_bt"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/login_signUp_bt"/>-->
+
+<!--    <View-->
+<!--        app:layout_constraintStart_toEndOf="@+id/login_or_tv"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/login_or_tv"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/login_or_tv"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/login_signUp_bt"-->
+<!--        android:layout_marginStart="15dp"-->
+<!--        android:background="@color/gray"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="1dp"/>-->
 
 
 
-            <LinearLayout
-                android:id="@+id/login_loginIcons_linear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/login_or_tv"
-                app:layout_constraintStart_toStartOf="@+id/login_or_tv"
-                app:layout_constraintTop_toBottomOf="@+id/login_or_tv">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/login_loginIcons_linear"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/login_or_tv"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/login_or_tv"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/login_or_tv">-->
 
-                <ImageButton
-                    android:id="@+id/login_naver_bt"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:background="@color/white"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/naver" />
+<!--                <ImageButton-->
+<!--                    android:id="@+id/login_naver_bt"-->
+<!--                    android:layout_width="45dp"-->
+<!--                    android:layout_height="45dp"-->
+<!--                    android:background="@color/white"-->
+<!--                    android:scaleType="fitXY"-->
+<!--                    android:src="@drawable/naver" />-->
 
-                <ImageButton
-                    android:id="@+id/login_kakao_bt"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@color/white"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/kakako" />
+<!--                <ImageButton-->
+<!--                    android:id="@+id/login_kakao_bt"-->
+<!--                    android:layout_width="45dp"-->
+<!--                    android:layout_height="45dp"-->
+<!--                    android:layout_marginStart="15dp"-->
+<!--                    android:layout_marginEnd="15dp"-->
+<!--                    android:background="@color/white"-->
+<!--                    android:scaleType="fitXY"-->
+<!--                    android:src="@drawable/kakako" />-->
 
-                <ImageButton
-                    android:id="@+id/login_google_bt"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:background="@color/white"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/google" />
-            </LinearLayout>
+<!--                <ImageButton-->
+<!--                    android:id="@+id/login_google_bt"-->
+<!--                    android:layout_width="45dp"-->
+<!--                    android:layout_height="45dp"-->
+<!--                    android:background="@color/white"-->
+<!--                    android:scaleType="fitXY"-->
+<!--                    android:src="@drawable/google" />-->
+<!--            </LinearLayout>-->
 
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/login_loginIcons_linear"
-        app:layout_constraintStart_toStartOf="@+id/login_loginIcons_linear"
-        app:layout_constraintTop_toBottomOf="@+id/login_loginIcons_linear">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linearLayout4"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/login_loginIcons_linear"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/login_loginIcons_linear"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/login_loginIcons_linear">-->
 
-        <TextView
-            android:id="@+id/login_findID_et"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_findID_et"
-            android:textColor="@color/gray"
-            android:textSize="14sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/login_findID_et"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/login_findID_et"-->
+<!--            android:textColor="@color/gray"-->
+<!--            android:textSize="14sp" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="3dp"
-            android:layout_marginEnd="3dp"
-            android:text="ㅣ"
-            android:textColor="@color/gray"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginStart="3dp"-->
+<!--            android:layout_marginEnd="3dp"-->
+<!--            android:text="ㅣ"-->
+<!--            android:textColor="@color/gray"-->
+<!--            android:textSize="14sp"-->
+<!--            android:textStyle="bold" />-->
 
-        <TextView
-            android:id="@+id/login_findPassword_et"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_findPassword_et"
-            android:textColor="@color/gray"
-            android:textSize="14sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/login_findPassword_et"-->
+<!--            android:layout_wid`th="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/login_findPassword_et"-->
+<!--            android:textColor="@color/gray"-->
+<!--            android:textSize="14sp" />-->
 
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/login_pb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    </LinearLayout>-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

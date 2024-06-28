@@ -3,7 +3,8 @@ package com.example.alne
 import android.content.Context
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.alne.model.Jwt
+import com.example.alne.data.model.Jwt
+import com.example.alne.data.model.Token
 import com.google.gson.Gson
 
 class SharedPrefManager(val context: Context) {
@@ -12,7 +13,7 @@ class SharedPrefManager(val context: Context) {
     private val KEY_SEARCH_HISTORY = "key_search_history"
 
     private val USER_INFO = "user_info"
-    private val KEY_USER_INFO = "jwt"
+    private val KEY_USER_TOKEN = "accessToken"
 
     private val LOGIN_SETTING = "login_setting"
 
@@ -51,43 +52,55 @@ class SharedPrefManager(val context: Context) {
 //        editor.apply()
 //    }
 
-    fun saveJwt(data: Jwt){
+    //토큰 저장
+    fun saveJwt(accessToken: String, refreshToken: String){
         val sharedPreferences = context?.getSharedPreferences(USER_INFO, AppCompatActivity.MODE_PRIVATE)!!
         val edit = sharedPreferences.edit()
-        edit.putString(KEY_USER_INFO, Gson().toJson(data))
+        edit.putString(KEY_USER_TOKEN, Gson().toJson(Token(accessToken, refreshToken)))
         edit.commit()
     }
 
-    //userId, Jwt 토큰
-    fun getUserToken(): Jwt? {
+    //토큰 불러오기
+    fun getUserToken(): Token {
         val sharedPreferences = context?.getSharedPreferences(USER_INFO, AppCompatActivity.MODE_PRIVATE)
-        val userJwt = Gson().fromJson(sharedPreferences?.getString(KEY_USER_INFO,null), Jwt::class.java)
-        Log.d("userJwt", userJwt.toString())
+        val userJwt = Gson().fromJson(sharedPreferences?.getString(KEY_USER_TOKEN,null), Token::class.java)
+        Log.d("token", userJwt.toString())
         return userJwt
     }
 
     // 자동로그인, 아이디기록 여부 저장
-    fun saveLoginSetting(saveId: Boolean, autoLogin: Boolean){
+    fun saveAutoLogin(autoLogin: Boolean){
         val sharedPreferences = context?.getSharedPreferences(LOGIN_SETTING, AppCompatActivity.MODE_PRIVATE)
         val edit = sharedPreferences?.edit()!!
-        edit.putBoolean("saveId", saveId)
         edit.putBoolean("autoLogin", autoLogin)
         edit.commit()
     }
 
-    fun getLoginSetting(): ArrayList<Boolean> {
+    fun saveIdLogin(saveId: String?){
+        val sharedPreferences = context?.getSharedPreferences(LOGIN_SETTING, AppCompatActivity.MODE_PRIVATE)
+        val edit = sharedPreferences?.edit()!!
+        edit.putString("saveId", saveId)
+        edit.commit()
+    }
+
+    fun getSaveIdLogin(): String?{
         val sharedPreferences = context?.getSharedPreferences(LOGIN_SETTING, AppCompatActivity.MODE_PRIVATE)!!
-        return arrayListOf(sharedPreferences.getBoolean("saveId", false), sharedPreferences.getBoolean("autoLogin", false))
+        return sharedPreferences.getString("saveId", null)
+    }
+
+    fun getAutoLogin(): Boolean {
+        val sharedPreferences = context?.getSharedPreferences(LOGIN_SETTING, AppCompatActivity.MODE_PRIVATE)!!
+        return sharedPreferences.getBoolean("autoLogin", false)
     }
 
     // 정보 삭제
-    fun deleteAutoLogin(){
+    fun deleteUserData(){
         val sharedPreferences1 = context?.getSharedPreferences(LOGIN_SETTING, AppCompatActivity.MODE_PRIVATE)!!
         val sharedPreferences = context?.getSharedPreferences(USER_INFO, AppCompatActivity.MODE_PRIVATE)!!
         val edit = sharedPreferences.edit()
         var edit1 = sharedPreferences1.edit()
         edit.clear()
-        edit1.commit()
+        edit1.clear()
         edit1.commit()
         edit.commit()
     }

@@ -6,19 +6,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.alne.GlobalApplication
-import com.example.alne.model.Comment
-import com.example.alne.model.DeleteFavorite
-import com.example.alne.model.FavoriteRespond
-import com.example.alne.model.RecipeProcess
-import com.example.alne.model.RecipeProcessRespond
-import com.example.alne.model.Status
-import com.example.alne.model.UserId
+import com.example.alne.data.model.Comment
+import com.example.alne.data.model.DeleteFavorite
+import com.example.alne.data.model.FavoriteRespond
+import com.example.alne.data.model.RecipeProcess
+import com.example.alne.data.model.RecipeProcessRespond
+import com.example.alne.data.model.Status
+import com.example.alne.data.model.UserId
 import com.example.alne.repository.recipeRepository
 import com.example.alne.Network.AuthResponse
-import com.example.alne.model.LikeRespond
-import com.example.alne.model.Profile
-import com.example.alne.model.ProfileRespond
-import com.example.alne.model.requestComment
+import com.example.alne.data.model.LikeRespond
+import com.example.alne.data.model.Profile
+import com.example.alne.data.model.ProfileRespond
+import com.example.alne.data.model.requestComment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,11 +56,11 @@ class RecipeDetailViewModel: ViewModel() {
     val userProfileLiveData: LiveData<Profile> = _userProfileLiveData
 
     init {
-        if(GlobalApplication.prefManager.getUserToken()?.userId != null){
-            getUserProfile(GlobalApplication.prefManager.getUserToken()!!.userId)
-        }else{
-            _userProfileLiveData.postValue(null)
-        }
+//        if(GlobalApplication.prefManager.getUserToken()?.userId != null){
+//            getUserProfile(GlobalApplication.prefManager.getUserToken()!!.userId)
+//        }else{
+//            _userProfileLiveData.postValue(null)
+//        }
     }
 
     fun addUserComment(comment: Comment) = repository.addUserComment(comment).enqueue(object: Callback<AuthResponse>{
@@ -108,7 +108,7 @@ class RecipeDetailViewModel: ViewModel() {
 
     })
 
-    fun addRecipeFavorite(recipeCode: Int ,userId: UserId = UserId(GlobalApplication.prefManager.getUserToken()?.userId!!, null)) = repository.addRecipeFavorite(recipeCode, userId).enqueue(object: Callback<FavoriteRespond>{
+    fun addRecipeFavorite(recipeCode: Int ,userId: UserId = UserId(GlobalApplication.prefManager.getUserToken()?.accessToken?.toInt()!!, null)) = repository.addRecipeFavorite(recipeCode, userId).enqueue(object: Callback<FavoriteRespond>{
         override fun onResponse(call: Call<FavoriteRespond>, response: Response<FavoriteRespond>) {
             val res = response.body()
             when(res?.status){
@@ -130,7 +130,7 @@ class RecipeDetailViewModel: ViewModel() {
 
     })
 
-    fun userLikeRecipe(recipeCode: Int, userId: UserId = UserId(GlobalApplication.prefManager.getUserToken()?.userId!!, null)) = repository.userLikeRecipe(recipeCode, userId).enqueue(object: Callback<LikeRespond>{
+    fun userLikeRecipe(recipeCode: Int, userId: UserId = UserId(GlobalApplication.prefManager.getUserToken()?.accessToken?.toInt()!!, null)) = repository.userLikeRecipe(recipeCode, userId).enqueue(object: Callback<LikeRespond>{
         override fun onResponse(call: Call<LikeRespond>, response: Response<LikeRespond>) {
             val res = response.body()
             when(res?.status){
@@ -153,7 +153,7 @@ class RecipeDetailViewModel: ViewModel() {
     })
 
 
-//    fun deleteRecipeFavorite(delete: DeleteFavorite) = repository.deleteRecipeFavorite(delete).enqueue(object: Callback<Status>{
+//    fun deleteRecipeFavorite(delete: DeleteFavorite) = authRepository.deleteRecipeFavorite(delete).enqueue(object: Callback<Status>{
 //        override fun onResponse(call: Call<Status>, response: Response<Status>) {
 //            val res = response.body()
 //            when(res?.status){
@@ -181,7 +181,7 @@ class RecipeDetailViewModel: ViewModel() {
             when(res?.status){
                 200 -> {
                     Log.d("deleteUserComment", "Success")
-                    getRecipeProcess(requestComment.data, UserId(GlobalApplication.prefManager.getUserToken()?.userId!!, null))
+//                    getRecipeProcess(requestComment.data, UserId(GlobalApplication.prefManager.getUserToken()?.userId!!, null))
                     _delUserCommentLiveData.postValue(true)
                 }
                 else -> {

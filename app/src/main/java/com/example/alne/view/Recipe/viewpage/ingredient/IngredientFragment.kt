@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alne.databinding.FragmentIngredientBinding
-import com.example.alne.model.Ingredient
+import com.example.alne.data.model.Ingredient
 
 
 class IngredientFragment : Fragment() {

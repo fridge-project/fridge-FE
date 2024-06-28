@@ -1,11 +1,9 @@
 package com.example.alne.Network
 
-import com.example.alne.model.KakaoUser
-import com.example.alne.model.User
-import com.example.alne.Network.AuthResponse
-import com.example.alne.model.Id
-import com.example.alne.model.ProfileRespond
-import com.example.alne.model.UserId
+import com.example.alne.data.model.User
+import com.example.alne.data.model.ProfileRespond
+import com.example.alne.data.model.Token
+import com.example.alne.data.model.UserId
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -16,17 +14,14 @@ import retrofit2.http.Part
 
 interface AuthApi {
 
-    @POST("/signup")
-    fun signUp(@Body user: User): Call<AuthResponse>
+    @POST(API.SIGNUP)
+    fun signUp(@Body user: User): Call<SignUpResponse>
 
-    @POST("/login")
+    @POST(API.LOGIN)
     fun login(@Body user: User): Call<LoginResponse>
 
-    @POST("/kakaoSignUp")
-    fun kakaoSignUp(@Body user: KakaoUser): Call<AuthResponse>
-
-    @POST("/kakaoLogin")
-    fun kakaoLogin(@Body user: KakaoUser): Call<AuthResponse>
+    @POST(API.LOGOUT)
+    fun logout(@Body token: Token): Call<SignUpResponse>
 
     @Multipart
     @POST("/userImage")

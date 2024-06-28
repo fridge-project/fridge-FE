@@ -9,7 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.alne.databinding.ActivitySignUpBinding
 import com.example.alne.view.Login.LoginActivity
 import com.example.alne.viewmodel.SignUpViewModel
-import com.example.alne.model.User
+import com.example.alne.data.model.User
+import com.example.alne.utils.REPONSE_STATUS
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -19,20 +20,7 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         viewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
-        viewModel.signUpRespond.observe(this, Observer { res ->
-            when(res?.status){
-                200 -> {
-                    Toast.makeText(this@SignUpActivity, "회원가입했습니다.",Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this@SignUpActivity, LoginActivity::class.java))
-                }
-                401 -> {
-                    Toast.makeText(this@SignUpActivity, "동일한 아이디가 존재합니다.", Toast.LENGTH_LONG).show()
-                }
-            }
-        })
-
         binding.signUpLoginBt.setOnClickListener {
             checkSignUp()
         }
@@ -41,7 +29,22 @@ class SignUpActivity : AppCompatActivity() {
     private fun checkSignUp(){
         if(binding.signUpNameEt.text?.isNotEmpty()!! || binding.signUpEmailEt.text?.isNotEmpty()!! || binding.signUpPasswordEt.text?.isNotEmpty()!! || binding.signUpPasswordVerifyEt.text?.isNotEmpty()!!){
             if(binding.signUpPasswordEt.text.toString() == binding.signUpPasswordVerifyEt.text.toString()){
-                viewModel.signUp(User(binding.signUpEmailEt.text.toString(), binding.signUpNameEt.text.toString() ,binding.signUpPasswordEt.text.toString()))
+                viewModel.signUp(
+                    User(binding.signUpEmailEt.text.toString(), binding.signUpNameEt.text.toString() ,binding.signUpPasswordEt.text.toString()),
+                    completion = { responseState, responseMessage ->
+                        when(responseState){
+                            REPONSE_STATUS.OKAY -> {
+                                Toast.makeText(this@SignUpActivity, "회원가입했습니다.",Toast.LENGTH_SHORT).show()
+                                startActivity(Intent(this@SignUpActivity, LoginActivity::class.java))
+                            }
+                            REPONSE_STATUS.FAIL -> {
+                                Toast.makeText(this@SignUpActivity, "동일한 아이디가 존재합니다.", Toast.LENGTH_SHORT).show()
+                            }
+                            REPONSE_STATUS.NETWORK_ERROR -> {
+                                Toast.makeText(this@SignUpActivity, "네트워크 오류입니다.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    })
             }else{
                 Toast.makeText(this, "비밀번호가 다릅니다.", Toast.LENGTH_LONG).show()
             }

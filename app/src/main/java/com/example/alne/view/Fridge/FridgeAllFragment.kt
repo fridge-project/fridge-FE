@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alne.GlobalApplication
 import com.example.alne.databinding.FragmentFridgeAllBinding
-import com.example.alne.model.Food
-import com.example.alne.model.UserId
+import com.example.alne.data.model.Food
+import com.example.alne.data.model.UserId
 import com.example.alne.viewmodel.FridgeViewModel
 import java.io.File
 
@@ -48,17 +48,17 @@ class FridgeAllFragment : Fragment(), MyCustomDialogDetailInterface {
 
                 // 보유재료 삭제 기능
                 override fun onInfoClick(view: View, position: Int) {
-                    viewModel.deleteFridgeFood(UserId(
-                        getUserToken()?.userId!!,
-                        fridgeadapter.items[position].userId!!
-                    ))
+//                    viewModel.deleteFridgeFood(UserId(
+//                        getUserToken()?.userId!!,
+//                        fridgeadapter.items[position].userId!!
+//                    ))
                 }
             })
         })
     }
 
     private fun getCustomDialog(food: Food){
-        CustomDialogDetail(requireContext(), getUserToken()!!,food, this).show(requireActivity().supportFragmentManager, "CustomDialog")
+//        CustomDialogDetail(requireContext(), getUserToken()!!,food, this).show(requireActivity().supportFragmentManager, "CustomDialog")
     }
 
     fun getUserToken() = GlobalApplication.prefManager.getUserToken()

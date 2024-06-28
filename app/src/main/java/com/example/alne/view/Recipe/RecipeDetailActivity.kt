@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.alne.GlobalApplication
 import com.example.alne.R
 import com.example.alne.databinding.ActivityRecipeDetailBinding
-import com.example.alne.model.UserId
+import com.example.alne.data.model.UserId
 import com.example.alne.room.model.recipe
 import com.example.alne.viewmodel.RecipeDetailViewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -55,7 +55,7 @@ class RecipeDetailActivity : AppCompatActivity() {
     }
 
     private fun init(recipe: recipe){
-        viewModel.getRecipeProcess(recipe.recipe_code, UserId(GlobalApplication.prefManager.getUserToken()?.userId!!, null))
+//        viewModel.getRecipeProcess(recipe.recipe_code, UserId(GlobalApplication.prefManager.getUserToken()?.userId!!, null))
         binding.recipeDetailTitleTv.text = recipe.name
         binding.recipeDetailChefTv.text = recipe.difficulty
         binding.recipeDetailIntroduceTv.text = recipe.introduce

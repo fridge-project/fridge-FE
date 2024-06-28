@@ -8,8 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import com.example.alne.GlobalApplication
 import com.example.alne.Network.FridgeGetResponse
 import com.example.alne.Network.FridgePostResponse
-import com.example.alne.model.Food
-import com.example.alne.model.UserId
+import com.example.alne.data.model.Food
+import com.example.alne.data.model.UserId
 import com.example.alne.repository.fridgeRepository
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -31,7 +31,7 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
 
     init {
         if(getUserToken() != null){
-            getFridgeFood(getUserToken()?.accessToken!!, UserId(getUserToken()?.userId!!, null))
+            getFridgeFood(getUserToken()?.accessToken!!, UserId(getUserToken()?.accessToken?.toInt()!!, null))
         }
     }
 
@@ -52,7 +52,7 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
                         200 -> {
                             Log.d("addFridgeData", "재료 등록 성공")
                             Log.d("addFridgeData", response.body()?.data.toString())
-                            getFridgeFood(getUserToken()?.accessToken!!, UserId(getUserToken()?.userId!!, null))
+                            getFridgeFood(getUserToken()?.accessToken!!, UserId(getUserToken()?.accessToken?.toInt()!!, null))
 
                         }
                         401 -> {
@@ -116,7 +116,7 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
                 Log.d("deleteFridgeFood", res.toString())
                     when(res?.status){
                         200 -> {
-                            getFridgeFood(getUserToken()?.accessToken!!, UserId(getUserToken()?.userId!!, null))
+                            getFridgeFood(getUserToken()?.accessToken!!, UserId(getUserToken()?.accessToken?.toInt()!!, null))
                         }
                         else -> {
                             Log.d("deleteFridgeFood", "onSuccess:fail")

@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.alne.databinding.FragmentStarPageBinding
-import com.example.alne.model.Grade
+import com.example.alne.data.model.Grade
 import com.example.alne.viewmodel.RecipeDetailViewModel
 
 class StarPageFragment : Fragment() {

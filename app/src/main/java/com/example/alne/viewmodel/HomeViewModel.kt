@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alne.GlobalApplication
 import com.example.alne.Network.FridgeGetResponse
-import com.example.alne.model.Food
-import com.example.alne.model.UserId
+import com.example.alne.data.model.Food
+import com.example.alne.data.model.UserId
 import com.example.alne.repository.fridgeRepository
 import com.example.alne.repository.recipeRepository
 import com.example.alne.room.model.recipe
@@ -33,11 +33,11 @@ class HomeViewModel: ViewModel() {
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            _getRecipeLiveData.postValue(recipeRepository.getAllRecipe())
-            if(GlobalApplication.prefManager.getUserToken()?.accessToken != null){
-                getFridgeFood(GlobalApplication.prefManager.getUserToken()!!.accessToken!!, UserId(
-                    GlobalApplication.prefManager.getUserToken()!!.userId, null))
-            }
+//            _getRecipeLiveData.postValue(recipeRepository.getAllRecipe())
+//            if(GlobalApplication.prefManager.getUserToken()?.accessToken != null){
+//                getFridgeFood(GlobalApplication.prefManager.getUserToken()!!.accessToken!!, UserId(
+//                    GlobalApplication.prefManager.getUserToken()!!.userId, null))
+//            }
 
         }
     }

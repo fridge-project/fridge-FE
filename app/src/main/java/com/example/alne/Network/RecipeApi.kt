@@ -1,15 +1,15 @@
 package com.example.alne.Network
 
-import com.example.alne.model.Comment
-import com.example.alne.model.DeleteFavorite
-import com.example.alne.model.FavoriteRespond
-import com.example.alne.model.FavoritesRespond
-import com.example.alne.model.Id
-import com.example.alne.model.LikeRespond
-import com.example.alne.model.RecipeProcessRespond
-import com.example.alne.model.UserId
-import com.example.alne.model.Status
-import com.example.alne.model.requestComment
+import com.example.alne.data.model.Comment
+import com.example.alne.data.model.DeleteFavorite
+import com.example.alne.data.model.FavoriteRespond
+import com.example.alne.data.model.FavoritesRespond
+import com.example.alne.data.model.Id
+import com.example.alne.data.model.LikeRespond
+import com.example.alne.data.model.RecipeProcessRespond
+import com.example.alne.data.model.UserId
+import com.example.alne.data.model.Status
+import com.example.alne.data.model.requestComment
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

@@ -1,7 +1,7 @@
 package com.example.alne.Network
 
-import com.example.alne.model.Food
-import com.example.alne.model.UserId
+import com.example.alne.data.model.Food
+import com.example.alne.data.model.UserId
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call

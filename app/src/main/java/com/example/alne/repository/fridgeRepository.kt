@@ -2,7 +2,7 @@ package com.example.alne.repository
 
 import com.example.alne.GlobalApplication
 import com.example.alne.Network.FridgeApi
-import com.example.alne.model.UserId
+import com.example.alne.data.model.UserId
 import com.example.alne.room.model.food
 import com.example.alne.Network.getRetrofit
 import okhttp3.MultipartBody

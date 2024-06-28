@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alne.databinding.ItemIngredientBinding
-import com.example.alne.model.Ingredient
+import com.example.alne.data.model.Ingredient
 
 class IngredientRVAdapter(val items: ArrayList<Ingredient>): RecyclerView.Adapter<IngredientRVAdapter.ViewHolder>() {
 

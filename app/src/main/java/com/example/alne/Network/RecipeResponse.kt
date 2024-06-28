@@ -1,7 +1,7 @@
 package com.example.alne.Network
 
-import com.example.alne.model.Jwt
-import com.example.alne.model.Recipe
+import com.example.alne.data.model.Jwt
+import com.example.alne.data.model.Recipe
 import com.google.gson.annotations.SerializedName
 
 

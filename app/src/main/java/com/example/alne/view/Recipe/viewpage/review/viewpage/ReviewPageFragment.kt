@@ -13,9 +13,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alne.GlobalApplication
 import com.example.alne.databinding.FragmentReviewPageBinding
-import com.example.alne.model.Comments
-import com.example.alne.model.UserId
-import com.example.alne.model.requestComment
+import com.example.alne.data.model.Comments
+import com.example.alne.data.model.UserId
+import com.example.alne.data.model.requestComment
 import com.example.alne.room.model.recipe
 import com.example.alne.view.Fridge.IngredientChoice
 import com.example.alne.viewmodel.RecipeDetailViewModel
@@ -46,7 +46,7 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
             if(!it){
                 Toast.makeText(requireContext(), "리뷰 작성에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }else{
-                viewModel.getRecipeProcess(recipe.recipe_code, UserId(GlobalApplication.prefManager.getUserToken()?.userId!!, null))
+//                viewModel.getRecipeProcess(recipe.recipe_code, UserId(GlobalApplication.prefManager.getUserToken()?.userId!!, null))
                 setUi(it)
             }
         })
@@ -68,7 +68,7 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
         adapter = ReviewPageRVAdapter(requireContext())
         adapter.setMyItemClickListener(object: ReviewPageRVAdapter.MyItemClickListener{
             override fun deleteComment(position: Int) {
-                viewModel.deleteUserComment(requestComment(GlobalApplication.prefManager.getUserToken()?.userId!!, recipe.recipe_code))
+//                viewModel.deleteUserComment(requestComment(GlobalApplication.prefManager.getUserToken()?.userId!!, recipe.recipe_code))
                 adapter.removeItem(position)
             }
             override fun patchComment(comment: Comments) {

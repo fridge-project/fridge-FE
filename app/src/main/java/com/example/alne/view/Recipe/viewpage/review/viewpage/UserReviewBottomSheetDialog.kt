@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.alne.GlobalApplication
 import com.example.alne.databinding.UserReviewDialogBinding
-import com.example.alne.model.Comment
-import com.example.alne.model.Comments
+import com.example.alne.data.model.Comment
+import com.example.alne.data.model.Comments
 import com.example.alne.room.model.recipe
 import com.example.alne.viewmodel.RecipeDetailViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -53,12 +53,12 @@ class UserReviewBottomSheetDialog: BottomSheetDialogFragment() {
         }
 
         binding.userReviewSubmitBt.setOnClickListener {
-            var userId = GlobalApplication.prefManager.getUserToken()!!.userId
-            Log.d("userId", userId.toString())
-            Log.d("editText", binding.userReviewCommentEt.text.toString())
-            // 댓글 정보 서버로 보내기
-            viewModel.addUserComment(Comment(recipe.recipe_code, userId, binding.userReviewCommentEt.text.toString(), binding.baseRatingBar.rating.toInt(), "url"))
-            dismiss()
+//            var userId = GlobalApplication.prefManager.getUserToken()!!.userId
+//            Log.d("userId", userId.toString())
+//            Log.d("editText", binding.userReviewCommentEt.text.toString())
+//            // 댓글 정보 서버로 보내기
+//            viewModel.addUserComment(Comment(recipe.recipe_code, userId, binding.userReviewCommentEt.text.toString(), binding.baseRatingBar.rating.toInt(), "url"))
+//            dismiss()
         }
 
 

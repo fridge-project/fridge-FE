@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alne.GlobalApplication
 import com.example.alne.databinding.ItemReviewBinding
-import com.example.alne.model.Comments
-import com.example.alne.model.Review
+import com.example.alne.data.model.Comments
+import com.example.alne.data.model.Review
 
 class ReviewPageRVAdapter(val context: Context): RecyclerView.Adapter<ReviewPageRVAdapter.ViewHolder>() {
 
@@ -49,16 +49,16 @@ class ReviewPageRVAdapter(val context: Context): RecyclerView.Adapter<ReviewPage
             Glide.with(context).load(comment.user.image).into(binding.itemReviewIv)
             binding.itemReviewIv.scaleType = ImageView.ScaleType.FIT_XY
             binding.itemReviewIv.setPadding(0,0,0,0)
-            if(comment.user.id == GlobalApplication.prefManager.getUserToken()?.userId){
-                binding.itemReviewInfo.visibility = View.VISIBLE
-                binding.itemReviewRecomment.setOnClickListener {
-                    myItemClickListener.patchComment(comment)
-                }
-                myItemClickListener.initUi(true)
-            }else{
-                binding.itemReviewInfo.visibility = View.INVISIBLE
-                myItemClickListener.initUi(false)
-            }
+//            if(comment.user.id == GlobalApplication.prefManager.getUserToken()?.userId){
+//                binding.itemReviewInfo.visibility = View.VISIBLE
+//                binding.itemReviewRecomment.setOnClickListener {
+//                    myItemClickListener.patchComment(comment)
+//                }
+//                myItemClickListener.initUi(true)
+//            }else{
+//                binding.itemReviewInfo.visibility = View.INVISIBLE
+//                myItemClickListener.initUi(false)
+//            }
         }
 
     }

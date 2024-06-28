@@ -2,14 +2,14 @@ package com.example.alne.repository
 
 import com.example.alne.GlobalApplication
 import com.example.alne.Network.AuthApi
-import com.example.alne.model.Comment
-import com.example.alne.model.DeleteFavorite
-import com.example.alne.model.UserId
+import com.example.alne.data.model.Comment
+import com.example.alne.data.model.DeleteFavorite
+import com.example.alne.data.model.UserId
 import com.example.alne.room.model.recipe
 import com.example.alne.Network.RecipeApi
 import com.example.alne.Network.getRetrofit
-import com.example.alne.model.Id
-import com.example.alne.model.requestComment
+import com.example.alne.data.model.Id
+import com.example.alne.data.model.requestComment
 import retrofit2.http.Body
 
 class recipeRepository {

@@ -38,8 +38,8 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import com.example.alne.databinding.ItemFoodDetailBinding
-import com.example.alne.model.Food
-import com.example.alne.model.Jwt
+import com.example.alne.data.model.Food
+import com.example.alne.data.model.Jwt
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -105,7 +105,8 @@ class CustomDialogDetail(context: Context, val jwt: Jwt, val food: Food, myCusto
         binding.submitBt.setOnClickListener {
             val title = binding.foodTitleEt.text.toString()
             Log.d("data", title + " "+ storage)
-            myCustomDialogDetailInterface?.onSubmitBtnDetailClicked(Food(jwt.userId,title,date + " " + time, addDate, binding
+            myCustomDialogDetailInterface?.onSubmitBtnDetailClicked(
+                Food(jwt.userId,title,date + " " + time, addDate, binding
                 .foodMemoTv.text.toString(),storage!!), photoFile)
             dismiss()
         }

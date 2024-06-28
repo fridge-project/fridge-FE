@@ -11,15 +11,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.alne.GlobalApplication
 import com.example.alne.databinding.LogoutDialogBinding
+import com.example.alne.utils.REPONSE_STATUS
 import com.example.alne.view.Splash.StartActivity
+import com.example.alne.viewmodel.MyPageViewModel
 import com.kakao.sdk.user.UserApiClient
 
 class LogoutCustomDialog: DialogFragment() {
 
     lateinit var binding: LogoutDialogBinding
+    lateinit var viewModel: MyPageViewModel
 
     companion object {
         const val TAG = "LogoutCustomDialog"
@@ -30,6 +35,7 @@ class LogoutCustomDialog: DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = LogoutDialogBinding.inflate(layoutInflater)
+        viewModel = ViewModelProvider(requireActivity()).get(MyPageViewModel::class.java)
 
         binding.dialogQuitBt.setOnClickListener {
             dismiss()
@@ -58,18 +64,23 @@ class LogoutCustomDialog: DialogFragment() {
     }
 
     private fun logOut(){
-        binding.dialogSubmitBt.setOnClickListener {
-            UserApiClient.instance.logout { error ->
-                if (error != null) {
-                    Log.e("logout", "로그아웃 실패. SDK에서 토큰 삭제됨", error)
-                    GlobalApplication.prefManager.deleteAutoLogin()
-                    startActivity(Intent(requireContext(), StartActivity::class.java))
-                }
-                else {
-                    startActivity(Intent(requireContext(), StartActivity::class.java))
-                    Log.i("logout", "로그아웃 성공. SDK에서 토큰 삭제됨")
+        viewModel.logout(GlobalApplication.prefManager.getUserToken(),
+            completion = { responseState ->
+                when(responseState){
+                    REPONSE_STATUS.OKAY -> {
+                        Toast.makeText(requireContext(), "로그아웃에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(requireContext(), StartActivity::class.java))
+                    }
+
+                    REPONSE_STATUS.FAIL -> {
+                        Toast.makeText(requireContext(), "로그아웃에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                    }
+
+                    REPONSE_STATUS.NETWORK_ERROR -> {
+                        Toast.makeText(requireContext(), "네트워크 오류입니다.", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-        }
+        )
     }
 }

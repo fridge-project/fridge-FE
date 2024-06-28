@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.alne.databinding.FragmentHomeBinding
-import com.example.alne.model.Food
+import com.example.alne.data.model.Food
 import com.example.alne.room.model.recipe
 import com.example.alne.view.Recipe.RecipeDetailActivity
 import com.example.alne.view.Recipe.RecipeGVAdapter

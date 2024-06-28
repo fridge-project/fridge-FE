@@ -14,6 +14,7 @@ class StartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityStartBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.startLoginBt.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }

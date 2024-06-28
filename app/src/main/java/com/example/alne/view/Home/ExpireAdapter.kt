@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alne.R
 import com.example.alne.databinding.ItemExpireBinding
-import com.example.alne.model.Food
+import com.example.alne.data.model.Food
 
 class ExpireAdapter(var item: ArrayList<Food>): RecyclerView.Adapter<ExpireAdapter.ViewHolder>() {
 

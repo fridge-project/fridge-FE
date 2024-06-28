@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alne.databinding.ItemOrderBinding
-import com.example.alne.model.Process
+import com.example.alne.data.model.Process
 
 class ReviewRVAdapter(val items: ArrayList<Process>): RecyclerView.Adapter<ReviewRVAdapter.ViewHolder>() {
 

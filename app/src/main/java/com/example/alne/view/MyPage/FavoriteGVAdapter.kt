@@ -12,8 +12,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.alne.R
-import com.example.alne.model.Favorite
-import com.example.alne.model.Recipe
+import com.example.alne.data.model.Favorite
+import com.example.alne.data.model.Recipe
 import com.example.alne.room.model.recipe
 
 class FavoriteGVAdapter(val context: Context): BaseAdapter() {

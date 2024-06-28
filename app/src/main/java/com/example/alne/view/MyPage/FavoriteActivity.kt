@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import com.example.alne.R
 import com.example.alne.databinding.ActivityFavoriteBinding
-import com.example.alne.model.Favorite
+import com.example.alne.data.model.Favorite
 import com.example.alne.room.model.recipe
 import com.example.alne.view.Recipe.RecipeDetailActivity
 import com.example.alne.view.Recipe.RecipeGVAdapter

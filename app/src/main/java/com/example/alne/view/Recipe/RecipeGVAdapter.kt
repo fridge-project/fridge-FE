@@ -12,7 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.alne.R
-import com.example.alne.model.Recipe
+import com.example.alne.data.model.Recipe
 import com.example.alne.room.model.recipe
 
 class RecipeGVAdapter(val context: Context): BaseAdapter(), Filterable {
