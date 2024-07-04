@@ -4,3 +4,10 @@ enum class REPONSE_STATUS{
     FAIL,
     NETWORK_ERROR
 }
+
+enum class Recipe_TYPE {
+    DEFAULT,
+    CATEGORY1,
+    CATEGORY2,
+    SEARCH
+}

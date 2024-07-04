@@ -57,119 +57,126 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/recipe_menu_All_bt"
-                android:background="@drawable/menu_click"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:layout_gravity="center"
-                android:text="ALL"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:textColor="@drawable/button_click_textcolor"
-                android:textStyle="bold" />
+            <RadioGroup
+                android:id="@+id/recipe_radio_gp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:checkedButton="@id/recipe_radio_all"
+                android:layout_height="wrap_content">
+
+               <RadioButton
+                   android:id="@+id/recipe_radio_all"
+                   android:text="ALL"
+                   android:button="@null"
+                   android:background="@drawable/menu_click"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:minHeight="0dp"
+                   android:minWidth="0dp"
+                   android:layout_gravity="center"
+                   android:paddingLeft="25dp"
+                   android:paddingRight="25dp"
+                   android:paddingTop="8dp"
+                   android:paddingBottom="8dp"
+                   android:textColor="@drawable/button_click_textcolor"
+                   android:textStyle="bold"/>
+
+                <RadioButton
+                    android:id="@+id/recipe_radio_korean"
+                    android:text="한식"
+                    android:layout_marginStart="10dp"
+                    android:button="@null"
+                    android:background="@drawable/menu_click"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:layout_gravity="center"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="25dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@drawable/button_click_textcolor"
+                    android:textStyle="bold"/>
+
+                <RadioButton
+                    android:id="@+id/recipe_radio_chinese"
+                    android:text="중식"
+                    android:layout_marginStart="10dp"
+                    android:button="@null"
+                    android:background="@drawable/menu_click"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:layout_gravity="center"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="25dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@drawable/button_click_textcolor"
+                    android:textStyle="bold"/>
+
+                <RadioButton
+                    android:id="@+id/recipe_radio_japanese"
+                    android:text="일식"
+                    android:layout_marginStart="10dp"
+                    android:button="@null"
+                    android:background="@drawable/menu_click"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:layout_gravity="center"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="25dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@drawable/button_click_textcolor"
+                    android:textStyle="bold"/>
+
+                <RadioButton
+                    android:id="@+id/recipe_radio_western"
+                    android:text="양식"
+                    android:layout_marginStart="10dp"
+                    android:button="@null"
+                    android:background="@drawable/menu_click"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:layout_gravity="center"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="25dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@drawable/button_click_textcolor"
+                    android:textStyle="bold"/>
+
+                <RadioButton
+                    android:id="@+id/recipe_radio_etc"
+                    android:text="기타"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:button="@null"
+                    android:background="@drawable/menu_click"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:layout_gravity="center"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="25dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@drawable/button_click_textcolor"
+                    android:textStyle="bold"/>
 
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/recipe_menu_korean_bt"
-                android:background="@drawable/menu_click"
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:layout_gravity="center"
-                android:text="한식"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@drawable/button_click_textcolor"
-                android:textStyle="bold" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/recipe_menu_chinese_bt"
-                android:background="@drawable/menu_click"
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:layout_gravity="center"
-                android:text="중식"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@drawable/button_click_textcolor"
-                android:textStyle="bold" />
+            </RadioGroup>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/recipe_menu_japan_bt"
-                android:background="@drawable/menu_click"
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:layout_gravity="center"
-                android:text="일식"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@drawable/button_click_textcolor"
-                android:textStyle="bold" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/recipe_menu_italian_bt"
-                android:background="@drawable/menu_click"
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:layout_gravity="center"
-                android:text="양식"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@drawable/button_click_textcolor"
-                android:textStyle="bold" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/recipe_menu_etc_bt"
-                android:background="@drawable/menu_click"
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:layout_gravity="center"
-                android:text="기타"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@drawable/button_click_textcolor"
-                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -188,16 +195,18 @@
 <!--        app:layout_constraintStart_toStartOf="@+id/recipe_menu_sv"-->
 <!--        app:layout_constraintTop_toBottomOf="@+id/recipe_menu_sv" />-->
 
-    <GridView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipe_gv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="15dp"
         android:horizontalSpacing="30dp"
         android:numColumns="auto_fit"
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        app:spanCount="2"
         android:scrollbars="none"
         android:stretchMode="columnWidth"
+
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/recipe_sv"
