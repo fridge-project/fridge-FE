@@ -4,9 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.alne.repository.recipeRepository
 import com.example.alne.room.model.recipe
+import com.example.alne.utils.Recipe_TYPE
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class RecipeViewModel() : ViewModel() {
@@ -17,7 +21,11 @@ class RecipeViewModel() : ViewModel() {
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            _getRecipeLiveData.postValue(repository.getAllRecipe())
+           // _getRecipeLiveData.postValue(repository.getAllRecipe())
         }
+    }
+
+    fun getRecipePagingList(category: String? = null, type: Recipe_TYPE) : Flow<PagingData<recipe>> {
+        return repository.getRecipePagingSource(category, type).cachedIn(viewModelScope)
     }
 }
