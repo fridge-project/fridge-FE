@@ -3,6 +3,7 @@ package com.example.alne
 import android.app.Application
 import android.util.Log
 import com.example.alne.room.AppDatabase
+import com.example.alne.utils.SharedPrefManager
 import com.kakao.sdk.common.KakaoSdk
 
 class GlobalApplication():Application() {
