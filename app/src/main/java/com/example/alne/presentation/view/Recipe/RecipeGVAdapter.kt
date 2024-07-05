@@ -97,6 +97,7 @@ class RecipeGVAdapter(val context: Context): Filterable, PagingDataAdapter<recip
 
             override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
                 items = p1?.values as ArrayList<recipe>
+
                 notifyDataSetChanged()
             }
         }

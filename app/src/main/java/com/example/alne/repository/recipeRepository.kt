@@ -24,7 +24,7 @@ class recipeRepository {
 
 
     // 레시피 목록 Paging
-    fun getRecipePagingSource(category: String?, type: Recipe_TYPE): Flow<PagingData<recipe>> {
+    fun getRecipePagingSource(category : String?, type: Recipe_TYPE): Flow<PagingData<recipe>> {
         return Pager(
             config =  PagingConfig(
                 pageSize = 10,

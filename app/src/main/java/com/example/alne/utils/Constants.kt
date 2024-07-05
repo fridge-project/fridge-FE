@@ -1,4 +1,7 @@
 package com.example.alne.utils
+
+import android.content.res.Resources
+
 enum class REPONSE_STATUS{
     OKAY,
     FAIL,
@@ -11,3 +14,6 @@ enum class Recipe_TYPE {
     CATEGORY2,
     SEARCH
 }
+
+fun Float.fromDpToPx(): Int =
+    (this * Resources.getSystem().displayMetrics.density).toInt()
