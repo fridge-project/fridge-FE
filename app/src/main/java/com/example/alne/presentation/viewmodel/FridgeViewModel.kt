@@ -6,12 +6,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.alne.GlobalApplication
-import com.example.alne.Network.FridgeGetResponse
 import com.example.alne.Network.FridgePostResponse
-import com.example.alne.data.model.Food
-import com.example.alne.data.model.UserId
+import com.example.alne.data.model.FridgeIngredient
 import com.example.alne.repository.fridgeRepository
+import com.example.alne.utils.RESPONSE_STATUS
 import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -25,20 +26,42 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
     private val repository = fridgeRepository()
 
     //재료 등록 정보
-    private val _getFridgeLiveData = MutableLiveData<ArrayList<Food>>()
-    val getFridgeLiveData: LiveData<ArrayList<Food>> = _getFridgeLiveData
+    private val _getFridgeLiveData = MutableLiveData<ArrayList<FridgeIngredient>>()
+    val getFridgeLiveData: LiveData<ArrayList<FridgeIngredient>> = _getFridgeLiveData
 
 
     init {
-        if(getUserToken() != null){
-            getFridgeFood(getUserToken()?.accessToken!!, UserId(getUserToken()?.accessToken?.toInt()!!, null))
-        }
+        getFridgeFood()
+    }
+    fun addFridgeDataTest(food: FridgeIngredient, completion: (RESPONSE_STATUS) -> Unit){
+        repository.addFridgeDataTest(food).enqueue(object: Callback<JsonElement> {
+            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                var res = response.body()
+                when(response.code()){
+                    200 -> {
+                        completion(RESPONSE_STATUS.OKAY)
+
+                    }
+
+                    500 -> {
+                        completion(RESPONSE_STATUS.FAIL)
+                    }
+                }
+                Log.d("addFridgeDataTest", res.toString())
+            }
+
+            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                completion(RESPONSE_STATUS.NETWORK_ERROR)
+            }
+
+        })
     }
 
-    fun addFridgeData(accessToken: String, food: Food, photoFile: File?){
+    fun addFridgeData(food: FridgeIngredient, photoFile: File?){
         var fileBody: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), photoFile!!)
         var file: MultipartBody.Part = MultipartBody.Part.createFormData("file", photoFile!!.name, fileBody)
         var content: RequestBody = RequestBody.create("application/json".toMediaTypeOrNull(), Gson().toJson(food))
+        var accessToken = GlobalApplication.prefManager.getUserToken().accessToken
         repository.addFridgeData(accessToken,content, file).enqueue(object: Callback<FridgePostResponse>{
             override fun onResponse(
                 call: Call<FridgePostResponse>,
@@ -52,7 +75,7 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
                         200 -> {
                             Log.d("addFridgeData", "재료 등록 성공")
                             Log.d("addFridgeData", response.body()?.data.toString())
-                            getFridgeFood(getUserToken()?.accessToken!!, UserId(getUserToken()?.accessToken?.toInt()!!, null))
+//                            getFridgeFood(getUserToken()?.accessToken!!, UserId(getUserToken()?.accessToken?.toInt()!!, null))
 
                         }
                         401 -> {
@@ -67,69 +90,69 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
         })
     }
 
-    fun getFridgeFood(accessToken: String, userId: UserId){
-        Log.d("accessToken", accessToken)
-        Log.d("userId", userId.toString())
-        repository.getFridgeFood(accessToken, userId).enqueue(object: Callback<FridgeGetResponse>{
+    fun getFridgeFood(){
+        repository.getFridgeFood().enqueue(object: Callback<JsonArray>{
             override fun onResponse(
-                call: Call<FridgeGetResponse>,
-                response: Response<FridgeGetResponse>,
+                call: Call<JsonArray>,
+                response: Response<JsonArray>,
             ) {
-                Log.d("getFridgeFood", "onSuccess")
-                if(response.isSuccessful) {
-                    var res = response.body()
-                    when(res?.status){
-                        200 -> {
-                            var fridge = res.data
-                            var items: ArrayList<Food> = ArrayList()
-                            for(item in fridge){
-                                var name = item.ingredient.name
-                                var image = item.imageUrl
-                                var storage = item.storage
-                                var expire = item.exp
-                                var memo = item.memo
-                                var food = Food(item.ingredient.id, name, expire,item.addDate, memo, storage, image)
-                                items.add(food)
+                var res: JsonArray? = response.body()
+                when(response.code()){
+                    200 -> {
+                        if (res != null) {
+                            var items: ArrayList<FridgeIngredient> = ArrayList()
+                            for(json in res){
+                                var jsonObject = json.asJsonObject
+                                var name = jsonObject.get("name").asString
+                                var memo = jsonObject.get("memo").asString
+                                var storage = jsonObject.get("storage").asString
+                                var exp = jsonObject.get("exp").asString
+                                var date = jsonObject.get("date").asString
+                                var imageURL = jsonObject.get("imageURL").asString
+                                items.add(
+                                    FridgeIngredient(name,memo,storage,exp,date, imageURL)
+                                )
                             }
                             _getFridgeLiveData.postValue(items)
                         }
                     }
-                }else{
-                    Log.d("getFridgeFood", response.body().toString())
+
+                    401 -> {
+
+                    }
                 }
+                Log.d("getFridgeFood", res.toString())
             }
 
-            override fun onFailure(call: Call<FridgeGetResponse>, t: Throwable) {
+            override fun onFailure(call: Call<JsonArray>, t: Throwable) {
                 Log.d("getFridgeFood", t.message.toString())
             }
 
         })
     }
-
-    fun deleteFridgeFood(userId: UserId){
-        repository.deleteFridgeFood(userId).enqueue(object: Callback<FridgePostResponse>{
-            override fun onResponse(
-                call: Call<FridgePostResponse>,
-                response: Response<FridgePostResponse>,
-            ) {
-                var res = response.body()
-                Log.d("deleteFridgeFood", res.toString())
-                    when(res?.status){
-                        200 -> {
-                            getFridgeFood(getUserToken()?.accessToken!!, UserId(getUserToken()?.accessToken?.toInt()!!, null))
-                        }
-                        else -> {
-                            Log.d("deleteFridgeFood", "onSuccess:fail")
-                        }
-                    }
-
-            }
-
-            override fun onFailure(call: Call<FridgePostResponse>, t: Throwable) {
-                Log.d("deleteFridgeFood:FAIL", t.message.toString())
-            }
-        })
-    }
-
-    fun getUserToken() = GlobalApplication.prefManager.getUserToken()
+//
+//    fun deleteFridgeFood(userId: UserId){
+//        repository.deleteFridgeFood(userId).enqueue(object: Callback<FridgePostResponse>{
+//            override fun onResponse(
+//                call: Call<FridgePostResponse>,
+//                response: Response<FridgePostResponse>,
+//            ) {
+//                var res = response.body()
+//                Log.d("deleteFridgeFood", res.toString())
+//                    when(res?.status){
+//                        200 -> {
+//                            getFridgeFood(getUserToken()?.accessToken!!, UserId(getUserToken()?.accessToken?.toInt()!!, null))
+//                        }
+//                        else -> {
+//                            Log.d("deleteFridgeFood", "onSuccess:fail")
+//                        }
+//                    }
+//
+//            }
+//
+//            override fun onFailure(call: Call<FridgePostResponse>, t: Throwable) {
+//                Log.d("deleteFridgeFood:FAIL", t.message.toString())
+//            }
+//        })
+//    }
 }
