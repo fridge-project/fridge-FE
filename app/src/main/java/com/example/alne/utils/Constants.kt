@@ -2,7 +2,7 @@ package com.example.alne.utils
 
 import android.content.res.Resources
 
-enum class REPONSE_STATUS{
+enum class RESPONSE_STATUS{
     OKAY,
     FAIL,
     NETWORK_ERROR
