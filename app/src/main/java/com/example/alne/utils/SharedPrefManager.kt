@@ -63,7 +63,6 @@ class SharedPrefManager(val context: Context) {
     fun getUserToken(): Token {
         val sharedPreferences = context?.getSharedPreferences(USER_INFO, AppCompatActivity.MODE_PRIVATE)
         val userJwt = Gson().fromJson(sharedPreferences?.getString(KEY_USER_TOKEN,null), Token::class.java)
-        Log.d("token", userJwt.toString())
         return userJwt
     }
 
