@@ -32,9 +32,6 @@
         <activity
             android:name=".view.MyPage.UserProfileActivity"
             android:exported="false" />
-        <activity
-            android:name=".view.Recipe.viewpage.review.viewpage.UserReviewActivity"
-            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -55,9 +52,9 @@
         </activity>
         <activity
             android:name=".view.Splash.SplashActivity"
+            android:theme="@style/Theme.ALNE.SplashScreen"
             android:exported="true"
-            android:noHistory="true"
-            android:theme="@style/Theme.Start">
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -72,6 +69,7 @@
             android:exported="true" />
         <activity
             android:name=".view.Splash.StartActivity"
+            android:theme="@style/Theme.ALNE"
             android:exported="false" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"

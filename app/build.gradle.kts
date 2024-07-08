@@ -77,4 +77,6 @@ dependencies {
 
     implementation("com.github.ome450901:SimpleRatingBar:1.5.1")
 
+    implementation ("androidx.core:core-splashscreen:1.0.0-alpha01")
+
 }
