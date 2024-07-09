@@ -1,25 +1,24 @@
 package com.example.alne.view.Fridge
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.icu.util.Calendar
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alne.R
 import com.example.alne.databinding.ItemFridgeBinding
-import com.example.alne.data.model.Food
-import java.lang.Exception
+import com.example.alne.data.model.FridgeIngredient
 import java.text.SimpleDateFormat
-import java.time.Year
 
-class FridgeAdapter(val context: Context,  val items: ArrayList<Food>): RecyclerView.Adapter<FridgeAdapter.ViewHolder>() {
+class FridgeAdapter(val context: Context): RecyclerView.Adapter<FridgeAdapter.ViewHolder>() {
 
+    val items: ArrayList<FridgeIngredient> = ArrayList()
     var calendar = Calendar.getInstance()
     var sfp = SimpleDateFormat("yyyy.MM.dd")
     init {
@@ -30,7 +29,7 @@ class FridgeAdapter(val context: Context,  val items: ArrayList<Food>): Recycler
     }
 
     interface MyItemClickListener {
-        fun onItemClick(food: Food)
+        fun onItemClick(food: FridgeIngredient)
         fun onInfoClick(view: View, position: Int)
     }
     private lateinit var mItemClickListener : MyItemClickListener
@@ -39,13 +38,13 @@ class FridgeAdapter(val context: Context,  val items: ArrayList<Food>): Recycler
     }
 
     inner class ViewHolder(val binding: ItemFridgeBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(food: Food){
+        fun bind(food: FridgeIngredient){
             Log.d("food", food.toString())
             // 마감 날짜
             var expDate = sfp.parse(food.exp!!.split(" ")[0])
 
             // 등록 날짜
-            var addDate = sfp.parse(food.addDate!!.split(" ")[0])
+            var addDate = sfp.parse(food.date!!.split(" ")[0])
 
             // 유효날짜 - 등록 날짜
             var dateLength = (expDate.time - addDate.time)/ (60 * 60 * 24 * 1000)
@@ -64,10 +63,11 @@ class FridgeAdapter(val context: Context,  val items: ArrayList<Food>): Recycler
                 binding.itemFridgeExpireInfoTv.text = "유효기간 ${needDiff}일 남음"
             }
 
-            if(food.imageUrl != null){
-                Glide.with(context).load(food.imageUrl).into(binding.itemFridgeIv)
+            if(food.imageURL != ""){
+                Glide.with(context).load(food.imageURL).into(binding.itemFridgeIv)
             }else{
                 binding.itemFridgeIv.setImageResource(R.drawable.camera )
+                binding.itemFridgeIv.scaleType = ImageView.ScaleType.FIT_XY
             }
 
 
@@ -124,13 +124,13 @@ class FridgeAdapter(val context: Context,  val items: ArrayList<Food>): Recycler
         }
     }
 
-    fun addAllFood(item: ArrayList<Food>){
+    fun addAllFood(item: ArrayList<FridgeIngredient>){
         items.clear()
         items.addAll(item)
         notifyDataSetChanged()
     }
 
-    fun addFood(item: Food){
+    fun addFood(item: FridgeIngredient){
         items.add(items.size-1, item)
         Log.d("adapter:item.size", items.size.toString())
         notifyDataSetChanged()
