@@ -1,11 +1,13 @@
 package com.example.alne.Network
 
-import com.example.alne.data.model.Food
-import com.example.alne.data.model.UserId
+import com.example.alne.data.model.FridgeIngredient
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -21,16 +23,18 @@ interface FridgeApi {
         @Part("addIngredientDto") food: RequestBody
     ): Call<FridgePostResponse>
 
+    @POST(API.FRIDGE)
+    fun addFridgeFoodTest(
+        @Body food: FridgeIngredient
+    ): Call<JsonElement>
 
-    @POST("/getFridge")
-    fun getFridgeFood(
-        @Header("accessToken") accessToken: String,
-        @Body userId: UserId
-    ): Call<FridgeGetResponse>
 
-    @POST("/delFridge")
-    fun deleteFridgeFood(
-        @Body userId: UserId
-    ): Call<FridgePostResponse>
+    @GET(API.FRIDGE)
+    fun getFridgeFood(): Call<JsonArray>
+
+//    @POST("/delFridge")
+//    fun deleteFridgeFood(
+//        @Body userId: UserId
+//    ): Call<FridgePostResponse>
 
 }
