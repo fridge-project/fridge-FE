@@ -10,13 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.alne.databinding.FragmentHomeBinding
-import com.example.alne.data.model.Food
 import com.example.alne.room.model.recipe
 import com.example.alne.view.Recipe.RecipeDetailActivity
-import com.example.alne.view.Recipe.RecipeGVAdapter
 import com.example.alne.viewmodel.HomeViewModel
 import com.google.gson.Gson
 
@@ -32,12 +28,6 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
-
-//        viewModel.getFridgeLiveData.observe(viewLifecycleOwner, Observer {
-//            var adapter = ExpireAdapter(it)
-//            binding.homeItemRv.adapter = adapter
-//        })
-
 
         val adapter = HomeRecipeRankRVAdapter(requireContext())
         adapter.setMyItemClickListener(object: HomeRecipeRankRVAdapter.setOnClickListener{
