@@ -6,15 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.alne.databinding.FragmentFridgeBinding
-import com.example.alne.data.model.Food
-import com.example.alne.data.model.Jwt
+import com.example.alne.data.model.FridgeIngredient
+import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.viewmodel.FridgeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
-import java.io.File
 
 
 class FridgeFragment : Fragment(), MyCustomDialogInterface{
@@ -37,25 +34,38 @@ class FridgeFragment : Fragment(), MyCustomDialogInterface{
             tab.text = information[position]
         }.attach()
 
-        // 재료 추가 버튼 클릭 시
+        // + 버튼 클릭 시
         binding.fridgeFloatingBt.setOnClickListener{
-            CustomDialogAdd(requireContext(), getUserToken(), this@FridgeFragment).show(requireActivity().supportFragmentManager, "CustomDialog")
+            CustomDialogAdd(requireContext(), this@FridgeFragment).show(requireActivity().supportFragmentManager, "CustomDialog")
         }
 
         return binding.root
     }
 
-    //Jwt 가져오기 수정
-    fun getUserToken(): Jwt {
-        val sharedPreferences = activity?.getSharedPreferences("user_info", AppCompatActivity.MODE_PRIVATE)
-        val userJwt = Gson().fromJson(sharedPreferences?.getString("jwt",null), Jwt::class.java)
-        return userJwt
-    }
 
-    override fun onSubmitBtnClicked(food: Food, photoFile: File?) {
-        viewModel.addFridgeData(getUserToken().accessToken!!, food, photoFile)
-    }
+//    override fun onSubmitBtnClicked(food: FridgeIngredient, photoFile: File?) {
+//        viewModel.addFridgeData(food, photoFile)
+//    }
 
+    // 재료 추가버튼 클릭 시
+    override fun onSubmitBtnClicked(food: FridgeIngredient) {
+        viewModel.addFridgeDataTest(food, completion = { responseState ->
+                when (responseState) {
+                    RESPONSE_STATUS.OKAY -> {
+                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.OKAY")
+                    }
+
+                    RESPONSE_STATUS.FAIL -> {
+                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.FAIL")
+                    }
+
+                    RESPONSE_STATUS.NETWORK_ERROR -> {
+                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.NETWORK_ERROR")
+                    }
+                }
+            }
+        )
+    }
     override fun onDestroy() {
         super.onDestroy()
         Log.d("FridgeFragment", "destroy")

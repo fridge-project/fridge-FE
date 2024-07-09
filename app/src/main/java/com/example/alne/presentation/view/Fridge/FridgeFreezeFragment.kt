@@ -14,12 +14,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alne.R
 import com.example.alne.databinding.FragmentFridgeFreezeBinding
-import com.example.alne.data.model.Food
+import com.example.alne.data.model.FridgeIngredient
 import com.example.alne.data.model.Jwt
-import com.example.alne.data.model.UserId
+import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.viewmodel.FridgeViewModel
 import com.google.gson.Gson
-import java.io.File
 
 class FridgeFreezeFragment : Fragment(), MyCustomDialogDetailInterface {
 
@@ -39,7 +38,7 @@ class FridgeFreezeFragment : Fragment(), MyCustomDialogDetailInterface {
         binding.fridgeFrozenRv.adapter = fridgeFrozenAdapter
         binding.fridgeFrozenRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         fridgeFrozenAdapter.setMyItemClickListener(object: FridgeFrozenAdapter.MyItemClickListener {
-            override fun onItemClick(food: Food) {
+            override fun onItemClick(food: FridgeIngredient) {
                 getCustomDialog(food)
             }
 
@@ -53,11 +52,11 @@ class FridgeFreezeFragment : Fragment(), MyCustomDialogDetailInterface {
                         R.id.menu_modify -> getCustomDialog(fridgeFrozenAdapter.items[position])
                         R.id.menu_delete -> {
                             fridgeFrozenAdapter.notifyDataSetChanged()
-                            viewModel.deleteFridgeFood(
-                                UserId(getUserToken().userId,
-                                    fridgeFrozenAdapter.items[position].userId!!
-                                )
-                            )
+//                            viewModel.deleteFridgeFood(
+//                                UserId(getUserToken().userId,
+//                                    fridgeFrozenAdapter.items[position].userId!!
+//                                )
+//                            )
                         }
                     }
                     false
@@ -75,8 +74,8 @@ class FridgeFreezeFragment : Fragment(), MyCustomDialogDetailInterface {
         return binding.root
     }
 
-    private fun getCustomDialog(food: Food){
-        CustomDialogDetail(requireContext(),getUserToken(),food, this).show(requireActivity().supportFragmentManager, "CustomDialog")
+    private fun getCustomDialog(food: FridgeIngredient){
+        CustomDialogDetail(requireContext(),food, this).show(requireActivity().supportFragmentManager, "CustomDialog")
     }
 
     fun getUserToken(): Jwt {
@@ -90,8 +89,27 @@ class FridgeFreezeFragment : Fragment(), MyCustomDialogDetailInterface {
         Log.d("FridgeFreezeFragment", "onDestroy")
     }
 
-    override fun onSubmitBtnDetailClicked(food: Food, photoFile: File?) {
-        viewModel.addFridgeData(getUserToken().accessToken!!, food, photoFile)
-    }
+//    override fun onSubmitBtnDetailClicked(food: FridgeIngredient, photoFile: File?) {
+//        viewModel.addFridgeData(getUserToken().accessToken!!, food, photoFile)
+//    }
 
+    override fun onSubmitBtnDetailClicked(food: FridgeIngredient) {
+        Log.d("onSubmitBtnDetailClicked", "launch")
+        viewModel.addFridgeDataTest(food, completion = { responseState ->
+                when (responseState) {
+                    RESPONSE_STATUS.OKAY -> {
+                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.OKAY")
+                    }
+
+                    RESPONSE_STATUS.FAIL -> {
+                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.FAIL")
+                    }
+
+                    RESPONSE_STATUS.NETWORK_ERROR -> {
+                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.NETWORK_ERROR")
+                    }
+                }
+            }
+        )
+    }
 }
