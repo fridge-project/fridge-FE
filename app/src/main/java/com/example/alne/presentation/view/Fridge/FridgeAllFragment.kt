@@ -11,10 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alne.GlobalApplication
 import com.example.alne.databinding.FragmentFridgeAllBinding
-import com.example.alne.data.model.Food
-import com.example.alne.data.model.UserId
+import com.example.alne.data.model.FridgeIngredient
+import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.viewmodel.FridgeViewModel
-import java.io.File
 
 
 class FridgeAllFragment : Fragment(), MyCustomDialogDetailInterface {
@@ -25,49 +24,67 @@ class FridgeAllFragment : Fragment(), MyCustomDialogDetailInterface {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentFridgeAllBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(requireActivity()).get(FridgeViewModel::class.java)
         Log.d("FridgeAllFragment", "onCreateView")
 
+        //RecyclerView 초기화
+        fridgeRecyclerViewSettings()
+        //현재 재료 목록 옵저버 패턴
+        viewModel.getFridgeLiveData.observe(viewLifecycleOwner, Observer { items ->
+            Log.d("getFridge", items.toString())
+            fridgeadapter.addAllFood(items)
+        })
+
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun fridgeRecyclerViewSettings(){
+        fridgeadapter = FridgeAdapter(requireContext())
+        binding.fridgeAllRv.adapter = fridgeadapter
+        binding.fridgeAllRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false )
+        fridgeadapter.setMyItemClickListener(object: FridgeAdapter.MyItemClickListener {
+            // 보유재료 클릭 시
+            override fun onItemClick(food: FridgeIngredient) {
+                CustomDialogDetail(requireContext(),food, this@FridgeAllFragment).show(requireActivity().supportFragmentManager, "CustomDialog")
+            }
 
-        viewModel.getFridgeLiveData.observe(viewLifecycleOwner, Observer { items ->
-            Log.d("getFridge", items.toString())
-            fridgeadapter = FridgeAdapter(requireContext(), items)
-            binding.fridgeAllRv.adapter = fridgeadapter
-            binding.fridgeAllRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false )
-            fridgeadapter.setMyItemClickListener(object: FridgeAdapter.MyItemClickListener {
-                override fun onItemClick(food: Food) {
-                    getCustomDialog(food)
-                }
-
-                // 보유재료 삭제 기능
-                override fun onInfoClick(view: View, position: Int) {
+            // 보유재료 삭제 기능
+            override fun onInfoClick(view: View, position: Int) {
 //                    viewModel.deleteFridgeFood(UserId(
 //                        getUserToken()?.userId!!,
 //                        fridgeadapter.items[position].userId!!
 //                    ))
-                }
-            })
+            }
         })
     }
 
-    private fun getCustomDialog(food: Food){
-//        CustomDialogDetail(requireContext(), getUserToken()!!,food, this).show(requireActivity().supportFragmentManager, "CustomDialog")
-    }
-
-    fun getUserToken() = GlobalApplication.prefManager.getUserToken()
-
     // 재료 수정하기(편집)
-    override fun onSubmitBtnDetailClicked(food: Food, photoFile: File?) {
-        Log.d("onSubmitBtnDetailClicked", "launch")
+//    override fun onSubmitBtnDetailClicked(food: FridgeIngredient, photoFile: File?) {
+//        Log.d("onSubmitBtnDetailClicked", "launch")
+//
+//        //viewModel.addFridgeData(getUserToken()?.accessToken!!, food, photoFile)
+//    }
 
-        viewModel.addFridgeData(getUserToken()?.accessToken!!, food, photoFile)
+    // 재료 저장하기 버튼 클릭 시
+    override fun onSubmitBtnDetailClicked(food: FridgeIngredient) {
+        Log.d("onSubmitBtnDetailClicked", "launch")
+        viewModel.addFridgeDataTest(food, completion = { responseState ->
+                when (responseState) {
+                    RESPONSE_STATUS.OKAY -> {
+                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.OKAY")
+                    }
+
+                    RESPONSE_STATUS.FAIL -> {
+                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.FAIL")
+                    }
+
+                    RESPONSE_STATUS.NETWORK_ERROR -> {
+                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.NETWORK_ERROR")
+                    }
+                }
+            }
+        )
     }
 
 }
