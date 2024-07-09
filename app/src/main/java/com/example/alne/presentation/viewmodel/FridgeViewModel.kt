@@ -29,18 +29,34 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
     private val _getFridgeLiveData = MutableLiveData<ArrayList<FridgeIngredient>>()
     val getFridgeLiveData: LiveData<ArrayList<FridgeIngredient>> = _getFridgeLiveData
 
+    // 현재 등록된 재료 아이템
+    var fridgeItems = ArrayList<FridgeIngredient>()
 
     init {
         getFridgeFood()
     }
+
+    // 재료 등록
+    fun addItem(food: FridgeIngredient){
+        fridgeItems.add(food)
+        _getFridgeLiveData.postValue(fridgeItems)
+    }
+
+    // 재료 등록
+    fun deleteItem(food: FridgeIngredient){
+        fridgeItems.remove(food)
+        _getFridgeLiveData.postValue(fridgeItems)
+    }
+
+
     fun addFridgeDataTest(food: FridgeIngredient, completion: (RESPONSE_STATUS) -> Unit){
         repository.addFridgeDataTest(food).enqueue(object: Callback<JsonElement> {
             override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
                 var res = response.body()
                 when(response.code()){
                     200 -> {
+                        addItem(food)
                         completion(RESPONSE_STATUS.OKAY)
-
                     }
 
                     500 -> {
@@ -113,6 +129,7 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
                                     FridgeIngredient(name,memo,storage,exp,date, imageURL)
                                 )
                             }
+                            fridgeItems.addAll(items)
                             _getFridgeLiveData.postValue(items)
                         }
                     }
