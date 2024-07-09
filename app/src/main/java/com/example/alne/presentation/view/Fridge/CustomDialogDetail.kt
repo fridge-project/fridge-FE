@@ -38,7 +38,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import com.example.alne.databinding.ItemFoodDetailBinding
-import com.example.alne.data.model.Food
+import com.example.alne.data.model.FridgeIngredient
 import com.example.alne.data.model.Jwt
 import java.io.File
 import java.io.FileOutputStream
@@ -47,7 +47,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
-class CustomDialogDetail(context: Context, val jwt: Jwt, val food: Food, myCustomDialogDetailInterface: MyCustomDialogDetailInterface): DialogFragment() {
+class CustomDialogDetail(context: Context, val food: FridgeIngredient, myCustomDialogDetailInterface: MyCustomDialogDetailInterface): DialogFragment() {
     private lateinit var binding: ItemFoodDetailBinding
     var storage: String? = null
     val myAdapter = ArrayAdapter(
@@ -77,12 +77,13 @@ class CustomDialogDetail(context: Context, val jwt: Jwt, val food: Food, myCusto
         savedInstanceState: Bundle?
     ): View? {
         binding = ItemFoodDetailBinding.inflate(inflater, container, false)
-        if(food.imageUrl != null){
+        if(food.imageURL != ""){
             binding.itemFoodDetailIv.visibility = View.VISIBLE
-            Glide.with(requireContext()).load(food.imageUrl).into(binding.itemFoodDetailIv)
+            Glide.with(requireContext()).load(food.imageURL).into(binding.itemFoodDetailIv)
             binding.itemFoodDetailIv.scaleType = ImageView.ScaleType.FIT_XY
             binding.itemFoodDetailDefaultIv.visibility = View.GONE
         }
+
         var dateString: String = food.exp!!
         var date = dateString.split(" ")[0]
         var time = dateString.split(" ")[1]
@@ -106,8 +107,10 @@ class CustomDialogDetail(context: Context, val jwt: Jwt, val food: Food, myCusto
             val title = binding.foodTitleEt.text.toString()
             Log.d("data", title + " "+ storage)
             myCustomDialogDetailInterface?.onSubmitBtnDetailClicked(
-                Food(jwt.userId,title,date + " " + time, addDate, binding
-                .foodMemoTv.text.toString(),storage!!), photoFile)
+                FridgeIngredient(title, binding.foodMemoTv.text.toString(), storage!!,date + " " + time, addDate, "" )
+            )
+//                FridgeIngredient(jwt.userId,title,date + " " + time, addDate, binding
+//                .foodMemoTv.text.toString(),storage!!), photoFile)
             dismiss()
         }
 
@@ -116,6 +119,10 @@ class CustomDialogDetail(context: Context, val jwt: Jwt, val food: Food, myCusto
         }
 
         binding.itemFoodDetailIv.setOnClickListener{
+            showDialog()
+        }
+
+        binding.itemFoodDetailDefaultIv.setOnClickListener {
             showDialog()
         }
 
@@ -185,8 +192,6 @@ class CustomDialogDetail(context: Context, val jwt: Jwt, val food: Food, myCusto
         val permissionCheck = ContextCompat.checkSelfPermission(
             requireContext(), Manifest.permission.CAMERA
         )
-
-        // 허용이 안되어있으면,
 
         // 허용이 안되어있으면,
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -321,5 +326,6 @@ class CustomDialogDetail(context: Context, val jwt: Jwt, val food: Food, myCusto
 
 // 재료 수정하기(편집)
 interface MyCustomDialogDetailInterface {
-    fun onSubmitBtnDetailClicked(food: Food, photoFile: File?)
+    //fun onSubmitBtnDetailClicked(food: FridgeIngredient, photoFile: File?)
+    fun onSubmitBtnDetailClicked(food: FridgeIngredient)
 }
