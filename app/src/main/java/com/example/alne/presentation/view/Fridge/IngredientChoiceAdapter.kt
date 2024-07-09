@@ -10,8 +10,9 @@ import com.example.alne.databinding.ItemChoiceIngredientBinding
 import com.example.alne.room.model.food
 import com.example.alne.room.model.recipe
 
-class IngredientChoiceAdapter(var items: ArrayList<food>): RecyclerView.Adapter<IngredientChoiceAdapter.ViewHolder>(), Filterable{
+class IngredientChoiceAdapter(): RecyclerView.Adapter<IngredientChoiceAdapter.ViewHolder>(), Filterable{
 
+    var items: ArrayList<food> = ArrayList()
     var itemsFilter: ArrayList<food> = items
     inner class ViewHolder(val binding: ItemChoiceIngredientBinding): RecyclerView.ViewHolder(binding.root){}
 
@@ -66,6 +67,12 @@ class IngredientChoiceAdapter(var items: ArrayList<food>): RecyclerView.Adapter<
             }
         }
         return filter
+    }
+
+    fun addAllItems(items: ArrayList<food>){
+        items.clear()
+        this.items.addAll(items)
+        notifyDataSetChanged()
     }
 
 
