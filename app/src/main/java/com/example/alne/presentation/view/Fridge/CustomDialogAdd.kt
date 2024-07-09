@@ -19,7 +19,6 @@ import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -40,10 +39,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
-import com.bumptech.glide.Glide
 import com.example.alne.databinding.ItemFoodaddBinding
-import com.example.alne.data.model.Food
-import com.example.alne.data.model.Jwt
+import com.example.alne.data.model.FridgeIngredient
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -52,7 +49,7 @@ import java.util.Calendar
 import java.util.Date
 
 
-class CustomDialogAdd(context: Context, val jwt: Jwt, myCustomDialogInterface: MyCustomDialogInterface): DialogFragment() {
+class CustomDialogAdd(context: Context, myCustomDialogInterface: MyCustomDialogInterface): DialogFragment() {
     private lateinit var binding: ItemFoodaddBinding
     val REQUEST_IMAGE_CAPTURE = 1
     val REQUEST_IMAGE_CHOOSER = 2
@@ -93,12 +90,8 @@ class CustomDialogAdd(context: Context, val jwt: Jwt, myCustomDialogInterface: M
         var addDate = date + " " + time
         Log.d("addDate", addDate.toString())
 
-        var defaultImage = com.example.alne.R.drawable.camera
-        var defaultImageBitmap = BitmapFactory.decodeResource(resources, defaultImage)
-        binding.foodImageDefaultIv.setImageBitmap(defaultImageBitmap)
+        binding.foodImageDefaultIv.setImageResource(com.example.alne.R.drawable.add_black)
         binding.foodImageDefaultIv.scaleType = ImageView.ScaleType.FIT_XY
-
-
 
         // 이미지 선택
         binding.foodImageIv.setOnClickListener{
@@ -106,19 +99,23 @@ class CustomDialogAdd(context: Context, val jwt: Jwt, myCustomDialogInterface: M
         }
         spinnerSetting()
 
+        // 재료 추가 버튼 클릭
         binding.submitBt.setOnClickListener {
             val title = binding.itemFoodaddTitleTv.text.toString()
-            if(title.equals("재료 선택")){
+            if(title == "재료 선택"){
                 Toast.makeText(requireContext(), "재료를 선택해주세요.", Toast.LENGTH_SHORT).show()
-
             }else{
                 myCustomDialogInterface?.onSubmitBtnClicked(
-                    Food(jwt.userId,title,date + " " + time, addDate, binding
-                    .foodMemoTv.text.toString(),storage!!), photoFile)
+                    FridgeIngredient(title, binding.foodMemoTv.text.toString(), storage!!,date + " " + time, addDate, "" )
+                )
             }
+
+//            FridgeIngredient(jwt.userId,title,date + " " + time, addDate, binding
+//                .foodMemoTv.text.toString(),storage!!), photoFile)
             dismiss()
         }
 
+        // 취소 버튼 클릭
         binding.cancelBt.setOnClickListener {
             dismiss()
         }
@@ -204,8 +201,6 @@ class CustomDialogAdd(context: Context, val jwt: Jwt, myCustomDialogInterface: M
         val permissionCheck = ContextCompat.checkSelfPermission(
             requireContext(), Manifest.permission.CAMERA
         )
-
-        // 허용이 안되어있으면,
 
         // 허용이 안되어있으면,
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -350,19 +345,9 @@ class CustomDialogAdd(context: Context, val jwt: Jwt, myCustomDialogInterface: M
             })
         builder.show()
     }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("CustomDialog_Pause", "OnPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("CustomDialog_Stop", "onStop")
-
-    }
 }
 
 interface MyCustomDialogInterface {
-    fun onSubmitBtnClicked(food: Food, photoFile: File?)
+    //fun onSubmitBtnClicked(food: FridgeIngredient, photoFile: File?)
+    fun onSubmitBtnClicked(food: FridgeIngredient)
 }
