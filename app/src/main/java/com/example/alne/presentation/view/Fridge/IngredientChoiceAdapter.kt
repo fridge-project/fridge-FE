@@ -1,5 +1,6 @@
 package com.example.alne.view.Fridge
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,8 +71,9 @@ class IngredientChoiceAdapter(): RecyclerView.Adapter<IngredientChoiceAdapter.Vi
     }
 
     fun addAllItems(items: ArrayList<food>){
-        items.clear()
+        this.items.clear()
         this.items.addAll(items)
+        Log.d("items", items.toString())
         notifyDataSetChanged()
     }
 

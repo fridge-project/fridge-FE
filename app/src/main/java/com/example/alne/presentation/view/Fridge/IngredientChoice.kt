@@ -2,6 +2,7 @@ package com.example.alne.view.Fridge
 
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,7 @@ class IngredientChoice: BottomSheetDialogFragment() {
     lateinit var binding: IngredientchoiceBinding
     lateinit var viewModel: IngredientChoiceViewModel
     private var listener: OnSendFromBottomSheetDialog? = null
-    var adapter: IngredientChoiceAdapter? = null
+    lateinit var adapter: IngredientChoiceAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,20 +28,12 @@ class IngredientChoice: BottomSheetDialogFragment() {
     ): View? {
         binding = IngredientchoiceBinding.inflate(layoutInflater)
         binding.ingredientChoiceSv.queryHint = Html.fromHtml("<font color = #000000>" + "재료명을 입력해 검색해보세요." + "</font>")
-
-
         viewModel = ViewModelProvider(this).get(IngredientChoiceViewModel::class.java)
 
+        ingredientRecyclerViewSettings()
         viewModel.getFridgeLiveData.observe(viewLifecycleOwner, Observer { items ->
-            adapter = IngredientChoiceAdapter(items)
-            adapter!!.setMyItemClickListener(object: IngredientChoiceAdapter.MyItemClickListener{
-                override fun onItemClick(name: String) {
-                    listener?.sendValue(name)
-                    dismiss()
-                }
-            })
-            binding.ingredientChoiceRv.adapter = adapter
-            binding.ingredientChoiceRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            Log.d("ObserverItems", items.toString())
+            adapter.addAllItems(items)
         })
 
         binding.ingredientChoiceSv.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
@@ -56,6 +49,18 @@ class IngredientChoice: BottomSheetDialogFragment() {
         })
 
         return binding.root
+    }
+
+    private fun ingredientRecyclerViewSettings(){
+        adapter = IngredientChoiceAdapter()
+        adapter.setMyItemClickListener(object: IngredientChoiceAdapter.MyItemClickListener{
+            override fun onItemClick(name: String) {
+                listener?.sendValue(name)
+                dismiss()
+            }
+        })
+        binding.ingredientChoiceRv.adapter = adapter
+        binding.ingredientChoiceRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
     interface OnSendFromBottomSheetDialog {
