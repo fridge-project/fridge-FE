@@ -11,7 +11,7 @@ interface IngredientDao {
     fun getIngredient(name: String): food
 
     @Query("SELECT * FROM food")
-    fun getAll(): List<food>
+    suspend fun getAll(): List<food>
 
 
 
