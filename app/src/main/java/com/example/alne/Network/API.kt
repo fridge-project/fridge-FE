@@ -11,6 +11,12 @@ object API {
     const val QUIT = "/api/auth/delete-account"
 
 
+    //Fridge
+    const val  FRIDGE = "/api/fridge"
+    const val  FRIDGE_DELETE = "/api/fridge/"
+
+
+
 
 
 

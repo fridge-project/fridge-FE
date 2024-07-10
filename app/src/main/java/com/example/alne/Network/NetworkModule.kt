@@ -1,13 +1,17 @@
 package com.example.alne.Network
+import android.util.Log
 import com.example.alne.GlobalApplication
+import com.google.gson.GsonBuilder
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.ResponseBody
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 
@@ -19,12 +23,15 @@ fun getRetrofit(): Retrofit {
 
     val builder = OkHttpClient.Builder()
         .addInterceptor(baseParameterInterceptor)
+        .addInterceptor(loggingInterceptor)
         .build()
+
+    var gson = GsonBuilder().setLenient().create()
 
     val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
-//        .addConverterFactory(nullOnEmptyConverterFactory)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(ScalarsConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .client(builder)
         .build()
     return retrofit
@@ -53,4 +60,14 @@ val baseParameterInterceptor: Interceptor = object: Interceptor {
         val finalRequest = originalRequest.newBuilder().addHeader("Authorization", "Bearer ${GlobalApplication.prefManager.getUserToken().accessToken}").build()
         return chain.proceed(finalRequest)
     }
+}
+
+//로깅 인터셉터 추가
+val loggingInterceptor = HttpLoggingInterceptor { message ->
+    Log.d(
+        "Logging",
+        "RetrofitClient - log() called: $message "
+    )
+}.apply {
+    level = HttpLoggingInterceptor.Level.BODY
 }

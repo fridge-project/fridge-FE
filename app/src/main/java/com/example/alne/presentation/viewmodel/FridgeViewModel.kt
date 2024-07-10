@@ -20,6 +20,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.text.FieldPosition
 
 class FridgeViewModel(private val application: Application) : AndroidViewModel(application) {
 
@@ -42,9 +43,9 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
         _getFridgeLiveData.postValue(fridgeItems)
     }
 
-    // 재료 등록
-    fun deleteItem(food: FridgeIngredient){
-        fridgeItems.remove(food)
+    // 재료 삭제
+    fun deleteItem(position: Int){
+        fridgeItems.removeAt(position)
         _getFridgeLiveData.postValue(fridgeItems)
     }
 
@@ -55,6 +56,8 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
                 var res = response.body()
                 when(response.code()){
                     200 -> {
+                        var _id = res?.asJsonObject?.get("_id")?.asString
+                        food._id = _id
                         addItem(food)
                         completion(RESPONSE_STATUS.OKAY)
                     }
@@ -119,6 +122,7 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
                             var items: ArrayList<FridgeIngredient> = ArrayList()
                             for(json in res){
                                 var jsonObject = json.asJsonObject
+                                var _id = jsonObject.get("_id").asString
                                 var name = jsonObject.get("name").asString
                                 var memo = jsonObject.get("memo").asString
                                 var storage = jsonObject.get("storage").asString
@@ -126,7 +130,7 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
                                 var date = jsonObject.get("date").asString
                                 var imageURL = jsonObject.get("imageURL").asString
                                 items.add(
-                                    FridgeIngredient(name,memo,storage,exp,date, imageURL)
+                                    FridgeIngredient(_id,name,memo,storage,exp,date, imageURL)
                                 )
                             }
                             fridgeItems.addAll(items)
@@ -147,29 +151,36 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
 
         })
     }
-//
-//    fun deleteFridgeFood(userId: UserId){
-//        repository.deleteFridgeFood(userId).enqueue(object: Callback<FridgePostResponse>{
-//            override fun onResponse(
-//                call: Call<FridgePostResponse>,
-//                response: Response<FridgePostResponse>,
-//            ) {
-//                var res = response.body()
-//                Log.d("deleteFridgeFood", res.toString())
-//                    when(res?.status){
-//                        200 -> {
-//                            getFridgeFood(getUserToken()?.accessToken!!, UserId(getUserToken()?.accessToken?.toInt()!!, null))
-//                        }
-//                        else -> {
-//                            Log.d("deleteFridgeFood", "onSuccess:fail")
-//                        }
-//                    }
-//
-//            }
-//
-//            override fun onFailure(call: Call<FridgePostResponse>, t: Throwable) {
-//                Log.d("deleteFridgeFood:FAIL", t.message.toString())
-//            }
-//        })
-//    }
+
+    fun deleteFridgeFood(position: Int){
+        repository.deleteFridgeFood(fridgeItems[position]._id!!).enqueue(object: Callback<String>{
+            override fun onResponse(
+                call: Call<String>,
+                response: Response<String>,
+            ) {
+                var res = response.body()
+                when(response.code()){
+                    200 -> {
+                        deleteItem(position)
+                        Log.d("deleteFridgeFood", "성공")
+                    }
+
+                    //재료 삭제 실패(재료 id 오류)
+                    401 -> {
+                        Log.d("deleteFridgeFood", "401(실패)")
+                    }
+
+                    //재료 삭제 실패(accessToken 인증 실패)
+                    500 -> {
+                        Log.d("deleteFridgeFood", "500(실패)")
+                    }
+                }
+                Log.d("deleteFridgeFood", res.toString())
+
+            }
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.d("deleteFridgeFood", t.message.toString())
+            }
+        })
+    }
 }
