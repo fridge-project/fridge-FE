@@ -107,7 +107,7 @@ class CustomDialogDetail(context: Context, val food: FridgeIngredient, myCustomD
             val title = binding.foodTitleEt.text.toString()
             Log.d("data", title + " "+ storage)
             myCustomDialogDetailInterface?.onSubmitBtnDetailClicked(
-                FridgeIngredient(title, binding.foodMemoTv.text.toString(), storage!!,date + " " + time, addDate, "" )
+                FridgeIngredient(null, title, binding.foodMemoTv.text.toString(), storage!!,date + " " + time, addDate, "" )
             )
 //                FridgeIngredient(jwt.userId,title,date + " " + time, addDate, binding
 //                .foodMemoTv.text.toString(),storage!!), photoFile)

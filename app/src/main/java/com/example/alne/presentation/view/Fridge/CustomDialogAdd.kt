@@ -106,7 +106,7 @@ class CustomDialogAdd(context: Context, myCustomDialogInterface: MyCustomDialogI
                 Toast.makeText(requireContext(), "재료를 선택해주세요.", Toast.LENGTH_SHORT).show()
             }else{
                 myCustomDialogInterface?.onSubmitBtnClicked(
-                    FridgeIngredient(title, binding.foodMemoTv.text.toString(), storage!!,date + " " + time, addDate, "" )
+                    FridgeIngredient(null, title, binding.foodMemoTv.text.toString(), storage!!,date + " " + time, addDate, "" )
                 )
             }
 
