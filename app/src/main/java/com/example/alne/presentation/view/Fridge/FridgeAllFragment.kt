@@ -39,52 +39,32 @@ class FridgeAllFragment : Fragment(), MyCustomDialogDetailInterface {
         return binding.root
     }
 
+    override fun onPause() {
+        super.onPause()
+        Log.d("FridgeAllFragment", "onPause")
+    }
+
     private fun fridgeRecyclerViewSettings(){
         fridgeadapter = FridgeAdapter(requireContext())
         binding.fridgeAllRv.adapter = fridgeadapter
         binding.fridgeAllRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false )
         fridgeadapter.setMyItemClickListener(object: FridgeAdapter.MyItemClickListener {
             // 보유재료 클릭 시
-            override fun onItemClick(food: FridgeIngredient) {
-                CustomDialogDetail(requireContext(),food, this@FridgeAllFragment).show(requireActivity().supportFragmentManager, "CustomDialog")
+            override fun onItemClick(food: FridgeIngredient, position: Int) {
+                CustomDialogDetail(requireContext(),food, position,this@FridgeAllFragment).show(requireActivity().supportFragmentManager, "CustomDialog")
             }
 
             // 보유재료 삭제 기능
             override fun onInfoClick(view: View, position: Int) {
-//                    viewModel.deleteFridgeFood(UserId(
-//                        getUserToken()?.userId!!,
-//                        fridgeadapter.items[position].userId!!
-//                    ))
+                viewModel.deleteFridgeFood(position)
             }
         })
     }
 
-    // 재료 수정하기(편집)
-//    override fun onSubmitBtnDetailClicked(food: FridgeIngredient, photoFile: File?) {
-//        Log.d("onSubmitBtnDetailClicked", "launch")
-//
-//        //viewModel.addFridgeData(getUserToken()?.accessToken!!, food, photoFile)
-//    }
-
-    // 재료 저장하기 버튼 클릭 시
-    override fun onSubmitBtnDetailClicked(food: FridgeIngredient) {
+    // 재료 수정하기 버튼 클릭 시
+    override fun onSubmitBtnDetailClicked(food: FridgeIngredient, position: Int) {
         Log.d("onSubmitBtnDetailClicked", "launch")
-        viewModel.addFridgeDataTest(food, completion = { responseState ->
-                when (responseState) {
-                    RESPONSE_STATUS.OKAY -> {
-                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.OKAY")
-                    }
-
-                    RESPONSE_STATUS.FAIL -> {
-                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.FAIL")
-                    }
-
-                    RESPONSE_STATUS.NETWORK_ERROR -> {
-                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.NETWORK_ERROR")
-                    }
-                }
-            }
-        )
+        viewModel.updateFridgeFood(food, position)
     }
 
 }

@@ -29,7 +29,7 @@ class FridgeAdapter(val context: Context): RecyclerView.Adapter<FridgeAdapter.Vi
     }
 
     interface MyItemClickListener {
-        fun onItemClick(food: FridgeIngredient)
+        fun onItemClick(food: FridgeIngredient, position: Int)
         fun onInfoClick(view: View, position: Int)
     }
     private lateinit var mItemClickListener : MyItemClickListener
@@ -57,6 +57,8 @@ class FridgeAdapter(val context: Context): RecyclerView.Adapter<FridgeAdapter.Vi
 
             binding.itemFridgeTitleTv.text = food.name
             binding.itemFridgeExpireTv.text = food.exp!!.split(" ")[0] + " 까지"
+            binding.itemFridgePb.progress = 0
+
             if(needDiff < 0){
                 binding.itemFridgeExpireInfoTv.text = "유효기간 ${-needDiff}일 지남"
             }else{
@@ -116,7 +118,7 @@ class FridgeAdapter(val context: Context): RecyclerView.Adapter<FridgeAdapter.Vi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
         holder.binding.root.setOnClickListener{
-            mItemClickListener.onItemClick(items[position])
+            mItemClickListener.onItemClick(items[position], position)
         }
 
         holder.binding.itemFridgeDeleteIb.setOnClickListener{

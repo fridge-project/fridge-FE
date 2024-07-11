@@ -47,7 +47,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
-class CustomDialogDetail(context: Context, val food: FridgeIngredient, myCustomDialogDetailInterface: MyCustomDialogDetailInterface): DialogFragment() {
+class CustomDialogDetail(context: Context, val food: FridgeIngredient, val position: Int, myCustomDialogDetailInterface: MyCustomDialogDetailInterface): DialogFragment() {
     private lateinit var binding: ItemFoodDetailBinding
     var storage: String? = null
     val myAdapter = ArrayAdapter(
@@ -106,11 +106,15 @@ class CustomDialogDetail(context: Context, val food: FridgeIngredient, myCustomD
         binding.submitBt.setOnClickListener {
             val title = binding.foodTitleEt.text.toString()
             Log.d("data", title + " "+ storage)
-            myCustomDialogDetailInterface?.onSubmitBtnDetailClicked(
-                FridgeIngredient(null, title, binding.foodMemoTv.text.toString(), storage!!,date + " " + time, addDate, "" )
-            )
-//                FridgeIngredient(jwt.userId,title,date + " " + time, addDate, binding
-//                .foodMemoTv.text.toString(),storage!!), photoFile)
+            food.run {
+                name = title
+                memo = binding.foodMemoTv.text.toString()
+                storage = storage!!
+                exp = date + " " + time
+                date = addDate
+                imageURL = ""
+            }
+            myCustomDialogDetailInterface?.onSubmitBtnDetailClicked(food, position)
             dismiss()
         }
 
@@ -327,5 +331,5 @@ class CustomDialogDetail(context: Context, val food: FridgeIngredient, myCustomD
 // 재료 수정하기(편집)
 interface MyCustomDialogDetailInterface {
     //fun onSubmitBtnDetailClicked(food: FridgeIngredient, photoFile: File?)
-    fun onSubmitBtnDetailClicked(food: FridgeIngredient)
+    fun onSubmitBtnDetailClicked(food: FridgeIngredient, position: Int)
 }

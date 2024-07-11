@@ -1,7 +1,6 @@
 package com.example.alne.view.Fridge
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.icu.util.Calendar
 import android.util.Log
@@ -13,12 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alne.R
 import com.example.alne.databinding.ItemFridgeBinding
-import com.example.alne.data.model.Food
+import com.example.alne.data.model.FridgeIngredient
 import java.text.SimpleDateFormat
 
 class FridgeColdAdapter(val context: Context): RecyclerView.Adapter<FridgeColdAdapter.ViewHolder>() {
 
-    val items: ArrayList<Food> = ArrayList()
+    val items: ArrayList<FridgeIngredient> = ArrayList()
     var calendar = Calendar.getInstance()
     var sfp = SimpleDateFormat("yyyy.MM.dd")
     init {
@@ -31,7 +30,7 @@ class FridgeColdAdapter(val context: Context): RecyclerView.Adapter<FridgeColdAd
     }
 
     interface MyItemClickListener {
-        fun onItemClick(food: Food)
+        fun onItemClick(food: FridgeIngredient, position: Int)
         fun onInfoClick(view: View, position: Int)
     }
     private lateinit var mItemClickListener : MyItemClickListener
@@ -40,13 +39,13 @@ class FridgeColdAdapter(val context: Context): RecyclerView.Adapter<FridgeColdAd
     }
 
     inner class ViewHolder(val binding: ItemFridgeBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(food: Food) {
+        fun bind(food: FridgeIngredient) {
 
             // 마감 날짜
             var expDate = sfp.parse(food.exp!!.split(" ")[0])
 
             // 등록 날짜
-            var addDate = sfp.parse(food.addDate!!.split(" ")[0])
+            var addDate = sfp.parse(food.date!!.split(" ")[0])
 
             // 유효날짜 - 등록 날짜
             var dateLength = (expDate.time - addDate.time)/ (60 * 60 * 24 * 1000)
@@ -65,8 +64,8 @@ class FridgeColdAdapter(val context: Context): RecyclerView.Adapter<FridgeColdAd
                 binding.itemFridgeExpireInfoTv.text = "유효기간 ${needDiff}일 남음"
             }
 
-            if(food.imageUrl != null){
-                Glide.with(context).load(food.imageUrl).into(binding.itemFridgeIv)
+            if(food.imageURL != null){
+                Glide.with(context).load(food.imageURL).into(binding.itemFridgeIv)
             }else{
                 binding.itemFridgeIv.setImageResource(R.drawable.camera )
             }
@@ -116,7 +115,7 @@ class FridgeColdAdapter(val context: Context): RecyclerView.Adapter<FridgeColdAd
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
         holder.binding.root.setOnClickListener{
-            mItemClickListener.onItemClick(items[position])
+            mItemClickListener.onItemClick(items[position], position)
         }
 
         holder.binding.itemFridgeDeleteIb.setOnClickListener{
@@ -124,7 +123,7 @@ class FridgeColdAdapter(val context: Context): RecyclerView.Adapter<FridgeColdAd
         }
     }
 
-    fun addAllFood(item: ArrayList<Food>){
+    fun addAllFood(item: ArrayList<FridgeIngredient>){
         items.clear()
         for(food in item){
             if(food.storage == "COLD"){

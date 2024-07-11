@@ -12,6 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
@@ -34,7 +35,13 @@ interface FridgeApi {
     @GET(API.FRIDGE)
     fun getFridgeFood(): Call<JsonArray>
 
-    @DELETE(API.FRIDGE_DELETE + "{id}")
+    @PUT(API.FRIDGE_UPDATE)
+    fun updateFridgeFood(
+        @Path(value = "id") id: String,
+        @Body food: FridgeIngredient
+    ): Call<JsonElement>
+
+    @DELETE(API.FRIDGE_DELETE)
     fun deleteFridgeFood(
          @Path(value = "id") id: String
     ): Call<String>

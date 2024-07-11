@@ -13,7 +13,8 @@ object API {
 
     //Fridge
     const val  FRIDGE = "/api/fridge"
-    const val  FRIDGE_DELETE = "/api/fridge/"
+    const val  FRIDGE_DELETE = "/api/fridge/{id}"
+    const val  FRIDGE_UPDATE = "/api/fridge/{id}"
 
 
 

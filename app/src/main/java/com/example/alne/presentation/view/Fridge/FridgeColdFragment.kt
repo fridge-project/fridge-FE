@@ -36,8 +36,8 @@ class FridgeColdFragment : Fragment(), MyCustomDialogDetailInterface {
         binding.fridgeColdRv.adapter = fridgeColdAdapter
         binding.fridgeColdRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         fridgeColdAdapter.setMyItemClickListener(object: FridgeColdAdapter.MyItemClickListener {
-            override fun onItemClick(food: FridgeIngredient) {
-                getCustomDialog(food)
+            override fun onItemClick(food: FridgeIngredient, position: Int) {
+                getCustomDialog(food, position)
             }
 
             // 보유재료 삭제 기능
@@ -47,7 +47,7 @@ class FridgeColdFragment : Fragment(), MyCustomDialogDetailInterface {
                 popupMenu.menuInflater.inflate(R.menu.food_menu, popupMenu.menu)
                 popupMenu.setOnMenuItemClickListener { m ->
                     when(m.itemId){
-                        R.id.menu_modify -> getCustomDialog(fridgeColdAdapter.items[position])
+                        R.id.menu_modify -> getCustomDialog(fridgeColdAdapter.items[position], position)
                         R.id.menu_delete -> {
                             fridgeColdAdapter.notifyDataSetChanged()
 //                            viewModel.deleteFridgeFood(
@@ -74,8 +74,8 @@ class FridgeColdFragment : Fragment(), MyCustomDialogDetailInterface {
         return binding.root
     }
 
-    private fun getCustomDialog(food: FridgeIngredient){
-        CustomDialogDetail(requireContext(),food, this).show(requireActivity().supportFragmentManager, "CustomDialog")
+    private fun getCustomDialog(food: FridgeIngredient, position: Int){
+        CustomDialogDetail(requireContext(),food, position, this).show(requireActivity().supportFragmentManager, "CustomDialog")
     }
 
     fun getUserToken(): Jwt {
@@ -88,23 +88,8 @@ class FridgeColdFragment : Fragment(), MyCustomDialogDetailInterface {
 //        viewModel.addFridgeData(getUserToken().accessToken!!, food, photoFile)
 //    }
 
-    override fun onSubmitBtnDetailClicked(food: FridgeIngredient) {
+    override fun onSubmitBtnDetailClicked(food: FridgeIngredient, position: Int) {
         Log.d("onSubmitBtnDetailClicked", "launch")
-        viewModel.addFridgeDataTest(food, completion = { responseState ->
-            when (responseState) {
-                RESPONSE_STATUS.OKAY -> {
-                    Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.OKAY")
-                }
-
-                RESPONSE_STATUS.FAIL -> {
-                    Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.FAIL")
-                }
-
-                RESPONSE_STATUS.NETWORK_ERROR -> {
-                    Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.NETWORK_ERROR")
-                }
-            }
-        }
-        )
+        viewModel.updateFridgeFood(food, position)
     }
 }

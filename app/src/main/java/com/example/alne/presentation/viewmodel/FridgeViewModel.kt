@@ -49,6 +49,12 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
         _getFridgeLiveData.postValue(fridgeItems)
     }
 
+    fun updateItem(position: Int, food: FridgeIngredient){
+        fridgeItems.removeAt(position)
+        fridgeItems.add(food)
+        _getFridgeLiveData.postValue(fridgeItems)
+    }
+
 
     fun addFridgeDataTest(food: FridgeIngredient, completion: (RESPONSE_STATUS) -> Unit){
         repository.addFridgeDataTest(food).enqueue(object: Callback<JsonElement> {
@@ -182,5 +188,32 @@ class FridgeViewModel(private val application: Application) : AndroidViewModel(a
                 Log.d("deleteFridgeFood", t.message.toString())
             }
         })
+    }
+
+    fun updateFridgeFood(food: FridgeIngredient, position: Int){
+        repository.updateFridgeFood(food).enqueue(object: Callback<JsonElement>{
+            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                var res = response.body()
+                when(response.code()){
+                    200 -> {
+                        updateItem(position, food)
+                        Log.d("updateFridgeFood", "성공")
+                    }
+                    500 -> {
+                        Log.d("updateFridgeFood", "500(실패)")
+                    }
+
+                    401 -> {
+                        Log.d("updateFridgeFood", "401(실패)")
+                    }
+                }
+                Log.d("updateFridgeFood", res.toString())
+            }
+
+            override fun onFailure(p0: Call<JsonElement>, p1: Throwable) {
+                Log.d("updateFridgeFood", p1.message.toString())
+            }
+        })
+
     }
 }
