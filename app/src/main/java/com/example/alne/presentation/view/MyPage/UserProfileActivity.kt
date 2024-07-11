@@ -59,6 +59,11 @@ class UserProfileActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        //계정탈퇴
+        binding.userProfileQuitLinear.setOnClickListener{
+            DeleteAccountCustomDialog().show(supportFragmentManager, LogoutCustomDialog.TAG)
+        }
+
         with(binding){
             userProfileImageCv.setOnClickListener{
                 showDialog()

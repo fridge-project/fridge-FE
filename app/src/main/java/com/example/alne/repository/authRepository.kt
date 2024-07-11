@@ -5,7 +5,6 @@ import com.example.alne.Network.AuthApi
 import com.example.alne.Network.getRetrofit
 import com.example.alne.data.model.Token
 import com.example.alne.data.model.User
-import com.example.alne.data.model.UserId
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
@@ -13,7 +12,6 @@ import okhttp3.RequestBody
 class authRepository(val application: Application) {
 
     private val userService = getRetrofit().create(AuthApi::class.java)
-
 
     fun signUp(user: User) = userService.signUp(user)
 
@@ -23,6 +21,8 @@ class authRepository(val application: Application) {
 
     fun saveUserProfileImage(file: MultipartBody.Part, userId: RequestBody) = userService.saveUserProfileImage(file,userId)
 
-    fun getUserProfile(userId: UserId) = userService.getUserProfile(userId)
+    fun deleteAccount() = userService.deleteAccount()
+
+    // fun getUserProfile(userId: UserId) = userService.getUserProfile(userId)
 
 }

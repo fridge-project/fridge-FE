@@ -10,9 +10,8 @@ import com.example.alne.Network.SignUpResponse
 import com.example.alne.data.model.Profile
 import com.example.alne.data.model.ProfileRespond
 import com.example.alne.data.model.Token
-import com.example.alne.data.model.UserId
 import com.example.alne.repository.authRepository
-import com.example.alne.utils.REPONSE_STATUS
+import com.example.alne.utils.RESPONSE_STATUS
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -67,43 +66,68 @@ class MyPageViewModel(application: Application) : AndroidViewModel(application) 
         })
     }
 
-    fun getUserProfile(userId: Int) = authRepository.getUserProfile(UserId(userId,null)).enqueue(object:
-        Callback<ProfileRespond>{
-        override fun onResponse(call: Call<ProfileRespond>, response: Response<ProfileRespond>) {
-            val res = response.body()
-            Log.d(TAG, "getUserProfile_onReponse:{${res.toString()}}")
-            when(res?.status){
-                200 -> {
-                    _userProfileLiveData.postValue(res.data)
+    fun deleteAccount(completion: (RESPONSE_STATUS) -> Unit) {
+        authRepository.deleteAccount().enqueue(object : Callback<String>{
+            override fun onResponse(p0: Call<String>, response: Response<String>) {
+                val res = response.body()
+                when(response.code()){
+                    200 -> {
+                        GlobalApplication.prefManager.deleteUserData()
+                        completion(RESPONSE_STATUS.OKAY)
+                    }
+
+                    401 -> {
+                        completion(RESPONSE_STATUS.FAIL)
+                    }
                 }
-                else -> {
-                    Log.d(TAG, "getUserProfile_Fail")
-                }
+                Log.d("deleteAccount", res.toString())
+
             }
-        }
 
-        override fun onFailure(call: Call<ProfileRespond>, t: Throwable) {
-            Log.d(TAG, "getUserProfile_onFailure: {${t.message.toString()}")
-        }
+            override fun onFailure(p0: Call<String>, p1: Throwable) {
+                completion(RESPONSE_STATUS.NETWORK_ERROR)
+            }
 
-    })
+        })
+    }
 
-    fun logout(token: Token, completion: (REPONSE_STATUS) -> Unit) = authRepository.logout(token).enqueue(object: Callback<SignUpResponse>{
+//    fun getUserProfile(userId: Int) = authRepository.getUserProfile(UserId(userId,null)).enqueue(object:
+//        Callback<ProfileRespond>{
+//        override fun onResponse(call: Call<ProfileRespond>, response: Response<ProfileRespond>) {
+//            val res = response.body()
+//            Log.d(TAG, "getUserProfile_onReponse:{${res.toString()}}")
+//            when(res?.status){
+//                200 -> {
+//                    _userProfileLiveData.postValue(res.data)
+//                }
+//                else -> {
+//                    Log.d(TAG, "getUserProfile_Fail")
+//                }
+//            }
+//        }
+//
+//        override fun onFailure(call: Call<ProfileRespond>, t: Throwable) {
+//            Log.d(TAG, "getUserProfile_onFailure: {${t.message.toString()}")
+//        }
+//
+//    })
+
+    fun logout(token: Token, completion: (RESPONSE_STATUS) -> Unit) = authRepository.logout(token).enqueue(object: Callback<SignUpResponse>{
         override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
             when(response.code()){
                 200 -> {
                     GlobalApplication.prefManager.deleteUserData()
-                    completion(REPONSE_STATUS.OKAY)
+                    completion(RESPONSE_STATUS.OKAY)
                 }
 
                 403 -> {
-                    completion(REPONSE_STATUS.FAIL)
+                    completion(RESPONSE_STATUS.FAIL)
                 }
             }
         }
 
         override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
-            completion(REPONSE_STATUS.NETWORK_ERROR)
+            completion(RESPONSE_STATUS.NETWORK_ERROR)
         }
 
     })
