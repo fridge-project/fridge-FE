@@ -156,6 +156,40 @@
 
             </LinearLayout>
 
+            <View
+                android:background="@color/gray_light1"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"/>
+
+            <LinearLayout
+                android:id="@+id/user_profile_quit_linear"
+                android:orientation="horizontal"
+                android:padding="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="회원탈퇴"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <View
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"/>
+
+                <ImageView
+                    android:scaleType="fitXY"
+                    android:src="@drawable/arrow_right_gray"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
