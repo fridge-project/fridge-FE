@@ -8,8 +8,3 @@ data class Fridge(
     val memo: String,
     val imageUrl: String
 )
-
-data class UserId(
-    val userId: Int,
-    val data: Int?
-)
