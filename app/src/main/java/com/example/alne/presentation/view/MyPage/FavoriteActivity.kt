@@ -10,9 +10,9 @@ import androidx.lifecycle.get
 import com.example.alne.R
 import com.example.alne.databinding.ActivityFavoriteBinding
 import com.example.alne.data.model.Favorite
+import com.example.alne.data.model.Recipe
 import com.example.alne.room.model.recipe
 import com.example.alne.view.Recipe.RecipeDetailActivity
-import com.example.alne.view.Recipe.RecipeGVAdapter
 import com.example.alne.viewmodel.FavoriteViewModel
 import com.google.gson.Gson
 
@@ -31,9 +31,9 @@ class FavoriteActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        val gridAdapter = FavoriteGVAdapter(this)
-        gridAdapter.setMyItemClickListener(object: FavoriteGVAdapter.setOnClickListener{
-            override fun clickItem(favorite: Favorite) {
+        val gridAdapter = RecipeGVAdapter(this)
+        gridAdapter.setMyItemClickListener(object: RecipeGVAdapter.setOnClickListener{
+            override fun clickItem(recipe: Recipe) {
 //                var intent = Intent(this, RecipeDetailActivity::class.java)
 //                intent.putExtra("recipe", Gson().toJson(favorite.recipe))
 //                startActivity(intent)
