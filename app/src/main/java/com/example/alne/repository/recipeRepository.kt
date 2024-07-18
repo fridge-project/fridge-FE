@@ -7,12 +7,11 @@ import com.example.alne.GlobalApplication
 import com.example.alne.Network.AuthApi
 import com.example.alne.data.model.Comment
 import com.example.alne.data.model.DeleteFavorite
-import com.example.alne.data.model.UserId
 import com.example.alne.room.model.recipe
 import com.example.alne.Network.RecipeApi
 import com.example.alne.Network.getRetrofit
 import com.example.alne.data.model.Id
-import com.example.alne.data.model.requestComment
+import com.example.alne.data.model.addComment
 import com.example.alne.presentation.view.Recipe.RecipePagingSource
 import com.example.alne.utils.Recipe_TYPE
 import kotlinx.coroutines.flow.Flow
@@ -34,21 +33,27 @@ class recipeRepository {
         ).flow
     }
 
-    fun addUserComment(comment: Comment) = recipeService.addUserComment(comment)
+    fun addUserComment(recipe_id: String, comment: addComment) = recipeService.addUserComment(recipe_id, comment)
 
-    fun deleteUserComment(requestComment: requestComment) = recipeService.deleteUserComment(requestComment)
+    fun deleteUserComment(_id: String) = recipeService.deleteUserComment(_id)
 
     //특정 레시피 조회
-    fun getRecipeProcess(recipeCode: Int, userId: UserId) = recipeService.getRecipeProcess(recipeCode, userId)
+    fun getRecipeProcess(recipeCode: Int) = recipeService.getRecipeProcess(recipeCode)
+//
+//    fun addRecipeFavorite(recipeCode: Int,userId: UserId) = recipeService.addRecipeFavorite(recipeCode,userId)
+//
+//    fun userLikeRecipe(recipeCode: Int, userId: UserId) = recipeService.likeRecipe(recipeCode,userId)
 
-    fun addRecipeFavorite(recipeCode: Int,userId: UserId) = recipeService.addRecipeFavorite(recipeCode,userId)
+    //좋아요 요청/해제
+    fun likeRecipe(id: String) = recipeService.likeRecipe(id)
 
-    fun userLikeRecipe(recipeCode: Int, userId: UserId) = recipeService.likeRecipe(recipeCode,userId)
+    //사용자 좋아요 전체 레시피 목록
+    fun getUserLikeList() = recipeService.userLikeList()
 
     //사용자 즐겨찾기 전체 목록
     fun getUserFavorites(id: Id) = recipeService.getUserFavorites(id)
 
     fun deleteRecipeFavorite(delete: DeleteFavorite) = recipeService.deleteRecipeFavorite(delete)
 
-    fun getUserProfile(userId: UserId) = authService.getUserProfile(userId)
+//    fun getUserProfile(userId: UserId) = authService.getUserProfile(userId)
 }
