@@ -16,6 +16,14 @@ object API {
     const val  FRIDGE_DELETE = "/api/fridge/{id}"
     const val  FRIDGE_UPDATE = "/api/fridge/{id}"
 
+    //Recipe
+    const val RECIPE_LIST = "/api/recipes"
+    const val LIKE = "/api/like/{id}"
+    const val LIKE_LIST = "/api/like"
+    const val RECIPE_PROECSS = "/api/recipes/{recipe_code}"
+    const val ADD_COMMENT = "/api/comment/{recipe_id}"
+    const val DELETE_COMMENT = "/api/comment/{id}"
+
 
 
 
