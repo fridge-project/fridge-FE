@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -79,5 +80,13 @@ dependencies {
     implementation("com.github.ome450901:SimpleRatingBar:1.5.1")
 
     implementation ("androidx.core:core-splashscreen:1.0.0-alpha01")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
+    implementation("com.google.firebase:firebase-analytics")
+
+    implementation("com.google.android.gms:play-services-ads:22.6.0")
+
+
 
 }

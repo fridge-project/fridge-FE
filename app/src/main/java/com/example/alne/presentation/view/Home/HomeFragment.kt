@@ -14,6 +14,11 @@ import com.example.alne.databinding.FragmentHomeBinding
 import com.example.alne.room.model.recipe
 import com.example.alne.view.Recipe.RecipeDetailActivity
 import com.example.alne.viewmodel.HomeViewModel
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.gson.Gson
 
 class HomeFragment : Fragment() {
@@ -27,7 +32,10 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater)
+
         viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
+
+        setBannerAds()
 
         val adapter = HomeRecipeRankRVAdapter(requireContext())
         adapter.setMyItemClickListener(object: HomeRecipeRankRVAdapter.setOnClickListener{
@@ -49,11 +57,31 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    fun saveQuery(item: String){
-        val sharedPreferences = context?.getSharedPreferences("search_query", MODE_PRIVATE)
-        val edit = sharedPreferences?.edit()
-        edit?.putString("query",item)
-        edit?.commit()
+    private fun setBannerAds(){
+        MobileAds.initialize(requireContext())
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+        binding.adView.adListener = object: AdListener() {
+            override fun onAdClicked() {
+                Log.d("adView", "배너 광고를 클릭했습니다")
+            }
+
+            override fun onAdClosed() {
+                Log.d("adView", "배너 광고를 닫았습니다")
+            }
+
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                Log.d("adView", "배너 광고가 로드 실패했습니다")
+            }
+
+            override fun onAdLoaded() {
+                Log.d("adView", "배너 광고가 로드되었습니다")
+            }
+
+            override fun onAdOpened() {
+                Log.d("adView", "배너 광고를 열었습니다")
+            }
+        }
     }
 
 
