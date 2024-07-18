@@ -8,21 +8,21 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alne.GlobalApplication
+import com.example.alne.data.model.Comment
 import com.example.alne.databinding.ItemReviewBinding
-import com.example.alne.data.model.Comments
 import com.example.alne.data.model.Review
 
 class ReviewPageRVAdapter(val context: Context): RecyclerView.Adapter<ReviewPageRVAdapter.ViewHolder>() {
 
-    private var items: ArrayList<Comments> = ArrayList()
+    private var items: ArrayList<Comment> = ArrayList()
     interface MyItemClickListener {
         fun deleteComment(position: Int)
-        fun patchComment(comment: Comments)
+        fun patchComment(comment: Comment)
 
         fun initUi(bool: Boolean)
     }
 
-    fun addAllItem(items: ArrayList<Comments>){
+    fun addAllItem(items: ArrayList<Comment>){
         this.items.clear()
         this.items.addAll(items)
         notifyDataSetChanged()
@@ -40,13 +40,15 @@ class ReviewPageRVAdapter(val context: Context): RecyclerView.Adapter<ReviewPage
     }
 
     inner class ViewHolder(val binding: ItemReviewBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(comment: Comments){
-            binding.itemReviewNickname.text = comment.user.name
+        fun bind(comment: Comment){
+            binding.itemReviewNickname.text = comment.user_id
             binding.itemReviewSummary.text = comment.detail
 //            binding.itemReviewDate.text = review.date
             binding.itemReviewRatingbar.rating = comment.grade.toFloat()
             binding.itemReviewRatingTv.text = comment.grade.toString()
-            Glide.with(context).load(comment.user.image).into(binding.itemReviewIv)
+
+            // 사용자 이미지
+            //Glide.with(context).load(comment.).into(binding.itemReviewIv)
             binding.itemReviewIv.scaleType = ImageView.ScaleType.FIT_XY
             binding.itemReviewIv.setPadding(0,0,0,0)
 //            if(comment.user.id == GlobalApplication.prefManager.getUserToken()?.userId){

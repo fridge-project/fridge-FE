@@ -10,10 +10,9 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.alne.GlobalApplication
 import com.example.alne.databinding.UserReviewDialogBinding
 import com.example.alne.data.model.Comment
-import com.example.alne.data.model.Comments
+import com.example.alne.data.model.addComment
 import com.example.alne.room.model.recipe
 import com.example.alne.viewmodel.RecipeDetailViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -34,7 +33,7 @@ class UserReviewBottomSheetDialog: BottomSheetDialogFragment() {
         viewModel = ViewModelProvider(requireActivity()).get(RecipeDetailViewModel::class.java)
 
         var recipe = Gson().fromJson(arguments?.getString("recipe"), recipe::class.java)
-        var comment = Gson().fromJson(arguments?.getString("comment"), Comments::class.java)
+        var comment = Gson().fromJson(arguments?.getString("comment"), Comment::class.java)
 
         viewModel.userProfileLiveData.observe(viewLifecycleOwner, Observer { profile ->
             if(profile != null){
@@ -53,12 +52,9 @@ class UserReviewBottomSheetDialog: BottomSheetDialogFragment() {
         }
 
         binding.userReviewSubmitBt.setOnClickListener {
-//            var userId = GlobalApplication.prefManager.getUserToken()!!.userId
-//            Log.d("userId", userId.toString())
-//            Log.d("editText", binding.userReviewCommentEt.text.toString())
-//            // 댓글 정보 서버로 보내기
-//            viewModel.addUserComment(Comment(recipe.recipe_code, userId, binding.userReviewCommentEt.text.toString(), binding.baseRatingBar.rating.toInt(), "url"))
-//            dismiss()
+            // 댓글 정보 서버로 보내기
+            viewModel.addUserComment(recipe._id, addComment(binding.userReviewCommentEt.text.toString(), binding.baseRatingBar.rating.toInt(), "url"))
+            dismiss()
         }
 
 
@@ -66,13 +62,13 @@ class UserReviewBottomSheetDialog: BottomSheetDialogFragment() {
         return binding.root
     }
 
-    private fun init(recipe: recipe?, comment: Comments?){
-        Glide.with(this).load(recipe?.imageurl).into(binding.userReviewMainFoodIv)
+    private fun init(recipe: recipe?, comment: Comment?){
+        Glide.with(this).load(recipe?.imageURL).into(binding.userReviewMainFoodIv)
         if(comment != null) {
             binding.userReviewSubmitBt.text = "수정"
             binding.userReviewCommentEt.setText(comment.detail)
             binding.baseRatingBar.rating = comment.grade.toFloat()
-            binding.itemReviewDialogIdTv.text = comment.user.name
+            binding.itemReviewDialogIdTv.text = comment.user_id
         }
     }
 

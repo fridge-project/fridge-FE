@@ -11,13 +11,9 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.alne.GlobalApplication
+import com.example.alne.data.model.Comment
 import com.example.alne.databinding.FragmentReviewPageBinding
-import com.example.alne.data.model.Comments
-import com.example.alne.data.model.UserId
-import com.example.alne.data.model.requestComment
 import com.example.alne.room.model.recipe
-import com.example.alne.view.Fridge.IngredientChoice
 import com.example.alne.viewmodel.RecipeDetailViewModel
 import com.google.gson.Gson
 
@@ -39,21 +35,13 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
         initAdapter()
 
         viewModel.getRecipeProcessLiveData.observe(viewLifecycleOwner, Observer{
-            adapter.addAllItem(it.comments as ArrayList<Comments>)
+            //adapter.addAllItem(it.comments as ArrayList<Comments>)
         })
 
-        viewModel.addUserCommentLiveData.observe(viewLifecycleOwner, Observer { it ->
-            if(!it){
-                Toast.makeText(requireContext(), "리뷰 작성에 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }else{
-//                viewModel.getRecipeProcess(recipe.recipe_code, UserId(GlobalApplication.prefManager.getUserToken()?.userId!!, null))
-                setUi(it)
-            }
+        viewModel.usersCommentsLiveData.observe(viewLifecycleOwner, Observer {
+            adapter.addAllItem(it)
         })
 
-        viewModel.delUserCommentLiveData.observe(viewLifecycleOwner, Observer {
-            setUi(!it)
-        })
 
         binding.reviewPageReviewBt.setOnClickListener {
             var bundle: Bundle = Bundle()
@@ -68,10 +56,9 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
         adapter = ReviewPageRVAdapter(requireContext())
         adapter.setMyItemClickListener(object: ReviewPageRVAdapter.MyItemClickListener{
             override fun deleteComment(position: Int) {
-//                viewModel.deleteUserComment(requestComment(GlobalApplication.prefManager.getUserToken()?.userId!!, recipe.recipe_code))
-                adapter.removeItem(position)
+                viewModel.deleteUserComment(position)
             }
-            override fun patchComment(comment: Comments) {
+            override fun patchComment(comment: Comment) {
                 var bundle: Bundle = Bundle()
                 bundle.putString("recipe", Gson().toJson(recipe))
                 bundle.putString("comment", Gson().toJson(comment))
