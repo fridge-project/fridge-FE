@@ -16,6 +16,10 @@ class SharedPrefManager(val context: Context) {
 
     private val LOGIN_SETTING = "login_setting"
 
+    private val FIRST_APP = "first_app"
+    private val FIRST_APP_KEY = "first"
+
+
 
 //    // 검색 목록을 저장
 //    fun storeSearchHistoryList(searchHistoryList: MutableList<SearchData>){
@@ -50,6 +54,19 @@ class SharedPrefManager(val context: Context) {
 //        editor.clear()
 //        editor.apply()
 //    }
+
+    //첫 앱 실행 -> 통신
+    fun savefirstApp(){
+        val sharedPreferences = context?.getSharedPreferences(FIRST_APP, AppCompatActivity.MODE_PRIVATE)!!
+        val edit = sharedPreferences.edit()
+        edit.putBoolean(FIRST_APP_KEY, true)
+        edit.commit()
+    }
+
+    fun getfirstApp(): Boolean{
+        val sharedPreferences = context?.getSharedPreferences(FIRST_APP, AppCompatActivity.MODE_PRIVATE)
+        return sharedPreferences?.getBoolean(FIRST_APP_KEY,false)!!
+    }
 
     //토큰 저장
     fun saveJwt(accessToken: String, refreshToken: String){
