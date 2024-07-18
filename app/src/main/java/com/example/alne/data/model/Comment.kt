@@ -3,14 +3,16 @@ package com.example.alne.data.model
 import com.google.gson.annotations.SerializedName
 
 data class Comment(
-    @SerializedName("recipeId") val recipeId: Int,
-    @SerializedName("userId") val userId: Int,
-    @SerializedName("detail") val detail: String,
-    @SerializedName("grade") val grade: Int,
-    @SerializedName("imageURL") val imageURL: String
+    var user_id: String,
+    var recipe_id: String,
+    var detail: String,
+    var grade: Int,
+    var _id: String,
+    var __v: Int
 )
 
-data class requestComment(
-    val userId: Int,
-    val data: Int
+data class addComment(
+    var detail: String,
+    var grade: Int,
+    var ImageURL: String
 )
