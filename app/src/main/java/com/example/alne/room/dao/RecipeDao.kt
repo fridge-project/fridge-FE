@@ -1,6 +1,8 @@
 package com.example.alne.room.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.alne.room.model.food
 import com.example.alne.room.model.recipe
@@ -8,6 +10,10 @@ import com.example.alne.room.model.recipe
 
 @Dao
 interface RecipeDao {
+
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAllRecipe(recipe: recipe)
 
     @Query("SELECT * FROM recipe LIMIT 10 OFFSET (:page-1)*10")
     suspend fun getAll(page: Int): List<recipe>
