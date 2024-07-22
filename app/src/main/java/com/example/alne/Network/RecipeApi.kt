@@ -18,6 +18,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 
@@ -30,6 +31,12 @@ interface RecipeApi {
     @POST(API.ADD_COMMENT)
     fun addUserComment(
         @Path(value = "recipe_id") recipe_id: String,
+        @Body comment: addComment
+    ): Call<JsonElement>
+
+    @PUT(API.UPDATE_COMMENT)
+    fun updateUserComment(
+        @Path(value = "id") commentId: String,
         @Body comment: addComment
     ): Call<JsonElement>
 
@@ -77,6 +84,8 @@ interface RecipeApi {
     fun getUserFavorites(
         @Body id: Id
     ): Call<FavoritesRespond>
+
+
 
 
 

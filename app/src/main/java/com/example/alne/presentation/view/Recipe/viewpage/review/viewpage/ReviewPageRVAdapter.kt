@@ -17,7 +17,7 @@ class ReviewPageRVAdapter(val context: Context): RecyclerView.Adapter<ReviewPage
     private var items: ArrayList<Comment> = ArrayList()
     interface MyItemClickListener {
         fun deleteComment(position: Int)
-        fun patchComment(comment: Comment)
+        fun patchComment(comment: Comment, position: Int)
 
         fun initUi(bool: Boolean)
     }
@@ -52,11 +52,8 @@ class ReviewPageRVAdapter(val context: Context): RecyclerView.Adapter<ReviewPage
             binding.itemReviewIv.scaleType = ImageView.ScaleType.FIT_XY
             binding.itemReviewIv.setPadding(0,0,0,0)
 //            if(comment.user.id == GlobalApplication.prefManager.getUserToken()?.userId){
-//                binding.itemReviewInfo.visibility = View.VISIBLE
-//                binding.itemReviewRecomment.setOnClickListener {
-//                    myItemClickListener.patchComment(comment)
-//                }
-//                myItemClickListener.initUi(true)
+                binding.itemReviewInfo.visibility = View.VISIBLE
+                myItemClickListener.initUi(true)
 //            }else{
 //                binding.itemReviewInfo.visibility = View.INVISIBLE
 //                myItemClickListener.initUi(false)
@@ -76,6 +73,10 @@ class ReviewPageRVAdapter(val context: Context): RecyclerView.Adapter<ReviewPage
         holder.bind(items[position])
         holder.binding.itemReviewDelete.setOnClickListener {
             myItemClickListener.deleteComment(position)
+        }
+
+        holder.binding.itemReviewRecomment.setOnClickListener {
+            myItemClickListener.patchComment(items[position], position)
         }
     }
 

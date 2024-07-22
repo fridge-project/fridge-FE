@@ -38,7 +38,7 @@ class RecipePagingSource(val service: String?, val type: Recipe_TYPE) : PagingSo
                 }else if(type == Recipe_TYPE.SEARCH){
                     data = GlobalApplication.appDatabase.recipeDao().getAll(nextPageNumber)
                         .filter {
-                            it.name.contains(service!!)
+                            it.recipe.contains(service!!)
                         }
                 }else{
 

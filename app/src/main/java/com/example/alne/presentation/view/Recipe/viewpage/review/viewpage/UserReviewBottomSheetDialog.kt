@@ -18,7 +18,7 @@ import com.example.alne.viewmodel.RecipeDetailViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 
-class UserReviewBottomSheetDialog: BottomSheetDialogFragment() {
+class UserReviewBottomSheetDialog(private val code: Int, private val position: Int): BottomSheetDialogFragment() {
 
     lateinit var binding: UserReviewDialogBinding
     lateinit var viewModel: RecipeDetailViewModel
@@ -53,7 +53,11 @@ class UserReviewBottomSheetDialog: BottomSheetDialogFragment() {
 
         binding.userReviewSubmitBt.setOnClickListener {
             // 댓글 정보 서버로 보내기
-            viewModel.addUserComment(recipe._id, addComment(binding.userReviewCommentEt.text.toString(), binding.baseRatingBar.rating.toInt(), "url"))
+            if(code == 0){
+                viewModel.addUserComment(recipe._id, addComment(binding.userReviewCommentEt.text.toString(), binding.baseRatingBar.rating.toInt(), "url"))
+            }else{
+                viewModel.updateUserComment(position, addComment(binding.userReviewCommentEt.text.toString(), binding.baseRatingBar.rating.toInt(), "url"))
+            }
             dismiss()
         }
 

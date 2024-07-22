@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alne.R
 import com.example.alne.databinding.FragmentReviewBinding
-import com.example.alne.data.model.Process
 import com.example.alne.room.model.recipe
 import com.example.alne.viewmodel.RecipeDetailViewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -44,11 +43,11 @@ class ReviewFragment(val recipe: recipe): Fragment() {
 
         viewModel.getRecipeProcessLiveData.observe(viewLifecycleOwner, Observer { recipeProcess ->
             Log.d("ReviewFragment_recipe", recipeProcess.toString())
-            binding.recipeReviewRv.adapter = ReviewRVAdapter(recipeProcess.recipeProcess as ArrayList<Process>)
+            binding.recipeReviewRv.adapter = ReviewRVAdapter(recipeProcess)
             binding.recipeReviewRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            reviewView.findViewById<TextView>(R.id.recipe_review_tv).text = recipeProcess.comments.size.toString()
+            //reviewView.findViewById<TextView>(R.id.recipe_review_tv).text = recipeProcess.comments.size.toString()
             starView.findViewById<TextView>(R.id.recipe_star_title).text = "평점"
-            starView.findViewById<TextView>(R.id.recipe_star_tv).text = recipeProcess.gradeDto.average.toString()
+            //starView.findViewById<TextView>(R.id.recipe_star_tv).text = recipeProcess.gradeDto.average.toString()
         })
 
 

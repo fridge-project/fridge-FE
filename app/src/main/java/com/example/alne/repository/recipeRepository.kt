@@ -37,6 +37,8 @@ class recipeRepository {
 
     fun deleteUserComment(_id: String) = recipeService.deleteUserComment(_id)
 
+    fun updateUserComment(id: String, addComment: addComment) = recipeService.updateUserComment(id, addComment)
+
     //특정 레시피 조회
     fun getRecipeProcess(recipeCode: Int) = recipeService.getRecipeProcess(recipeCode)
 //

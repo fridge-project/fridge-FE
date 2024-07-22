@@ -73,6 +73,12 @@ class RecipeDetailViewModel: ViewModel() {
         _usersCommentsLiveData.postValue(itemComments)
     }
 
+    fun updateCommentItem(comment: Comment, position: Int){
+        itemComments[position] = comment
+        Log.d("updateCommentItem", comment.toString())
+        _usersCommentsLiveData.postValue(itemComments)
+    }
+
     fun addUserComment(recipe_id: String, comment: addComment) = repository.addUserComment(recipe_id, comment).enqueue(object: Callback<JsonElement>{
         override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
             var res = response.body()
@@ -95,6 +101,28 @@ class RecipeDetailViewModel: ViewModel() {
         }
     })
 
+    fun updateUserComment(position: Int, addComment: addComment) = repository.updateUserComment(itemComments[position]._id, addComment).enqueue(object: Callback<JsonElement>{
+        override fun onResponse(p0: Call<JsonElement>, p1: Response<JsonElement>) {
+            val res = p1.body()
+            when(p1.code()){
+                200 -> {
+                    var json = res?.asJsonObject
+                    var comment = Gson().fromJson(json, Comment::class.java)
+                    updateCommentItem(comment, position)
+                }
+
+                500 -> {
+
+                }
+            }
+            Log.d("updateUserComment", res.toString())
+        }
+
+        override fun onFailure(p0: Call<JsonElement>, p1: Throwable) {
+
+        }
+
+    })
 
     //특정 레시피 조회
     fun getRecipeProcess(recipeCode: Int) = repository.getRecipeProcess(recipeCode).enqueue(object: Callback<JsonArray>{

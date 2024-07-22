@@ -23,6 +23,7 @@ object API {
     const val RECIPE_PROECSS = "/api/recipes/{recipe_code}"
     const val ADD_COMMENT = "/api/comment/{recipe_id}"
     const val DELETE_COMMENT = "/api/comment/{id}"
+    const val UPDATE_COMMENT = "/api/comment/{id}"
 
 
 

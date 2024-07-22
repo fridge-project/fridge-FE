@@ -46,7 +46,7 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
         binding.reviewPageReviewBt.setOnClickListener {
             var bundle: Bundle = Bundle()
             bundle.putString("recipe", Gson().toJson(recipe))
-            startUserReviewBottomSheetDialog(bundle)
+            startUserReviewBottomSheetDialog(0,bundle, 0)
         }
 
         return binding.root
@@ -58,11 +58,11 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
             override fun deleteComment(position: Int) {
                 viewModel.deleteUserComment(position)
             }
-            override fun patchComment(comment: Comment) {
+            override fun patchComment(comment: Comment, position: Int) {
                 var bundle: Bundle = Bundle()
                 bundle.putString("recipe", Gson().toJson(recipe))
                 bundle.putString("comment", Gson().toJson(comment))
-                startUserReviewBottomSheetDialog(bundle)
+                startUserReviewBottomSheetDialog(1, bundle, position)
             }
 
             override fun initUi(bool: Boolean) {
@@ -81,8 +81,8 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
         }
     }
 
-    private fun startUserReviewBottomSheetDialog(bundle: Bundle){
-        val dialog = UserReviewBottomSheetDialog()
+    private fun startUserReviewBottomSheetDialog(code: Int, bundle: Bundle, position: Int){
+        val dialog = UserReviewBottomSheetDialog(code, position)
         dialog.arguments = bundle
         dialog.show(childFragmentManager, "")
         Log.d("reviewPageReviewBt", bundle.toString())
