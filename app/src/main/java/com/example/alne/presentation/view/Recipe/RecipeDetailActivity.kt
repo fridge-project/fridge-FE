@@ -72,26 +72,12 @@ class RecipeDetailActivity : AppCompatActivity() {
         })
 
         binding.like.setOnClickListener {
-            viewModel.likeRecipe(recipe._id, completion = { responseStatus ->
-                when(responseStatus){
-                    RESPONSE_STATUS.OKAY -> {
-                        Log.d("like.setOnClickListener", "OKAY")
-                    }
-
-                    RESPONSE_STATUS.FAIL -> {
-                        Log.d("like.setOnClickListener", "FAIL")
-                    }
-
-                    RESPONSE_STATUS.NETWORK_ERROR -> {
-                        Log.d("like.setOnClickListener", "NETWORK_ERROR")
-                    }
-                }
-            })
+            viewModel.likeRecipe(recipe._id)
         }
-//
-//        binding.bookmark.setOnClickListener {
-//            viewModel.addRecipeFavorite(recipe.recipe_code)
-//        }
+
+        binding.bookmark.setOnClickListener {
+            viewModel.addRecipeFavorite(recipe._id)
+        }
         setOnClickListener()
     }
 

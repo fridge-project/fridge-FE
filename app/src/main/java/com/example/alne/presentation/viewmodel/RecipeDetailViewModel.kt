@@ -1,37 +1,26 @@
 package com.example.alne.viewmodel
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.alne.GlobalApplication
 import com.example.alne.data.model.Comment
-import com.example.alne.data.model.DeleteFavorite
-import com.example.alne.data.model.FavoriteRespond
 import com.example.alne.data.model.RecipeProcess
-import com.example.alne.data.model.Status
 import com.example.alne.repository.recipeRepository
-import com.example.alne.Network.AuthResponse
-import com.example.alne.data.model.FridgeIngredient
-import com.example.alne.data.model.LikeRespond
 import com.example.alne.data.model.Profile
-import com.example.alne.data.model.ProfileRespond
 import com.example.alne.data.model.addComment
-import com.example.alne.room.model.recipe
-import com.example.alne.utils.RESPONSE_STATUS
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Arrays
 
 class RecipeDetailViewModel: ViewModel() {
 
     private val repository = recipeRepository()
 
+    // 댓글 목록
     var itemComments = ArrayList<Comment>()
 
     //댓글 전체 목록 LiveData
@@ -160,52 +149,32 @@ class RecipeDetailViewModel: ViewModel() {
         }
 
     })
-//
-//    fun addRecipeFavorite(recipeCode: Int ,userId: UserId = UserId(GlobalApplication.prefManager.getUserToken()?.accessToken?.toInt()!!, null)) = repository.addRecipeFavorite(recipeCode, userId).enqueue(object: Callback<FavoriteRespond>{
-//        override fun onResponse(call: Call<FavoriteRespond>, response: Response<FavoriteRespond>) {
-//            val res = response.body()
-//            when(res?.status){
-//                200 -> {
-//                    _addRecipeFavoriteLiveData.postValue(res.data.favorite)
-//                    Log.d("addRecipeFavorite_onSuccess", res.toString())
-//                }
-//                else -> {
-//                    _addRecipeFavoriteLiveData.postValue(false)
-//                    Log.d("addRecipeFavorite_onSuccess:fail", res.toString())
-//                }
-//            }
-//        }
-//
-//        override fun onFailure(call: Call<FavoriteRespond>, t: Throwable) {
-//            Log.d("addRecipeFavorite_onFailure", t.message.toString())
-//            _addRecipeFavoriteLiveData.postValue(false)
-//        }
-//
-//    })
-//
-//    fun userLikeRecipe(recipeCode: Int, userId: UserId = UserId(GlobalApplication.prefManager.getUserToken()?.accessToken?.toInt()!!, null)) = repository.userLikeRecipe(recipeCode, userId).enqueue(object: Callback<LikeRespond>{
-//        override fun onResponse(call: Call<LikeRespond>, response: Response<LikeRespond>) {
-//            val res = response.body()
-//            when(res?.status){
-//                200 -> {
-//                    _addRecipeLikeLiveData.postValue(res.data.like)
-//                    Log.d("addRecipeFavorite_onSuccess", res.toString())
-//                }
-//                else -> {
-//                    _addRecipeLikeLiveData.postValue(false)
-//                    Log.d("addRecipeFavorite_onSuccess:fail", res.toString())
-//                }
-//            }
-//        }
-//
-//        override fun onFailure(call: Call<LikeRespond>, t: Throwable) {
-//            _addRecipeLikeLiveData.postValue(false)
-//            Log.d("addRecipeFavorite_fail", t.message.toString())
-//        }
-//
-//    })
 
-    fun likeRecipe(_id: String, completion: (RESPONSE_STATUS) -> Unit ) = repository.likeRecipe(_id).enqueue(object: Callback<String>{
+    fun addRecipeFavorite(recipe_id: String) = repository.favoriteRecipe(recipe_id).enqueue(object: Callback<String>{
+        override fun onResponse(p0: Call<String>, p1: Response<String>) {
+            val res = p1.body()
+            when(p1.code()){
+                200 -> {
+                    if(res.toString().equals("즐겨찾기 성공")){
+                        _addRecipeFavoriteLiveData.postValue(true)
+                    }else{
+                        _addRecipeFavoriteLiveData.postValue(false)
+                    }
+                    Log.d("addRecipeFavorite", "성공")
+                }
+
+                500 -> {
+                    Log.d("addRecipeFavorite", "실패")
+                }
+            }
+            Log.d("addRecipeFavorite", res.toString())
+        }
+
+        override fun onFailure(p0: Call<String>, p1: Throwable) {
+            Log.d("addRecipeFavorite", p1.message.toString())
+        }
+    })
+    fun likeRecipe(_id: String) = repository.likeRecipe(_id).enqueue(object: Callback<String>{
         override fun onResponse(p0: Call<String>, response: Response<String>) {
             val res = response.body()
             when(response.code()){
@@ -215,44 +184,19 @@ class RecipeDetailViewModel: ViewModel() {
                     }else{
                         _addRecipeLikeLiveData.postValue(false)
                     }
-                    completion(RESPONSE_STATUS.OKAY)
                 }
 
                 500 -> {
-                    completion(RESPONSE_STATUS.FAIL)
+
                 }
             }
             Log.d("likeRecipe", res.toString())
         }
         override fun onFailure(p0: Call<String>, p1: Throwable) {
             Log.d("likeRecipe", p1.message.toString())
-            completion(RESPONSE_STATUS.NETWORK_ERROR)
         }
 
     })
-
-
-//    fun deleteRecipeFavorite(delete: DeleteFavorite) = authRepository.deleteRecipeFavorite(delete).enqueue(object: Callback<Status>{
-//        override fun onResponse(call: Call<Status>, response: Response<Status>) {
-//            val res = response.body()
-//            when(res?.status){
-//                200 -> {
-//                    _deleteRecipeFavoriteLiveData.postValue(true)
-//                    Log.d("deleteRecipeFavorite_onSuccess", res.toString())
-//                }
-//                else -> {
-//                    _deleteRecipeFavoriteLiveData.postValue(false)
-//                    Log.d("deleteRecipeFavorite_onSuccess:fail", res.toString())
-//                }
-//            }
-//        }
-//
-//        override fun onFailure(call: Call<Status>, t: Throwable) {
-//            _deleteRecipeFavoriteLiveData.postValue(false)
-//            Log.d("deleteRecipeFavorite_onFailure", t.message.toString())
-//        }
-//
-//    })
 
     fun deleteUserComment(position: Int) = repository.deleteUserComment(itemComments[position]._id).enqueue(object: Callback<String>{
         override fun onResponse(call: Call<String>, response: Response<String>) {

@@ -24,6 +24,8 @@ object API {
     const val ADD_COMMENT = "/api/comment/{recipe_id}"
     const val DELETE_COMMENT = "/api/comment/{id}"
     const val UPDATE_COMMENT = "/api/comment/{id}"
+    const val FAVORITE = "/api/favorite/{recipe_id}"
+    const val FAVORITE_LIST = "/api/favorite"
 
 
 

@@ -1,15 +1,7 @@
 package com.example.alne.Network
 
-import com.example.alne.data.model.Comment
-import com.example.alne.data.model.DeleteFavorite
-import com.example.alne.data.model.FavoriteRespond
-import com.example.alne.data.model.FavoritesRespond
-import com.example.alne.data.model.Id
-import com.example.alne.data.model.LikeRespond
 import com.example.alne.data.model.Recipe
-import com.example.alne.data.model.Status
 import com.example.alne.data.model.addComment
-import com.example.alne.room.model.recipe
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import retrofit2.Call
@@ -46,24 +38,10 @@ interface RecipeApi {
         @Path("recipe_code") recipeCode: Int,
     ): Call<JsonArray>
 
-
-//
-//    @POST("/recipe/{recipeCode}/favorite")
-//    fun addRecipeFavorite(
-//        @Path("recipeCode") recipeCode: Int,
-//        @Body userId: UserId
-//    ): Call<FavoriteRespond>
-
-    @POST("/favorites/delete")
-    fun deleteRecipeFavorite(
-        @Body delete: DeleteFavorite
-    ): Call<Status>
-
-//    @POST("/recipe/{recipeCode}/like")
-//    fun likeRecipe(
-//        @Path("recipeCode") recipeCode: Int,
-//        @Body userid: UserId
-//    ): Call<LikeRespond>
+    @POST(API.FAVORITE)
+    fun favoriteRecipe(
+        @Path("recipe_id") recipe_id: String,
+    ): Call<String>
 
     @POST(API.LIKE)
     fun likeRecipe(
@@ -80,14 +58,6 @@ interface RecipeApi {
 
 
     //사용자가 즐겨찾기 한 모든 레시피 정보 가져오기
-    @POST("/favorites")
-    fun getUserFavorites(
-        @Body id: Id
-    ): Call<FavoritesRespond>
-
-
-
-
-
-
+    @GET(API.FAVORITE_LIST)
+    fun userFavoriteList(): Call<JsonArray>
 }
