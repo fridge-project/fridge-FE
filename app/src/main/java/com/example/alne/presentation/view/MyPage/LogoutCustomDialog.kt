@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.alne.GlobalApplication
 import com.example.alne.databinding.LogoutDialogBinding
-import com.example.alne.utils.REPONSE_STATUS
+import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.view.Splash.StartActivity
 import com.example.alne.viewmodel.MyPageViewModel
 import com.kakao.sdk.user.UserApiClient
@@ -67,16 +67,16 @@ class LogoutCustomDialog: DialogFragment() {
         viewModel.logout(GlobalApplication.prefManager.getUserToken(),
             completion = { responseState ->
                 when(responseState){
-                    REPONSE_STATUS.OKAY -> {
+                    RESPONSE_STATUS.OKAY -> {
                         Toast.makeText(requireContext(), "로그아웃에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(requireContext(), StartActivity::class.java))
                     }
 
-                    REPONSE_STATUS.FAIL -> {
+                    RESPONSE_STATUS.FAIL -> {
                         Toast.makeText(requireContext(), "로그아웃에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                     }
 
-                    REPONSE_STATUS.NETWORK_ERROR -> {
+                    RESPONSE_STATUS.NETWORK_ERROR -> {
                         Toast.makeText(requireContext(), "네트워크 오류입니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
