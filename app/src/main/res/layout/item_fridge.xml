@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        app:cardElevation="1dp"
+        app:cardElevation="0dp"
         app:cardCornerRadius="15dp"
         android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
+                    android:padding="25dp"
                     android:src="@drawable/camera"
 
                     />
@@ -58,20 +59,19 @@
 
             <TextView
                 android:id="@+id/item_fridge_storage_tv"
-                android:text="냉장"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:background="@drawable/textview_border"
-                android:textColor="@color/black"
-                android:layout_marginStart="10dp"
-
-                android:paddingLeft="7dp"
-                android:paddingRight="7dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@+id/item_fridge_expire_tv"
-                app:layout_constraintTop_toTopOf="@+id/item_fridge_expire_tv"
-                app:layout_constraintBottom_toBottomOf="@+id/item_fridge_expire_tv" />
+                android:background="@drawable/textview_border"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:layout_marginStart="100dp"
+                android:text="냉장"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/item_fridge_expire_tv"
+                app:layout_constraintStart_toEndOf="@+id/item_fridge_cv"
+                app:layout_constraintTop_toTopOf="@+id/item_fridge_expire_tv" />
 
             <TextView
                 android:id="@+id/item_fridge_expire_tv"
