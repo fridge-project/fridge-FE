@@ -1,10 +1,4 @@
 package com.example.alne.data.model
-
-data class FavoriteRespond(
-    val status: Int,
-    val data: Favorite
-)
-
 data class Favorite(
     val user: UserInfo,
     val recipe: Recipe,
@@ -20,9 +14,4 @@ data class UserInfo(
     val image: String,
     val favoriteRecipes: List<Int> = ArrayList(),
     val likeRecipes: List<Int> = ArrayList()
-)
-
-data class FavoritesRespond(
-    val status: Int,
-    val data: List<Favorite>
 )
