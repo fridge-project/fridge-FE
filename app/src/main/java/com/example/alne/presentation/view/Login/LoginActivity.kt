@@ -13,7 +13,7 @@ import com.example.alne.MainActivity
 import com.example.alne.R
 import com.example.alne.databinding.ActivityLoginBinding
 import com.example.alne.data.model.User
-import com.example.alne.utils.REPONSE_STATUS
+import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.utils.ToolBox
 import com.example.alne.view.SignUp.SignUpActivity
 import com.example.alne.viewmodel.LoginViewModel
@@ -74,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
             ),
                 completion = { responseState ->
                     when (responseState) {
-                        REPONSE_STATUS.OKAY -> {
+                        RESPONSE_STATUS.OKAY -> {
                             Toast.makeText(this@LoginActivity, "로그인 성공했습니다.", Toast.LENGTH_SHORT)
                                 .show()
                             Handler(Looper.getMainLooper()).postDelayed({
@@ -87,7 +87,7 @@ class LoginActivity : AppCompatActivity() {
                             }, 1000)
                         }
 
-                        REPONSE_STATUS.FAIL -> {
+                        RESPONSE_STATUS.FAIL -> {
                             Toast.makeText(
                                 this@LoginActivity,
                                 "이메일 또는 패스워드 오류입니다.",
@@ -95,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
                             ).show()
                         }
 
-                        REPONSE_STATUS.NETWORK_ERROR -> {
+                        RESPONSE_STATUS.NETWORK_ERROR -> {
                             Toast.makeText(this@LoginActivity, "네트워크 오류입니다.", Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -133,7 +133,7 @@ class LoginActivity : AppCompatActivity() {
         val manager: InputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(
-            currentFocus!!.windowToken,
+            currentFocus?.windowToken,
             InputMethodManager.HIDE_NOT_ALWAYS
         )
     }
