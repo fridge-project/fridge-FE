@@ -2,33 +2,26 @@ package com.example.alne.view.Recipe
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.PagingData
-import androidx.paging.filter
-import androidx.paging.map
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.example.alne.databinding.FragmentRecipeBinding
 import com.example.alne.room.model.recipe
 import com.example.alne.utils.Recipe_TYPE
 import com.example.alne.utils.fromDpToPx
 import com.example.alne.viewmodel.RecipeViewModel
-import com.google.android.material.internal.ViewUtils.hideKeyboard
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class RecipeFragment : Fragment() {
@@ -40,11 +33,10 @@ class RecipeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentRecipeBinding.inflate(layoutInflater)
-
         viewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
 
+        // 화면 밖 클릭 시 키보드 내림
         binding.root.setOnClickListener{
             hideKeyBoard()
         }
@@ -61,8 +53,9 @@ class RecipeFragment : Fragment() {
                 startActivity(intent)
             }
         })
-        binding.recipeGv.addItemDecoration(GridSpacingItemDecoration(spanCount = 2, spacing = 12f.fromDpToPx()))
+        binding.recipeGv.addItemDecoration(GridSpacingItemDecoration(spanCount = 2, spacing = 20, true))
         binding.recipeGv.adapter = gridAdapter
+        binding.recipeGv.layoutManager = GridLayoutManager(requireContext(), 2)
 
         // Flow 데이터 수신 대기
         lifecycleScope.launch {
@@ -135,37 +128,32 @@ class RecipeFragment : Fragment() {
     }
 
 
-    internal class GridSpacingItemDecoration(
-        private val spanCount: Int, // Grid의 column 수
-        private val spacing: Int // 간격
-    ) : RecyclerView.ItemDecoration() {
-
+    class GridSpacingItemDecoration(
+        private val spanCount: Int,
+        private val spacing: Int,
+        private val includeEdge: Boolean,
+    ) :
+        ItemDecoration() {
         override fun getItemOffsets(
             outRect: Rect,
             view: View,
             parent: RecyclerView,
-            state: RecyclerView.State
+            state: RecyclerView.State,
         ) {
-            val position: Int = parent.getChildAdapterPosition(view)
+            val position = parent.getChildAdapterPosition(view) // item position
+            val column = position % spanCount + 1      // 1부터 시작
 
-            if (position >= 0) {
-                val column = position % spanCount // item column
-                outRect.apply {
-                    // spacing - column * ((1f / spanCount) * spacing)
-                    left = spacing - column * spacing / spanCount
-                    // (column + 1) * ((1f / spanCount) * spacing)
-                    right = (column + 1) * spacing / spanCount
-                    if (position < spanCount) top = spacing
-                    bottom = spacing
-                }
-            } else {
-                outRect.apply {
-                    left = 0
-                    right = 0
-                    top = 0
-                    bottom = 0
-                }
+            /** 첫번째 행(row-1)에 있는 아이템인 경우 상단에 [space] 만큼의 여백을 추가한다 */
+            if (position < spanCount){
+                outRect.top = spacing
             }
+            /** 마지막 열(column-N)에 있는 아이템인 경우 우측에 [space] 만큼의 여백을 추가한다 */
+            if (column == spanCount){
+                outRect.right = spacing
+            }
+            /** 모든 아이템의 좌측과 하단에 [space] 만큼의 여백을 추가한다. */
+            outRect.left = spacing
+            outRect.bottom = spacing
         }
     }
 }
