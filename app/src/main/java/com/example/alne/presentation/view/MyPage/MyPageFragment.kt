@@ -58,7 +58,6 @@ class MyPageFragment : Fragment() {
             startActivity(Intent(requireContext(), LikeListActivity::class.java))
         }
 
-
         return binding.root
     }
 
