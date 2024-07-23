@@ -7,7 +7,7 @@ import com.example.alne.GlobalApplication
 import com.example.alne.Network.LoginResponse
 import com.example.alne.data.model.User
 import com.example.alne.repository.authRepository
-import com.example.alne.utils.REPONSE_STATUS
+import com.example.alne.utils.RESPONSE_STATUS
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,7 +16,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     private val authRepository = authRepository(application)
 
-    fun login(user: User, completion: (REPONSE_STATUS) -> Unit){
+    fun login(user: User, completion: (RESPONSE_STATUS) -> Unit){
         authRepository.login(user).enqueue(object: Callback<LoginResponse> {
             override fun onResponse(
                 call: Call<LoginResponse>,
@@ -27,18 +27,18 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                     200 -> {
                         //토큰 처리
                         GlobalApplication.prefManager.saveJwt(res!!.accessToken, res!!.refreshToken)
-                        completion(REPONSE_STATUS.OKAY)
+                        completion(RESPONSE_STATUS.OKAY)
                     }
 
                     401 -> {
-                        completion(REPONSE_STATUS.FAIL)
+                        completion(RESPONSE_STATUS.FAIL)
                     }
                 }
                 Log.d("login_success", res.toString())
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                completion(REPONSE_STATUS.NETWORK_ERROR)
+                completion(RESPONSE_STATUS.NETWORK_ERROR)
             }
         })
     }
