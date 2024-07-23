@@ -10,7 +10,7 @@ import com.example.alne.databinding.ActivitySignUpBinding
 import com.example.alne.view.Login.LoginActivity
 import com.example.alne.viewmodel.SignUpViewModel
 import com.example.alne.data.model.User
-import com.example.alne.utils.REPONSE_STATUS
+import com.example.alne.utils.RESPONSE_STATUS
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -33,14 +33,14 @@ class SignUpActivity : AppCompatActivity() {
                     User(binding.signUpEmailEt.text.toString(), binding.signUpNameEt.text.toString() ,binding.signUpPasswordEt.text.toString()),
                     completion = { responseState, responseMessage ->
                         when(responseState){
-                            REPONSE_STATUS.OKAY -> {
+                            RESPONSE_STATUS.OKAY -> {
                                 Toast.makeText(this@SignUpActivity, "회원가입했습니다.",Toast.LENGTH_SHORT).show()
                                 startActivity(Intent(this@SignUpActivity, LoginActivity::class.java))
                             }
-                            REPONSE_STATUS.FAIL -> {
+                            RESPONSE_STATUS.FAIL -> {
                                 Toast.makeText(this@SignUpActivity, "동일한 아이디가 존재합니다.", Toast.LENGTH_SHORT).show()
                             }
-                            REPONSE_STATUS.NETWORK_ERROR -> {
+                            RESPONSE_STATUS.NETWORK_ERROR -> {
                                 Toast.makeText(this@SignUpActivity, "네트워크 오류입니다.", Toast.LENGTH_SHORT).show()
                             }
                         }
