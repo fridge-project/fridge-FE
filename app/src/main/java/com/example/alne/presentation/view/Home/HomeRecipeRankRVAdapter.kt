@@ -34,10 +34,10 @@ class HomeRecipeRankRVAdapter(var context: Context): RecyclerView.Adapter<HomeRe
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.itemRecipeTitleTv.text = items[position].name
+        holder.binding.itemRecipeTitleTv.text = items[position].recipe
         holder.binding.itemRecipeTimeTv.text = "약 " + items[position].time + "분"
         holder.binding.itemRecipeRankTv.text = items[position].difficulty
-        Glide.with(context).load(items[position].imageurl).into(holder.binding.itemRecipeIv)
+        Glide.with(context).load(items[position].imageURL).into(holder.binding.itemRecipeIv)
         holder.binding.root.setOnClickListener{
             myItemClickListener.clickItem(items[position])
         }
