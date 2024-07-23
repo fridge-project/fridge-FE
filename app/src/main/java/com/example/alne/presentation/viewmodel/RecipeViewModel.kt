@@ -17,23 +17,9 @@ import kotlinx.coroutines.launch
 class RecipeViewModel() : ViewModel() {
 
     private val repository = recipeRepository()
-    private val _getRecipeLiveData = MutableLiveData<ArrayList<recipe>>()
-    val getRecipeLiveData: LiveData<ArrayList<recipe>> = _getRecipeLiveData
-
-
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-           // _getRecipeLiveData.postValue(repository.getAllRecipe())
-        }
-    }
 
     fun getRecipePagingList(category : String?, type: Recipe_TYPE) : Flow<PagingData<recipe>> {
         var data = repository.getRecipePagingSource(category, type).cachedIn(viewModelScope)
         return data
     }
-
-//    fun getRecipePagingList(vararg : String? , type: Recipe_TYPE) : Flow<PagingData<recipe>> {
-//        var data = repository.getRecipePagingSource(vararg, type).cachedIn(viewModelScope)
-//        return data
-//    }
 }
