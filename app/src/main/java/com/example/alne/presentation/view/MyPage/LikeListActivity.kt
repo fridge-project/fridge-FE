@@ -26,17 +26,7 @@ class LikeListActivity : AppCompatActivity() {
         binding.likeListTb.setNavigationOnClickListener {
             finish()
         }
-        viewModel.getUserLikeList { responseStatus ->
-            when(responseStatus){
-                RESPONSE_STATUS.OKAY -> {
 
-                }
-
-                else -> {
-
-                }
-            }
-        }
         val gridAdapter = RecipeGVAdapter(this)
         gridAdapter.setMyItemClickListener(object: RecipeGVAdapter.setOnClickListener{
             override fun clickItem(recipe: Recipe) {
