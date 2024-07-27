@@ -17,10 +17,11 @@ object API {
     const val  FRIDGE_UPDATE = "/api/fridge/{id}"
 
     //Recipe
+    const val INGREDIENTS_ALL = "/api/ingredients"
+    const val RECIPE_DETAIL = "/api/recipes/{recipe_code}"
     const val RECIPE_LIST = "/api/recipes"
     const val LIKE = "/api/like/{id}"
     const val LIKE_LIST = "/api/like"
-    const val RECIPE_PROECSS = "/api/recipes/{recipe_code}"
     const val ADD_COMMENT = "/api/comment/{recipe_id}"
     const val DELETE_COMMENT = "/api/comment/{id}"
     const val UPDATE_COMMENT = "/api/comment/{id}"
