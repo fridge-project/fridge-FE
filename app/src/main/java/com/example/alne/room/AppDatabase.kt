@@ -4,12 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.alne.data.model.RoomIngredient
 import com.example.alne.room.dao.IngredientDao
 import com.example.alne.room.dao.RecipeDao
-import com.example.alne.room.model.food
 import com.example.alne.room.model.recipe
 
-@Database(entities = [food::class, recipe::class], version = 3)
+@Database(entities = [RoomIngredient::class, recipe::class], version = 4)
 abstract class AppDatabase : RoomDatabase(){
 
     abstract fun ingredientDao(): IngredientDao
