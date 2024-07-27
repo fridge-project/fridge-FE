@@ -1,17 +1,21 @@
 package com.example.alne.room.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
-import com.example.alne.room.model.food
+import com.example.alne.data.model.RoomIngredient
 
 @Dao
 interface IngredientDao {
 
-    @Query("SELECT * FROM food WHERE name=:name")
-    fun getIngredient(name: String): food
+    @Query("SELECT * FROM RoomIngredient WHERE name=:name")
+    fun getIngredient(name: String): RoomIngredient
 
-    @Query("SELECT * FROM food")
-    suspend fun getAll(): List<food>
+    @Insert
+    suspend fun insertIngredient(ingredient: RoomIngredient)
+
+    @Query("SELECT * FROM RoomIngredient")
+    suspend fun getAll(): List<RoomIngredient>
 
 
 
