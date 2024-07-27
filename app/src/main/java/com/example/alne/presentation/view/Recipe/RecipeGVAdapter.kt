@@ -1,21 +1,14 @@
 package com.example.alne.view.Recipe
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.alne.R
-import com.example.alne.data.model.Recipe
 import com.example.alne.databinding.ItemRecipeBinding
 import com.example.alne.room.model.recipe
 
@@ -48,7 +41,7 @@ class RecipeGVAdapter(val context: Context): Filterable, PagingDataAdapter<recip
     inner class ViewHolder(val binding: ItemRecipeBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(recipe: recipe) {
             binding.itemRecipeTitleTv.text = recipe.recipe
-            binding.itemRecipeTimeTv.text = "약 " + recipe.time + "분"
+            binding.itemRecipeTimeTv.text = "약 " + recipe.time
             binding.itemRecipeRankTv.text = recipe.difficulty
             Glide.with(context).load(recipe.imageURL).into(binding.itemRecipeIv)
             binding.root.setOnClickListener {
