@@ -2,19 +2,17 @@ package com.example.alne.view.Fridge
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
+import com.example.alne.data.model.RoomIngredient
 import com.example.alne.databinding.ItemChoiceIngredientBinding
-import com.example.alne.room.model.food
-import com.example.alne.room.model.recipe
 
 class IngredientChoiceAdapter(): RecyclerView.Adapter<IngredientChoiceAdapter.ViewHolder>(), Filterable{
 
-    var items: ArrayList<food> = ArrayList()
-    var itemsFilter: ArrayList<food> = items
+    var items: ArrayList<RoomIngredient> = ArrayList()
+    var itemsFilter: ArrayList<RoomIngredient> = items
     inner class ViewHolder(val binding: ItemChoiceIngredientBinding): RecyclerView.ViewHolder(binding.root){}
 
     interface MyItemClickListener {
@@ -50,7 +48,7 @@ class IngredientChoiceAdapter(): RecyclerView.Adapter<IngredientChoiceAdapter.Vi
                     filterResults.count = itemsFilter.size
                     filterResults.values = itemsFilter
                 }else{
-                    var searchResult: ArrayList<food> = ArrayList()
+                    var searchResult: ArrayList<RoomIngredient> = ArrayList()
                     for(food in itemsFilter){
                         if(food.name.contains(p0)){
                             searchResult.add(food)
@@ -63,14 +61,14 @@ class IngredientChoiceAdapter(): RecyclerView.Adapter<IngredientChoiceAdapter.Vi
             }
 
             override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
-                items = p1?.values as ArrayList<food>
+                items = p1?.values as ArrayList<RoomIngredient>
                 notifyDataSetChanged()
             }
         }
         return filter
     }
 
-    fun addAllItems(items: ArrayList<food>){
+    fun addAllItems(items: ArrayList<RoomIngredient>){
         this.items.clear()
         this.items.addAll(items)
         Log.d("items", items.toString())
