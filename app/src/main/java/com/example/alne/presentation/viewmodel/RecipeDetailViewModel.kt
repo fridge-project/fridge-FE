@@ -4,11 +4,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.alne.Network.RecipeService
+import com.example.alne.Network.getRetrofit
 import com.example.alne.data.model.Comment
 import com.example.alne.data.model.RecipeProcess
-import com.example.alne.repository.recipeRepository
+import com.example.alne.data.model.repository.RecipeRepositoryImpl
 import com.example.alne.data.model.Profile
 import com.example.alne.data.model.addComment
+import com.example.alne.domain.model.RecipeDetailResponse
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
@@ -16,9 +19,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RecipeDetailViewModel: ViewModel() {
+class RecipeDetailViewModel(): ViewModel() {
 
-    private val repository = recipeRepository()
+    private val repository: RecipeRepositoryImpl = RecipeRepositoryImpl(getRetrofit().create(RecipeService::class.java))
 
     // 댓글 목록
     var itemComments = ArrayList<Comment>()
@@ -26,6 +29,10 @@ class RecipeDetailViewModel: ViewModel() {
     //댓글 전체 목록 LiveData
     private val _usersCommentsLiveData = MutableLiveData<ArrayList<Comment>>()
     val usersCommentsLiveData: LiveData<ArrayList<Comment>> = _usersCommentsLiveData
+
+    //평점 LiveData
+    private val _usersStarLiveData = MutableLiveData<Int>()
+    val usersStarLiveData: LiveData<Int> = _usersStarLiveData
 
     //특정 레시프 조회
     private val _getRecipeProcessLiveData = MutableLiveData<ArrayList<RecipeProcess>>()
@@ -49,7 +56,6 @@ class RecipeDetailViewModel: ViewModel() {
 //        }else{
 //            _userProfileLiveData.postValue(null)
 //        }
-        _addRecipeLikeLiveData.postValue(false)
     }
 
     fun addCommentItem(comment: Comment){
@@ -68,27 +74,29 @@ class RecipeDetailViewModel: ViewModel() {
         _usersCommentsLiveData.postValue(itemComments)
     }
 
-    fun addUserComment(recipe_id: String, comment: addComment) = repository.addUserComment(recipe_id, comment).enqueue(object: Callback<JsonElement>{
-        override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
-            var res = response.body()
-            when(response.code()){
-                201 -> {
-                    var json = res?.asJsonObject
-                    var comment = Gson().fromJson(json, Comment::class.java)
-                    addCommentItem(comment)
-                }
+    fun addUserComment(recipe_id: String, comment: addComment) {
+        repository.addUserComment(recipe_id, comment).enqueue(object: Callback<JsonElement>{
+            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                var res = response.body()
+                when(response.code()){
+                    201 -> {
+                        var json = res?.asJsonObject
+                        var comment = Gson().fromJson(json, Comment::class.java)
+                        addCommentItem(comment)
+                    }
 
-                500 -> {
+                    500 -> {
 
+                    }
                 }
+                Log.d("addUserComment_res", res.toString())
             }
-            Log.d("addUserComment_res", res.toString())
-        }
 
-        override fun onFailure(call: Call<JsonElement>, t: Throwable) {
-            Log.d("addUserComment_onFailure", t.message.toString())
-        }
-    })
+            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                Log.d("addUserComment_onFailure", t.message.toString())
+            }
+        })
+    }
 
     fun updateUserComment(position: Int, addComment: addComment) = repository.updateUserComment(itemComments[position]._id, addComment).enqueue(object: Callback<JsonElement>{
         override fun onResponse(p0: Call<JsonElement>, p1: Response<JsonElement>) {
@@ -114,37 +122,30 @@ class RecipeDetailViewModel: ViewModel() {
     })
 
     //특정 레시피 조회
-    fun getRecipeProcess(recipeCode: Int) = repository.getRecipeProcess(recipeCode).enqueue(object: Callback<JsonArray>{
+    fun getRecipeProcess(recipeCode: Int) = repository.getRecipeDetail(recipeCode).enqueue(object: Callback<RecipeDetailResponse>{
         override fun onResponse(
-            call: Call<JsonArray>,
-            response: Response<JsonArray>,
+            call: Call<RecipeDetailResponse>,
+            response: Response<RecipeDetailResponse>,
         ) {
             val res = response.body()
             when(response.code()){
                 200 -> {
-                    if (res != null) {
-                        var item: ArrayList<RecipeProcess> = ArrayList()
-                        for(json in res){
-                            var jsonObject = json.asJsonObject
-                            var recipe_code = jsonObject.get("recipe_code").asInt
-                            var order_num = jsonObject.get("order_num").asInt
-                            var detail = jsonObject.get("detail").asString
-                            var imageURL = jsonObject.get("imageURL").asString
-                            var tip = jsonObject.get("tip").asString
-                            item.add(RecipeProcess(recipe_code,order_num,detail,imageURL,tip))
-                        }
-                        item = ArrayList(item.sortedBy { it.order_num })
-                        _getRecipeProcessLiveData.postValue(item)
-                    }
+                    if(res?.like != null) _addRecipeLikeLiveData.postValue(true) else _addRecipeLikeLiveData.postValue(false)
+                    if(res?.favorite != null) _addRecipeFavoriteLiveData.postValue(true) else _addRecipeFavoriteLiveData.postValue(false)
+                    if(res?.comment != null) addCommentItem(res?.comment)
+                    if(res?.avg != null) _usersStarLiveData.postValue(res?.avg)
+                    _getRecipeProcessLiveData.postValue(ArrayList(res?.process?.sortedBy { it.order_num }))
                 }
 
                 500 -> {
 
                 }
             }
+            Log.d("getRecipeProcess", res.toString())
+
         }
 
-        override fun onFailure(call: Call<JsonArray>, t: Throwable) {
+        override fun onFailure(call: Call<RecipeDetailResponse>, t: Throwable) {
             Log.d("getRecipeProcess_onFailure", t.message.toString())
         }
 
