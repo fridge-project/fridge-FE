@@ -45,9 +45,14 @@ class ReviewFragment(val recipe: recipe): Fragment() {
             Log.d("ReviewFragment_recipe", recipeProcess.toString())
             binding.recipeReviewRv.adapter = ReviewRVAdapter(recipeProcess)
             binding.recipeReviewRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            //reviewView.findViewById<TextView>(R.id.recipe_review_tv).text = recipeProcess.comments.size.toString()
-            starView.findViewById<TextView>(R.id.recipe_star_title).text = "평점"
-            //starView.findViewById<TextView>(R.id.recipe_star_tv).text = recipeProcess.gradeDto.average.toString()
+        })
+
+        viewModel.usersCommentsLiveData.observe(viewLifecycleOwner, Observer { it ->
+            reviewView.findViewById<TextView>(R.id.recipe_review_tv).text = it.size.toString()
+        })
+
+        viewModel.usersStarLiveData.observe(viewLifecycleOwner, Observer { it ->
+            starView.findViewById<TextView>(R.id.recipe_star_tv).text = it.toString()
         })
 
 
