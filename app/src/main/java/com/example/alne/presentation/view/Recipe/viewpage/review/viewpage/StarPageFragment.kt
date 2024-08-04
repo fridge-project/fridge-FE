@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.alne.databinding.FragmentStarPageBinding
-import com.example.alne.data.model.Grade
 import com.example.alne.viewmodel.RecipeDetailViewModel
 
 class StarPageFragment : Fragment() {
@@ -23,11 +22,11 @@ class StarPageFragment : Fragment() {
         Log.d("starPageFragment", "onCreateView")
         binding = FragmentStarPageBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(requireActivity()).get(RecipeDetailViewModel::class.java)
-        viewModel.getRecipeProcessLiveData.observe(viewLifecycleOwner, Observer{recipeProcess ->
-            var grade: Grade = recipeProcess.gradeDto
-            binding.startPageRatingbar.rating = grade.average.toFloat()
-            binding.starPageAverageStar.text = grade.average.toString()
-            setRatingProgress(grade, recipeProcess.comments.size)
+        viewModel.usersStarLiveData.observe(viewLifecycleOwner, Observer{ it ->
+            Log.d("Star", it.toString())
+            binding.startPageRatingbar.rating = it[0].toFloat()
+            binding.starPageAverageStar.text = it[0].toString()
+            setRatingProgress(it)
         })
         return binding.root
     }
@@ -37,30 +36,32 @@ class StarPageFragment : Fragment() {
         binding.root.requestLayout()
     }
 
-    private fun setRatingProgress(grade: Grade, size: Int){
+    private fun setRatingProgress(grade: Array<Int>){
+        var size = 0;
+        for(i in 1 until grade.size){
+            size += grade[i]
+        }
+        if(size == 0) size = 1
         with(binding){
             expireProgressPb.max = size
-            expireProgressPb.progress = grade.count.get(0).toInt() / size
-            binding.expireProgressCountTv.text = grade.count.get(0).toInt().toString()
+            expireProgressPb.progress = grade[1] / size
+            binding.expireProgressCountTv.text = grade[1].toString()
 
             expireProgressPb1.max = size
-            expireProgressPb1.progress = grade.count.get(1).toInt() / size
-            binding.expireProgressCountTv1.text = grade.count.get(1).toInt().toString()
+            expireProgressPb1.progress = grade[2] / size
+            binding.expireProgressCountTv1.text = grade[2].toString()
 
             expireProgressPb2.max = size
-            expireProgressPb2.progress = grade.count.get(2).toInt() / size
-            binding.expireProgressCountTv2.text = grade.count.get(2).toInt().toString()
+            expireProgressPb2.progress = grade[3] / size
+            binding.expireProgressCountTv2.text = grade[3].toString()
 
             expireProgressPb3.max = size
-            expireProgressPb3.progress = grade.count.get(3).toInt() / size
-            binding.expireProgressCountTv3.text = grade.count.get(3).toInt().toString()
+            expireProgressPb3.progress = grade[4] / size
+            binding.expireProgressCountTv3.text = grade[4].toString()
 
             expireProgressPb4.max = size
-            expireProgressPb4.progress = grade.count.get(4).toInt() / size
-            binding.expireProgressCountTv4.text = grade.count.get(4).toInt().toString()
-
-
-
+            expireProgressPb4.progress = grade[5] / size
+            binding.expireProgressCountTv4.text = grade[5].toString()
         }
     }
 }

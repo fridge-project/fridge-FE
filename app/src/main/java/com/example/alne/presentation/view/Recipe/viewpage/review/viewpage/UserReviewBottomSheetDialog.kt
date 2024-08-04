@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.alne.GlobalApplication
 import com.example.alne.databinding.UserReviewDialogBinding
 import com.example.alne.data.model.Comment
 import com.example.alne.data.model.addComment
@@ -35,17 +36,7 @@ class UserReviewBottomSheetDialog(private val code: Int, private val position: I
         var recipe = Gson().fromJson(arguments?.getString("recipe"), recipe::class.java)
         var comment = Gson().fromJson(arguments?.getString("comment"), Comment::class.java)
 
-        viewModel.userProfileLiveData.observe(viewLifecycleOwner, Observer { profile ->
-            if(profile != null){
-                Glide.with(requireContext()).load(profile.image).into(binding.reviewDialogUserProfileIv)
-                binding.reviewDialogUserProfileIv.scaleType = ImageView.ScaleType.FIT_XY
-                binding.itemReviewDialogIdTv.text = profile.name
-            }
-        })
-
-
         init(recipe, comment)
-
 
         binding.userReviewCancelBt.setOnClickListener {
             dismiss()
@@ -60,19 +51,16 @@ class UserReviewBottomSheetDialog(private val code: Int, private val position: I
             }
             dismiss()
         }
-
-
-
         return binding.root
     }
 
     private fun init(recipe: recipe?, comment: Comment?){
         Glide.with(this).load(recipe?.imageURL).into(binding.userReviewMainFoodIv)
+        binding.itemReviewDialogIdTv.text = viewModel.email
         if(comment != null) {
             binding.userReviewSubmitBt.text = "수정"
             binding.userReviewCommentEt.setText(comment.detail)
             binding.baseRatingBar.rating = comment.grade.toFloat()
-            binding.itemReviewDialogIdTv.text = comment.user_id
         }
     }
 

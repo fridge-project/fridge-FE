@@ -52,7 +52,7 @@ class ReviewFragment(val recipe: recipe): Fragment() {
         })
 
         viewModel.usersStarLiveData.observe(viewLifecycleOwner, Observer { it ->
-            starView.findViewById<TextView>(R.id.recipe_star_tv).text = it.toString()
+            starView.findViewById<TextView>(R.id.recipe_star_tv).text = it[0]?.toString()
         })
 
 
