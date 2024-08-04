@@ -1,8 +1,9 @@
 package com.example.alne.data.model
+
 data class Favorite(
-    val user: UserInfo,
-    val recipe: Recipe,
-    val favorite: Boolean
+    val _id: String,
+    val user_id: String,
+    val recipe_id: String
 )
 
 data class UserInfo(
