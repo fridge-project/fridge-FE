@@ -1,9 +1,13 @@
 package com.example.alne.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.alne.GlobalApplication
 import com.example.alne.Network.RecipeService
 import com.example.alne.Network.getRetrofit
 import com.example.alne.data.model.Comment
@@ -12,27 +16,30 @@ import com.example.alne.data.model.repository.RecipeRepositoryImpl
 import com.example.alne.data.model.Profile
 import com.example.alne.data.model.addComment
 import com.example.alne.domain.model.RecipeDetailResponse
+import com.example.alne.domain.utils.RESPONSE_STATUS
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RecipeDetailViewModel(): ViewModel() {
+class RecipeDetailViewModel: ViewModel() {
 
     private val repository: RecipeRepositoryImpl = RecipeRepositoryImpl(getRetrofit().create(RecipeService::class.java))
 
     // 댓글 목록
     var itemComments = ArrayList<Comment>()
 
+    var nickname: String = ""
+    var email: String = ""
+
     //댓글 전체 목록 LiveData
     private val _usersCommentsLiveData = MutableLiveData<ArrayList<Comment>>()
     val usersCommentsLiveData: LiveData<ArrayList<Comment>> = _usersCommentsLiveData
 
     //평점 LiveData
-    private val _usersStarLiveData = MutableLiveData<Int>()
-    val usersStarLiveData: LiveData<Int> = _usersStarLiveData
+    private val _usersStarLiveData = MutableLiveData<Array<Int>>()
+    val usersStarLiveData: LiveData<Array<Int>> = _usersStarLiveData
 
     //특정 레시프 조회
     private val _getRecipeProcessLiveData = MutableLiveData<ArrayList<RecipeProcess>>()
@@ -46,9 +53,6 @@ class RecipeDetailViewModel(): ViewModel() {
     private val _addRecipeLikeLiveData = MutableLiveData<Boolean>()
     val addRecipeLikeLiveData: LiveData<Boolean> = _addRecipeLikeLiveData
 
-    //사용자 프로필
-    private val _userProfileLiveData = MutableLiveData<Profile>()
-    val userProfileLiveData: LiveData<Profile> = _userProfileLiveData
 
     init {
 //        if(GlobalApplication.prefManager.getUserToken()?.userId != null){
@@ -60,6 +64,12 @@ class RecipeDetailViewModel(): ViewModel() {
 
     fun addCommentItem(comment: Comment){
         itemComments.add(comment)
+        _usersCommentsLiveData.postValue(itemComments)
+    }
+
+    fun addAllCommentItem(comment: ArrayList<Comment>){
+        itemComments.clear()
+        itemComments.addAll(comment)
         _usersCommentsLiveData.postValue(itemComments)
     }
 
@@ -82,6 +92,8 @@ class RecipeDetailViewModel(): ViewModel() {
                     201 -> {
                         var json = res?.asJsonObject
                         var comment = Gson().fromJson(json, Comment::class.java)
+                        comment.email = email
+                        comment.username = nickname
                         addCommentItem(comment)
                     }
 
@@ -122,7 +134,7 @@ class RecipeDetailViewModel(): ViewModel() {
     })
 
     //특정 레시피 조회
-    fun getRecipeProcess(recipeCode: Int) = repository.getRecipeDetail(recipeCode).enqueue(object: Callback<RecipeDetailResponse>{
+    fun getRecipeProcess(recipeCode: Int, completion: (RESPONSE_STATUS) -> Unit) = repository.getRecipeDetail(recipeCode).enqueue(object: Callback<RecipeDetailResponse>{
         override fun onResponse(
             call: Call<RecipeDetailResponse>,
             response: Response<RecipeDetailResponse>,
@@ -132,13 +144,21 @@ class RecipeDetailViewModel(): ViewModel() {
                 200 -> {
                     if(res?.like != null) _addRecipeLikeLiveData.postValue(true) else _addRecipeLikeLiveData.postValue(false)
                     if(res?.favorite != null) _addRecipeFavoriteLiveData.postValue(true) else _addRecipeFavoriteLiveData.postValue(false)
-                    if(res?.comment != null) addCommentItem(res?.comment)
-                    if(res?.avg != null) _usersStarLiveData.postValue(res?.avg)
+                    if(res?.updatedComments != null) addAllCommentItem(res?.updatedComments)
+                    if(res?.gradeArr!![0] == null) {
+                        res?.gradeArr[0] = 0
+                        _usersStarLiveData.postValue(res?.gradeArr)
+                    }else{
+                        _usersStarLiveData.postValue(res?.gradeArr)
+                    }
+                    nickname = res.username
+                    email = res.email
                     _getRecipeProcessLiveData.postValue(ArrayList(res?.process?.sortedBy { it.order_num }))
+                    completion(RESPONSE_STATUS.OKAY)
                 }
 
                 500 -> {
-
+                    completion(RESPONSE_STATUS.FAIL)
                 }
             }
             Log.d("getRecipeProcess", res.toString())
@@ -147,6 +167,7 @@ class RecipeDetailViewModel(): ViewModel() {
 
         override fun onFailure(call: Call<RecipeDetailResponse>, t: Throwable) {
             Log.d("getRecipeProcess_onFailure", t.message.toString())
+            completion(RESPONSE_STATUS.NETWORK_ERROR)
         }
 
     })
@@ -199,22 +220,25 @@ class RecipeDetailViewModel(): ViewModel() {
 
     })
 
-    fun deleteUserComment(position: Int) = repository.deleteUserComment(itemComments[position]._id).enqueue(object: Callback<String>{
+    fun deleteUserComment(position: Int, completion: (RESPONSE_STATUS) -> Unit) = repository.deleteUserComment(itemComments[position]._id).enqueue(object: Callback<String>{
         override fun onResponse(call: Call<String>, response: Response<String>) {
             val res = response.body()
             when(response.code()){
                 200 -> {
                     Log.d("deleteUserComment", "Success")
                     deleteCommentItem(position)
+                    completion(RESPONSE_STATUS.OKAY)
                 }
                 500 -> {
                     Log.d("deleteUserComment", "Fail")
+                    completion(RESPONSE_STATUS.FAIL)
                 }
             }
             Log.d("deleteUserComment", res.toString())
         }
 
         override fun onFailure(call: Call<String>, t: Throwable) {
+            completion(RESPONSE_STATUS.NETWORK_ERROR)
             Log.d("deleteUserComment_onFailure", t.message.toString())
         }
 

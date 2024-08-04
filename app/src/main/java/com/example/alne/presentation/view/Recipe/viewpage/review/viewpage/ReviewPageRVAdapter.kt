@@ -1,6 +1,7 @@
 package com.example.alne.view.Recipe.viewpage.review.viewpage
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,24 +13,17 @@ import com.example.alne.data.model.Comment
 import com.example.alne.databinding.ItemReviewBinding
 import com.example.alne.data.model.Review
 
-class ReviewPageRVAdapter(val context: Context): RecyclerView.Adapter<ReviewPageRVAdapter.ViewHolder>() {
-
+class ReviewPageRVAdapter(val context: Context, val nickname: String): RecyclerView.Adapter<ReviewPageRVAdapter.ViewHolder>() {
     private var items: ArrayList<Comment> = ArrayList()
     interface MyItemClickListener {
         fun deleteComment(position: Int)
         fun patchComment(comment: Comment, position: Int)
-
         fun initUi(bool: Boolean)
     }
 
     fun addAllItem(items: ArrayList<Comment>){
         this.items.clear()
         this.items.addAll(items)
-        notifyDataSetChanged()
-    }
-
-    fun removeItem(position: Int){
-        items.removeAt(position)
         notifyDataSetChanged()
     }
 
@@ -41,7 +35,8 @@ class ReviewPageRVAdapter(val context: Context): RecyclerView.Adapter<ReviewPage
 
     inner class ViewHolder(val binding: ItemReviewBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(comment: Comment){
-            binding.itemReviewNickname.text = comment.user_id
+            Log.d("comment", comment.toString())
+            binding.itemReviewNickname.text = comment.username
             binding.itemReviewSummary.text = comment.detail
 //            binding.itemReviewDate.text = review.date
             binding.itemReviewRatingbar.rating = comment.grade.toFloat()
@@ -51,13 +46,13 @@ class ReviewPageRVAdapter(val context: Context): RecyclerView.Adapter<ReviewPage
             //Glide.with(context).load(comment.).into(binding.itemReviewIv)
             binding.itemReviewIv.scaleType = ImageView.ScaleType.FIT_XY
             binding.itemReviewIv.setPadding(0,0,0,0)
-//            if(comment.user.id == GlobalApplication.prefManager.getUserToken()?.userId){
+            if(comment.username == nickname){
                 binding.itemReviewInfo.visibility = View.VISIBLE
                 myItemClickListener.initUi(true)
-//            }else{
-//                binding.itemReviewInfo.visibility = View.INVISIBLE
-//                myItemClickListener.initUi(false)
-//            }
+            }else{
+                binding.itemReviewInfo.visibility = View.INVISIBLE
+                myItemClickListener.initUi(false)
+            }
         }
 
     }

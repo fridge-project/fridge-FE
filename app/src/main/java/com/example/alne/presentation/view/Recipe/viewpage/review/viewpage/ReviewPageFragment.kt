@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alne.data.model.Comment
 import com.example.alne.databinding.FragmentReviewPageBinding
+import com.example.alne.domain.utils.RESPONSE_STATUS
 import com.example.alne.room.model.recipe
 import com.example.alne.viewmodel.RecipeDetailViewModel
 import com.google.gson.Gson
@@ -34,14 +35,10 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
 
         initAdapter()
 
-        viewModel.getRecipeProcessLiveData.observe(viewLifecycleOwner, Observer{
-            //adapter.addAllItem(it.comments as ArrayList<Comments>)
-        })
-
         viewModel.usersCommentsLiveData.observe(viewLifecycleOwner, Observer {
+            Log.d("usersCommentsLiveData", it.toString())
             adapter.addAllItem(it)
         })
-
 
         binding.reviewPageReviewBt.setOnClickListener {
             var bundle: Bundle = Bundle()
@@ -53,10 +50,18 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
     }
 
     private fun initAdapter() {
-        adapter = ReviewPageRVAdapter(requireContext())
+        adapter = ReviewPageRVAdapter(requireContext(), viewModel.nickname)
         adapter.setMyItemClickListener(object: ReviewPageRVAdapter.MyItemClickListener{
             override fun deleteComment(position: Int) {
-                viewModel.deleteUserComment(position)
+                viewModel.deleteUserComment(position, completion = { responseStatus ->
+                    when(responseStatus){
+                        RESPONSE_STATUS.OKAY -> initUi(false)
+                        RESPONSE_STATUS.FAIL, RESPONSE_STATUS.NETWORK_ERROR -> {
+                            Toast.makeText(requireContext(), "서버 오류입니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                })
             }
             override fun patchComment(comment: Comment, position: Int) {
                 var bundle: Bundle = Bundle()

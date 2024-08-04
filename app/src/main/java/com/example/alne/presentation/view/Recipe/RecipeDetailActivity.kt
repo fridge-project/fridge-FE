@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.alne.R
 import com.example.alne.databinding.ActivityRecipeDetailBinding
 import com.example.alne.room.model.recipe
-import com.example.alne.utils.RESPONSE_STATUS
+import com.example.alne.domain.utils.RESPONSE_STATUS
 import com.example.alne.viewmodel.RecipeDetailViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
@@ -30,16 +30,19 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         Log.d("RecipeDetailActivity_recipe", globalrecipe.toString())
         viewModel = ViewModelProvider(this).get(RecipeDetailViewModel::class.java)
-        viewModel.getRecipeProcess(globalrecipe!!.recipe_code)
+        viewModel.getRecipeProcess(globalrecipe!!.recipe_code, completion = {responseStatus ->
+            when(responseStatus){
+                RESPONSE_STATUS.OKAY -> {
+                    init(globalrecipe!!)
+                }
 
+                else -> {
 
+                }
+            }
+
+        })
     }
-
-    override fun onResume() {
-        super.onResume()
-        init(globalrecipe!!)
-    }
-
     private fun init(recipe: recipe){
         binding.recipeDetailTitleTv.text = recipe.recipe
         binding.recipeDetailChefTv.text = recipe.difficulty
