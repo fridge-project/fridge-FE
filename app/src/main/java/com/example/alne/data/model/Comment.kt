@@ -8,7 +8,9 @@ data class Comment(
     var recipe_id: String,
     var detail: String,
     var grade: Int,
-    var __v: Int
+    var __v: Int,
+    var username: String,
+    var email: String,
 )
 
 data class addComment(
