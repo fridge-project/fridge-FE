@@ -46,7 +46,7 @@ class ReviewPageRVAdapter(val context: Context, val nickname: String): RecyclerV
             //Glide.with(context).load(comment.).into(binding.itemReviewIv)
             binding.itemReviewIv.scaleType = ImageView.ScaleType.FIT_XY
             binding.itemReviewIv.setPadding(0,0,0,0)
-            if(comment.username == nickname){
+            if(comment.username.equals(nickname)){
                 binding.itemReviewInfo.visibility = View.VISIBLE
                 myItemClickListener.initUi(true)
             }else{

@@ -42,25 +42,27 @@ class StarPageFragment : Fragment() {
             size += grade[i]
         }
         if(size == 0) size = 1
+        var mod = 100 / size
+        Log.d("progress", size.toString() + ":" + grade[1] / size)
         with(binding){
-            expireProgressPb.max = size
-            expireProgressPb.progress = grade[1] / size
+
+            expireProgressPb.progress = grade[1] * mod
             binding.expireProgressCountTv.text = grade[1].toString()
 
-            expireProgressPb1.max = size
-            expireProgressPb1.progress = grade[2] / size
+
+            expireProgressPb1.progress = grade[2] * mod
             binding.expireProgressCountTv1.text = grade[2].toString()
 
-            expireProgressPb2.max = size
-            expireProgressPb2.progress = grade[3] / size
+
+            expireProgressPb2.progress = grade[3] * mod
             binding.expireProgressCountTv2.text = grade[3].toString()
 
-            expireProgressPb3.max = size
-            expireProgressPb3.progress = grade[4] / size
+
+            expireProgressPb3.progress = grade[4] * mod
             binding.expireProgressCountTv3.text = grade[4].toString()
 
-            expireProgressPb4.max = size
-            expireProgressPb4.progress = grade[5] / size
+
+            expireProgressPb4.progress = grade[5] * mod
             binding.expireProgressCountTv4.text = grade[5].toString()
         }
     }

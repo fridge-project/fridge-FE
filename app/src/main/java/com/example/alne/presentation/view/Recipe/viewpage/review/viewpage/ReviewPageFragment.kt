@@ -35,9 +35,16 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
 
         initAdapter()
 
-        viewModel.usersCommentsLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.usersCommentsLiveData.observe(viewLifecycleOwner, Observer { it ->
             Log.d("usersCommentsLiveData", it.toString())
             adapter.addAllItem(it)
+            it.stream().forEach { comment ->
+                if(comment.username == viewModel.nickname){
+                    setUi(true)
+                }else{
+                    setUi(false)
+                }
+            }
         })
 
         binding.reviewPageReviewBt.setOnClickListener {
@@ -50,6 +57,7 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
     }
 
     private fun initAdapter() {
+        Log.d("nicknameadapter", viewModel.nickname)
         adapter = ReviewPageRVAdapter(requireContext(), viewModel.nickname)
         adapter.setMyItemClickListener(object: ReviewPageRVAdapter.MyItemClickListener{
             override fun deleteComment(position: Int) {
@@ -80,7 +88,7 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
 
     private fun setUi(bool: Boolean){
         if(bool){
-            binding.reviewPageReviewBt.visibility = View.GONE
+            binding.reviewPageReviewBt.visibility = View.INVISIBLE
         }else{
             binding.reviewPageReviewBt.visibility = View.VISIBLE
         }
