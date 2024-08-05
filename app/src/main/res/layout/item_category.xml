@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView
+    android:id="@+id/item_category_tv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="5dp"
+    android:background="@drawable/textview_rec_border"
+    android:paddingLeft="10dp"
+    android:paddingTop="3dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="3dp"
+    android:text="#한식"
+    android:textColor="@color/gray_light1"
+    android:textSize="12sp"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

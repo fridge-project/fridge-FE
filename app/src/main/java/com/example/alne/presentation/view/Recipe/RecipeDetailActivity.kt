@@ -4,13 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.alne.R
 import com.example.alne.databinding.ActivityRecipeDetailBinding
 import com.example.alne.room.model.recipe
 import com.example.alne.domain.utils.RESPONSE_STATUS
+import com.example.alne.presentation.view.Recipe.CategoryRVAdapter
 import com.example.alne.viewmodel.RecipeDetailViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
@@ -37,7 +40,7 @@ class RecipeDetailActivity : AppCompatActivity() {
                 }
 
                 else -> {
-
+                    Toast.makeText(this@RecipeDetailActivity, "데이터 불러오기 오류", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -47,9 +50,8 @@ class RecipeDetailActivity : AppCompatActivity() {
         binding.recipeDetailTitleTv.text = recipe.recipe
         binding.recipeDetailChefTv.text = recipe.difficulty
         binding.recipeDetailIntroduceTv.text = recipe.introduce
-        binding.recipeDetailCategoryTv1.text = "#" + recipe.classification
-        binding.recipeDetailTimeTv.text = "약 " + recipe.time + "분"
-        binding.recipeDetailKcalTv.text = recipe.calorie.toString() + "kcal"
+        binding.recipeDetailTimeTv.text = "약 " + recipe.time
+        binding.recipeDetailKcalTv.text = recipe.calorie
         Glide.with(this@RecipeDetailActivity).load(recipe.imageURL).into(binding.recipeDetailFoodIv)
 
         val recipeAdapter = RecipeDetailVPAdapter(this@RecipeDetailActivity, recipe)
@@ -57,6 +59,15 @@ class RecipeDetailActivity : AppCompatActivity() {
         TabLayoutMediator(binding.recipeDetailTl, binding.recipeDetailVp){ tab, position ->
             tab.text = information[position]
         }.attach()
+
+
+        var categoryItem = ArrayList<String>()
+        categoryItem.add(recipe.category)
+        categoryItem.addAll(recipe.classification.split("/"))
+        val categoryAdapter = CategoryRVAdapter(categoryItem)
+        binding.recipeDetailCategoryRv.adapter = categoryAdapter
+        binding.recipeDetailCategoryRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
 
         viewModel.addRecipeLikeLiveData.observe(this, Observer {
             if(it){
