@@ -11,6 +11,7 @@ import com.example.alne.GlobalApplication
 import com.example.alne.Network.RecipeService
 import com.example.alne.Network.getRetrofit
 import com.example.alne.data.model.Comment
+import com.example.alne.data.model.Ingredient
 import com.example.alne.data.model.RecipeProcess
 import com.example.alne.data.model.repository.RecipeRepositoryImpl
 import com.example.alne.data.model.Profile
@@ -44,6 +45,11 @@ class RecipeDetailViewModel: ViewModel() {
     //특정 레시프 조회
     private val _getRecipeProcessLiveData = MutableLiveData<ArrayList<RecipeProcess>>()
     val getRecipeProcessLiveData: LiveData<ArrayList<RecipeProcess>> = _getRecipeProcessLiveData
+
+    //레피피 재료 LiveData
+    private val _ingredientRecipeLiveData = MutableLiveData<ArrayList<Ingredient>>()
+    val ingredientRecipeLiveData: LiveData<ArrayList<Ingredient>> = _ingredientRecipeLiveData
+
 
     //즐겨찾기 등록
     private val _addRecipeFavoriteLiveData = MutableLiveData<Boolean>()
@@ -139,21 +145,17 @@ class RecipeDetailViewModel: ViewModel() {
             call: Call<RecipeDetailResponse>,
             response: Response<RecipeDetailResponse>,
         ) {
-            val res = response.body()
+            val res = response.body()!!
             when(response.code()){
                 200 -> {
-                    if(res?.like != null) _addRecipeLikeLiveData.postValue(true) else _addRecipeLikeLiveData.postValue(false)
-                    if(res?.favorite != null) _addRecipeFavoriteLiveData.postValue(true) else _addRecipeFavoriteLiveData.postValue(false)
-                    if(res?.updatedComments != null) addAllCommentItem(res?.updatedComments)
-                    if(res?.gradeArr!![0] == null) {
-                        res?.gradeArr[0] = 0
-                        _usersStarLiveData.postValue(res?.gradeArr)
-                    }else{
-                        _usersStarLiveData.postValue(res?.gradeArr)
-                    }
+                    if(res.like?.size != 0) _addRecipeLikeLiveData.postValue(true) else _addRecipeLikeLiveData.postValue(false)
+                    if(res.favorite?.size != 0) _addRecipeFavoriteLiveData.postValue(true) else _addRecipeFavoriteLiveData.postValue(false)
+                    if(res.updatedComments?.size != 0) addAllCommentItem(res.updatedComments!!)
+                    _usersStarLiveData.postValue(res?.gradeArr)
                     nickname = res.username
                     email = res.email
                     _getRecipeProcessLiveData.postValue(ArrayList(res?.process?.sortedBy { it.order_num }))
+                    _ingredientRecipeLiveData.postValue(res.recipe_ingredient)
                     completion(RESPONSE_STATUS.OKAY)
                 }
 
