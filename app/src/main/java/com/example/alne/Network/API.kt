@@ -1,6 +1,7 @@
 package com.example.alne.Network
 
-object API {
+object
+API {
 
 
     //Auth
@@ -27,6 +28,7 @@ object API {
     const val UPDATE_COMMENT = "/api/comment/{id}"
     const val FAVORITE = "/api/favorite/{recipe_id}"
     const val FAVORITE_LIST = "/api/favorite"
+    const val COMMENT_LIST = "/api/comment"
 
 
 

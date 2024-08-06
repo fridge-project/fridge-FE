@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.alne.databinding.FragmentMyPageBinding
 import com.example.alne.data.model.Profile
+import com.example.alne.presentation.view.MyPage.CommentActivity
 import com.example.alne.presentation.view.MyPage.LikeListActivity
 import com.example.alne.view.Login.LoginActivity
 import com.example.alne.view.SignUp.SignUpActivity
@@ -54,8 +55,12 @@ class MyPageFragment : Fragment() {
             startActivity(Intent(requireContext(), FavoriteActivity::class.java))
         }
 
-        binding.myPageLikeListIv.setOnClickListener {
+        binding.myPageLikeListLinear.setOnClickListener {
             startActivity(Intent(requireContext(), LikeListActivity::class.java))
+        }
+
+        binding.myPageCommentLinear.setOnClickListener{
+            startActivity(Intent(requireContext(), CommentActivity::class.java))
         }
 
         return binding.root
