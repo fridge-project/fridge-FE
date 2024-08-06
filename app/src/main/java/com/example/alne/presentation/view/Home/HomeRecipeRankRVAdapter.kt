@@ -35,7 +35,7 @@ class HomeRecipeRankRVAdapter(var context: Context): RecyclerView.Adapter<HomeRe
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.itemRecipeTitleTv.text = items[position].recipe
-        holder.binding.itemRecipeTimeTv.text = "약 " + items[position].time + "분"
+        holder.binding.itemRecipeTimeTv.text = "약 " + items[position].time
         holder.binding.itemRecipeRankTv.text = items[position].difficulty
         Glide.with(context).load(items[position].imageURL).into(holder.binding.itemRecipeIv)
         holder.binding.root.setOnClickListener{
