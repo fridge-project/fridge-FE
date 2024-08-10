@@ -4,15 +4,17 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.alne.GlobalApplication
-import com.example.alne.Network.AuthResponse
-import com.example.alne.Network.SignUpResponse
+import com.example.alne.data.Network.AuthResponse
+import com.example.alne.data.Network.SignUpResponse
 import com.example.alne.data.model.Profile
 import com.example.alne.data.model.ProfileRespond
 import com.example.alne.data.model.Token
-import com.example.alne.repository.authRepository
+import com.example.alne.domain.repository.authRepository
 import com.example.alne.utils.RESPONSE_STATUS
 import com.google.gson.Gson
+import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -20,11 +22,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-
-class MyPageViewModel(application: Application) : AndroidViewModel(application) {
+import javax.inject.Inject
+@HiltViewModel
+class MyPageViewModel @Inject constructor(
+    private val authRepository: authRepository
+) : ViewModel() {
 
     val TAG = "MyPageViewModel"
-    private val authRepository = authRepository(application)
 
     private val _userProfileLiveData = MutableLiveData<Profile>()
     val userProfileLiveData = _userProfileLiveData

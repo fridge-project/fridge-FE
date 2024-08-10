@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.Recipe.viewpage.review.ReviewFragment">
+    tools:context=".view.Recipe.viewpage.review.ProcessFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipe_review_rv"

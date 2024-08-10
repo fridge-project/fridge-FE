@@ -10,16 +10,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.alne.R
-import com.example.alne.data.model.Favorite
-import com.example.alne.data.model.Recipe
-import com.example.alne.room.model.recipe
+import com.example.alne.data.model.RecipeModel
 
 class RecipeGVAdapter(val context: Context): BaseAdapter() {
 
-    var items: ArrayList<Recipe> = ArrayList()
+    var items: ArrayList<RecipeModel> = ArrayList()
 
     interface setOnClickListener {
-        fun clickItem(recipe: Recipe)
+        fun clickItem(recipe: RecipeModel)
     }
 
     private lateinit var myItemClickListener: setOnClickListener
@@ -50,7 +48,7 @@ class RecipeGVAdapter(val context: Context): BaseAdapter() {
 //        binding.itemRecipeIv.setImageResource(items[p0].imageURL)
         return view
     }
-    fun addItems(item: ArrayList<Recipe>) {
+    fun addItems(item: ArrayList<RecipeModel>) {
         items.clear()
         items.addAll(item)
         notifyDataSetChanged()

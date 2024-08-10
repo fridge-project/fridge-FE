@@ -18,6 +18,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -30,25 +31,25 @@ import com.example.alne.R
 import com.example.alne.databinding.ActivityUserProfileBinding
 import com.example.alne.data.model.Profile
 import com.example.alne.viewmodel.MyPageViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 
+@AndroidEntryPoint
 class UserProfileActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityUserProfileBinding
     val REQUEST_IMAGE_CAPTURE = 1
     val REQUEST_IMAGE_CHOOSER = 2
     var photoFile: File? = null
-    lateinit var viewModel: MyPageViewModel
+    private val viewModel: MyPageViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(this).get(MyPageViewModel::class.java)
 
         viewModel.userProfileLiveData.observe(this, Observer {profile ->
             if(profile != null){

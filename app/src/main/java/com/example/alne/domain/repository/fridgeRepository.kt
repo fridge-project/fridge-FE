@@ -1,17 +1,16 @@
-package com.example.alne.repository
+package com.example.alne.domain.repository
 
 import com.example.alne.GlobalApplication
-import com.example.alne.Network.FridgeApi
-import com.example.alne.room.model.food
-import com.example.alne.Network.getRetrofit
+import com.example.alne.data.Network.FridgeApi
 import com.example.alne.data.model.FridgeIngredient
+import com.example.alne.data.model.RoomIngredient
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import javax.inject.Inject
 
-class fridgeRepository() {
-
-    private val fridgeService = getRetrofit().create(FridgeApi::class.java)
-
+class fridgeRepository @Inject constructor(
+    private val fridgeService: FridgeApi
+) {
     fun addFridgeData(accessToken: String, food: RequestBody, photoFile: MultipartBody.Part) = fridgeService.addFridgeFood(accessToken, photoFile, food)
 
     fun addFridgeDataTest(food: FridgeIngredient) = fridgeService.addFridgeFoodTest(food)
@@ -22,6 +21,6 @@ class fridgeRepository() {
 
     fun updateFridgeFood(food: FridgeIngredient) = fridgeService.updateFridgeFood(food._id!!, food)
 
-    suspend fun getAllIngredient(): ArrayList<food> = GlobalApplication.appDatabase.ingredientDao().getAll() as ArrayList<food>
+    suspend fun getAllIngredient(): ArrayList<RoomIngredient> = GlobalApplication.appDatabase.ingredientDao().getAll() as ArrayList<RoomIngredient>
 
 }

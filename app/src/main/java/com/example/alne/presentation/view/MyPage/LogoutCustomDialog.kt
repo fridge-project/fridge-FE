@@ -6,25 +6,25 @@ import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.example.alne.GlobalApplication
 import com.example.alne.databinding.LogoutDialogBinding
 import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.view.Splash.StartActivity
 import com.example.alne.viewmodel.MyPageViewModel
-import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LogoutCustomDialog: DialogFragment() {
 
     lateinit var binding: LogoutDialogBinding
-    lateinit var viewModel: MyPageViewModel
+    private val viewModel: MyPageViewModel by activityViewModels()
 
     companion object {
         const val TAG = "LogoutCustomDialog"
@@ -35,7 +35,6 @@ class LogoutCustomDialog: DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = LogoutDialogBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(requireActivity()).get(MyPageViewModel::class.java)
 
         binding.dialogQuitBt.setOnClickListener {
             dismiss()

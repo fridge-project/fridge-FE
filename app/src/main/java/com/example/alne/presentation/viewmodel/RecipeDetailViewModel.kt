@@ -1,32 +1,29 @@
 package com.example.alne.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.alne.GlobalApplication
-import com.example.alne.Network.RecipeService
-import com.example.alne.Network.getRetrofit
+import com.example.alne.data.Network.RecipeDetailResponse
 import com.example.alne.data.model.Comment
 import com.example.alne.data.model.Ingredient
 import com.example.alne.data.model.RecipeProcess
-import com.example.alne.data.model.repository.RecipeRepositoryImpl
-import com.example.alne.data.model.Profile
 import com.example.alne.data.model.addComment
-import com.example.alne.domain.model.RecipeDetailResponse
-import com.example.alne.domain.utils.RESPONSE_STATUS
+import com.example.alne.domain.repository.recipeRepository
+import com.example.alne.utils.RESPONSE_STATUS
 import com.google.gson.Gson
 import com.google.gson.JsonElement
+import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class RecipeDetailViewModel: ViewModel() {
 
-    private val repository: RecipeRepositoryImpl = RecipeRepositoryImpl(getRetrofit().create(RecipeService::class.java))
+@HiltViewModel
+class RecipeDetailViewModel @Inject constructor(
+    private val repository: recipeRepository
+) : ViewModel() {
 
     // 댓글 목록
     var itemComments = ArrayList<Comment>()
@@ -59,14 +56,6 @@ class RecipeDetailViewModel: ViewModel() {
     private val _addRecipeLikeLiveData = MutableLiveData<Boolean>()
     val addRecipeLikeLiveData: LiveData<Boolean> = _addRecipeLikeLiveData
 
-
-    init {
-//        if(GlobalApplication.prefManager.getUserToken()?.userId != null){
-//            getUserProfile(GlobalApplication.prefManager.getUserToken()!!.userId)
-//        }else{
-//            _userProfileLiveData.postValue(null)
-//        }
-    }
 
     fun addCommentItem(comment: Comment){
         itemComments.add(comment)

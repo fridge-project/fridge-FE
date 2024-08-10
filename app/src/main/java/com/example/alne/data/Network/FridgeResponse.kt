@@ -1,4 +1,4 @@
-package com.example.alne.Network
+package com.example.alne.data.Network
 import com.google.gson.annotations.SerializedName
 
 data class FridgePostResponse(

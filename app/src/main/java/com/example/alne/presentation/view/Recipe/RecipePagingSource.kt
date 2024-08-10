@@ -4,15 +4,13 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.alne.GlobalApplication
-import com.example.alne.room.model.recipe
+import com.example.alne.domain.model.recipe
 import com.example.alne.utils.Recipe_TYPE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class RecipePagingSource(val service: String?, val type: Recipe_TYPE) : PagingSource<Int, recipe>() {
-
 
     override fun getRefreshKey(state: PagingState<Int, recipe>): Int? {
         return state.anchorPosition?.let { anchorPosition ->

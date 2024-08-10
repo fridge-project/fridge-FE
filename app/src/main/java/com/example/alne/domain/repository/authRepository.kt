@@ -1,18 +1,18 @@
-package com.example.alne.repository
+package com.example.alne.domain.repository
 
 import android.app.Application
-import com.example.alne.Network.AuthApi
-import com.example.alne.Network.getRetrofit
+import com.example.alne.data.Network.AuthApi
+import com.example.alne.data.Network.getRetrofit
 import com.example.alne.data.model.Token
 import com.example.alne.data.model.User
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import javax.inject.Inject
 
 
-class authRepository(val application: Application) {
-
-    private val userService = getRetrofit().create(AuthApi::class.java)
-
+class authRepository @Inject constructor(
+    private val userService: AuthApi
+) {
     fun signUp(user: User) = userService.signUp(user)
 
     fun login(user: User) = userService.login(user)

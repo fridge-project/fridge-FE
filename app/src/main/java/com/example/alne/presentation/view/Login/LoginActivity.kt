@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.alne.GlobalApplication
@@ -17,8 +18,10 @@ import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.utils.ToolBox
 import com.example.alne.view.SignUp.SignUpActivity
 import com.example.alne.viewmodel.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
 
@@ -27,14 +30,12 @@ class LoginActivity : AppCompatActivity() {
 
     //자동 로그인
     private var autoLogin: Boolean = false
-    private lateinit var viewModel: LoginViewModel
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         //회원가입 이동
         binding.loginSignUpBt.setOnClickListener {

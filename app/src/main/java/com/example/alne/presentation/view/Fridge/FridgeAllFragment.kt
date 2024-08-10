@@ -6,26 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.alne.GlobalApplication
 import com.example.alne.databinding.FragmentFridgeAllBinding
 import com.example.alne.data.model.FridgeIngredient
-import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.viewmodel.FridgeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class FridgeAllFragment : Fragment(), MyCustomDialogDetailInterface {
     lateinit var binding: FragmentFridgeAllBinding
-    lateinit var viewModel: FridgeViewModel
+    private val viewModel: FridgeViewModel by activityViewModels()
     lateinit var fridgeadapter: FridgeAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentFridgeAllBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(requireActivity()).get(FridgeViewModel::class.java)
         Log.d("FridgeAllFragment", "onCreateView")
 
         //RecyclerView 초기화

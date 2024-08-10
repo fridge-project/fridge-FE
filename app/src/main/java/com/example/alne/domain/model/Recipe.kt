@@ -1,4 +1,4 @@
-package com.example.alne.room.model
+package com.example.alne.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

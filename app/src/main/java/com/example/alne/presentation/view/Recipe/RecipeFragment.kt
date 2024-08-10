@@ -10,31 +10,31 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.example.alne.databinding.FragmentRecipeBinding
-import com.example.alne.room.model.recipe
+import com.example.alne.domain.model.recipe
 import com.example.alne.utils.Recipe_TYPE
-import com.example.alne.utils.fromDpToPx
 import com.example.alne.viewmodel.RecipeViewModel
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class RecipeFragment : Fragment() {
 
     lateinit var binding: FragmentRecipeBinding
-    lateinit var viewModel: RecipeViewModel
+    private val viewModel: RecipeViewModel by viewModels()
     lateinit var gridAdapter: RecipeGVAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentRecipeBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
 
         // 화면 밖 클릭 시 키보드 내림
         binding.root.setOnClickListener{

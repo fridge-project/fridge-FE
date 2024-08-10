@@ -7,33 +7,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alne.R
 import com.example.alne.databinding.FragmentReviewBinding
-import com.example.alne.room.model.recipe
+import com.example.alne.domain.model.recipe
 import com.example.alne.viewmodel.RecipeDetailViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
-class ReviewFragment(val recipe: recipe): Fragment() {
+@AndroidEntryPoint
+class ProcessFragment(val recipe: recipe): Fragment() {
     lateinit var binding: FragmentReviewBinding
-    lateinit var reviewAdapter: ReviewVPAdapter
-    lateinit var viewModel: RecipeDetailViewModel
+    lateinit var reviewAdapter: ProcessVPAdapter
+    private val viewModel: RecipeDetailViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentReviewBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(requireActivity()).get(RecipeDetailViewModel::class.java)
-        Log.d("ReviewFragment", recipe.toString())
+        Log.d("ProcessFragment", recipe.toString())
 
         var starView = layoutInflater.inflate(R.layout.layout_tab_star, null)
         var reviewView = layoutInflater.inflate(R.layout.layout_tab_review, null)
         var list = arrayListOf(reviewView, starView)
         binding.recipeReviewTl.addTab(binding.recipeReviewTl.newTab().setCustomView(starView))
         binding.recipeReviewTl.addTab(binding.recipeReviewTl.newTab().setCustomView(reviewView))
-        reviewAdapter = ReviewVPAdapter(this, recipe)
+        reviewAdapter = ProcessVPAdapter(this, recipe)
         binding.recipeReviewVp.adapter = reviewAdapter
         TabLayoutMediator(binding.recipeReviewTl, binding.recipeReviewVp){
                 tap, position ->
@@ -43,7 +44,7 @@ class ReviewFragment(val recipe: recipe): Fragment() {
 
         viewModel.getRecipeProcessLiveData.observe(viewLifecycleOwner, Observer { recipeProcess ->
             Log.d("ReviewFragment_recipe", recipeProcess.toString())
-            binding.recipeReviewRv.adapter = ReviewRVAdapter(recipeProcess)
+            binding.recipeReviewRv.adapter = ProcessRVAdapter(recipeProcess)
             binding.recipeReviewRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         })
 

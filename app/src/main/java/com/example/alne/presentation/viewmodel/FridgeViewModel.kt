@@ -5,14 +5,16 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.alne.GlobalApplication
-import com.example.alne.Network.FridgePostResponse
+import com.example.alne.data.Network.FridgePostResponse
 import com.example.alne.data.model.FridgeIngredient
-import com.example.alne.repository.fridgeRepository
+import com.example.alne.domain.repository.fridgeRepository
 import com.example.alne.utils.RESPONSE_STATUS
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -21,10 +23,12 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.text.FieldPosition
+import javax.inject.Inject
 
-class FridgeViewModel(private val application: Application) : AndroidViewModel(application) {
-
-    private val repository = fridgeRepository()
+@HiltViewModel
+class FridgeViewModel @Inject constructor(
+    private val repository: fridgeRepository
+): ViewModel() {
 
     //재료 등록 정보
     private val _getFridgeLiveData = MutableLiveData<ArrayList<FridgeIngredient>>()

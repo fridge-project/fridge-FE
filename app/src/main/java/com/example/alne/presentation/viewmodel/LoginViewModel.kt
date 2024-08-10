@@ -1,20 +1,22 @@
 package com.example.alne.viewmodel
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import com.example.alne.GlobalApplication
-import com.example.alne.Network.LoginResponse
+import com.example.alne.data.Network.LoginResponse
 import com.example.alne.data.model.User
-import com.example.alne.repository.authRepository
+import com.example.alne.domain.repository.authRepository
 import com.example.alne.utils.RESPONSE_STATUS
+import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class LoginViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val authRepository = authRepository(application)
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val authRepository: authRepository
+) : ViewModel() {
 
     fun login(user: User, completion: (RESPONSE_STATUS) -> Unit){
         authRepository.login(user).enqueue(object: Callback<LoginResponse> {

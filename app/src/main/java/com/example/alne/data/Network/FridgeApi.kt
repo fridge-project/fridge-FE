@@ -1,4 +1,4 @@
-package com.example.alne.Network
+package com.example.alne.data.Network
 
 import com.example.alne.data.model.FridgeIngredient
 import com.google.gson.JsonArray

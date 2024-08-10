@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alne.databinding.ItemRecipeBinding
-import com.example.alne.room.model.recipe
+import com.example.alne.domain.model.recipe
 
 class RecipeGVAdapter(val context: Context): Filterable, PagingDataAdapter<recipe, RecipeGVAdapter.ViewHolder>(ARTICLE_DIFF_CALLBACK) {
 

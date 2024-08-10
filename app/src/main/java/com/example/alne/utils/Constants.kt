@@ -8,6 +8,8 @@ enum class RESPONSE_STATUS{
     NETWORK_ERROR
 }
 
+const val BASE_URL = "http://10.0.2.2:3000"
+
 enum class Recipe_TYPE {
     DEFAULT,
     CATEGORY1,

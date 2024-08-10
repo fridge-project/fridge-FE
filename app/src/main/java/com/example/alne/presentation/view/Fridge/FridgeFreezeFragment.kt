@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,11 +21,13 @@ import com.example.alne.data.model.Jwt
 import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.viewmodel.FridgeViewModel
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FridgeFreezeFragment : Fragment(), MyCustomDialogDetailInterface {
 
     lateinit var binding: FragmentFridgeFreezeBinding
-    lateinit var viewModel: FridgeViewModel
+    private val viewModel: FridgeViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -31,8 +35,6 @@ class FridgeFreezeFragment : Fragment(), MyCustomDialogDetailInterface {
         Log.d("FridgeFreezeFragment", "OnCreate")
         // Inflate the layout for this fragment
         binding = FragmentFridgeFreezeBinding.inflate(inflater, container, false)
-
-        viewModel = ViewModelProvider(requireActivity()).get(FridgeViewModel::class.java)
 
         val fridgeFrozenAdapter = FridgeFrozenAdapter(requireContext())
         binding.fridgeFrozenRv.adapter = fridgeFrozenAdapter

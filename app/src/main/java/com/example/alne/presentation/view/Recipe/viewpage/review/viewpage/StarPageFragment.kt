@@ -6,22 +6,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.alne.databinding.FragmentStarPageBinding
 import com.example.alne.viewmodel.RecipeDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StarPageFragment : Fragment() {
 
     lateinit var binding: FragmentStarPageBinding
-    lateinit var viewModel: RecipeDetailViewModel
+    private val viewModel: RecipeDetailViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         Log.d("starPageFragment", "onCreateView")
         binding = FragmentStarPageBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(requireActivity()).get(RecipeDetailViewModel::class.java)
         viewModel.usersStarLiveData.observe(viewLifecycleOwner, Observer{ it ->
             Log.d("Star", it.toString())
             binding.startPageRatingbar.rating = it[0].toFloat()

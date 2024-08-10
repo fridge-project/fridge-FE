@@ -6,26 +6,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.alne.databinding.FragmentFridgeBinding
 import com.example.alne.data.model.FridgeIngredient
 import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.viewmodel.FridgeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class FridgeFragment : Fragment(), MyCustomDialogInterface{
 
     lateinit var binding: FragmentFridgeBinding
     private val information = arrayListOf("All", "냉장","냉동")
-    lateinit var viewModel : FridgeViewModel
+    private val viewModel : FridgeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentFridgeBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(requireActivity()).get(FridgeViewModel::class.java)
 
         //ViewPager - TabLayout 연결
         val fridgeAdapter = FridgeVPAdapter(this)

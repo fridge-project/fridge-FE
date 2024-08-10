@@ -1,11 +1,10 @@
-package com.example.alne.room.dao
+package com.example.alne.data.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.alne.room.model.food
-import com.example.alne.room.model.recipe
+import com.example.alne.domain.model.recipe
 
 
 @Dao

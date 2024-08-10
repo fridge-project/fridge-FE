@@ -1,6 +1,5 @@
 package com.example.alne.view.Recipe.viewpage.review.viewpage
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,20 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alne.data.model.Comment
 import com.example.alne.databinding.FragmentReviewPageBinding
-import com.example.alne.domain.utils.RESPONSE_STATUS
-import com.example.alne.room.model.recipe
+import com.example.alne.domain.model.recipe
+import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.viewmodel.RecipeDetailViewModel
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReviewPageFragment(val recipe: recipe) : Fragment() {
 
     lateinit var binding: FragmentReviewPageBinding
-    lateinit var viewModel: RecipeDetailViewModel
+    private val viewModel: RecipeDetailViewModel by activityViewModels()
     lateinit var adapter: ReviewPageRVAdapter
 
     override fun onCreateView(
@@ -30,7 +31,6 @@ class ReviewPageFragment(val recipe: recipe) : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentReviewPageBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(requireActivity()).get(RecipeDetailViewModel::class.java)
         Log.d("ReviewPageFragment", "onCreateView")
 
         initAdapter()

@@ -10,7 +10,9 @@ import com.example.alne.view.Home.HomeFragment
 import com.example.alne.view.MyPage.MyPageFragment
 import com.example.alne.view.Recipe.RecipeFragment
 import com.kakao.sdk.common.util.Utility
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding

@@ -32,6 +32,7 @@
             android:id="@+id/food_image_default_iv"
             android:src="@drawable/add_black"
             android:padding="30dp"
+            android:scaleType="fitXY"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </androidx.cardview.widget.CardView>

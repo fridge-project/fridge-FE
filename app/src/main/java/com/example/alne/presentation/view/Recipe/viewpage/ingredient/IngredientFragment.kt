@@ -5,25 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alne.databinding.FragmentIngredientBinding
-import com.example.alne.data.model.Ingredient
 import com.example.alne.viewmodel.RecipeDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class IngredientFragment : Fragment() {
 
     lateinit var binding: FragmentIngredientBinding
-    lateinit var viewModel: RecipeDetailViewModel
+    private val viewModel: RecipeDetailViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentIngredientBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(requireActivity()).get(RecipeDetailViewModel::class.java)
 
         viewModel.ingredientRecipeLiveData.observe(viewLifecycleOwner, Observer{
             binding.ingredientRv.adapter = IngredientRVAdapter(it)

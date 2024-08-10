@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.alne.databinding.ItemOrderBinding
 import com.example.alne.data.model.RecipeProcess
 
-class ReviewRVAdapter(val items: ArrayList<RecipeProcess>): RecyclerView.Adapter<ReviewRVAdapter.ViewHolder>() {
+class ProcessRVAdapter(val items: ArrayList<RecipeProcess>): RecyclerView.Adapter<ProcessRVAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemOrderBinding): RecyclerView.ViewHolder(binding.root){}
 

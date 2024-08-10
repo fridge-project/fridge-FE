@@ -1,4 +1,4 @@
-package com.example.alne.room.dao
+package com.example.alne.data.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

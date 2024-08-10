@@ -7,17 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alne.databinding.IngredientchoiceBinding
 import com.example.alne.viewmodelprivate.IngredientChoiceViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class IngredientChoice: BottomSheetDialogFragment() {
 
     lateinit var binding: IngredientchoiceBinding
-    lateinit var viewModel: IngredientChoiceViewModel
+    private val viewModel: IngredientChoiceViewModel by viewModels()
     private var listener: OnSendFromBottomSheetDialog? = null
     lateinit var adapter: IngredientChoiceAdapter
 
@@ -28,7 +31,6 @@ class IngredientChoice: BottomSheetDialogFragment() {
     ): View? {
         binding = IngredientchoiceBinding.inflate(layoutInflater)
         binding.ingredientChoiceSv.queryHint = Html.fromHtml("<font color = #000000>" + "재료명을 입력해 검색해보세요." + "</font>")
-        viewModel = ViewModelProvider(this).get(IngredientChoiceViewModel::class.java)
 
         ingredientRecyclerViewSettings()
         viewModel.getFridgeLiveData.observe(viewLifecycleOwner, Observer { items ->

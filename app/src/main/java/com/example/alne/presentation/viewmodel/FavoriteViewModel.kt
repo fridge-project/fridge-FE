@@ -1,26 +1,25 @@
 package com.example.alne.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.alne.data.model.Favorite
-import com.example.alne.data.model.Recipe
-import com.example.alne.repository.recipeRepository
-import com.example.alne.room.model.recipe
+import com.example.alne.data.model.RecipeModel
+import com.example.alne.domain.repository.recipeRepository
 import com.google.gson.Gson
 import com.google.gson.JsonArray
+import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-class FavoriteViewModel: ViewModel() {
-
-    private val repository = recipeRepository()
+import javax.inject.Inject
+@HiltViewModel
+class FavoriteViewModel @Inject constructor(
+    private val repository: recipeRepository
+) : ViewModel() {
 
     //재료 등록 정보
-    private val _userFavoriteLiveData: MutableLiveData<ArrayList<Recipe>> = MutableLiveData<ArrayList<Recipe>>()
-    val userFavoriteLiveData: LiveData<ArrayList<Recipe>>? = _userFavoriteLiveData
+    private val _userFavoriteLiveData: MutableLiveData<ArrayList<RecipeModel>> = MutableLiveData<ArrayList<RecipeModel>>()
+    val userFavoriteLiveData: LiveData<ArrayList<RecipeModel>>? = _userFavoriteLiveData
 
     init {
 
@@ -29,11 +28,11 @@ class FavoriteViewModel: ViewModel() {
                 val res = p1.body()
                 when(p1.code()){
                     200 -> {
-                        var item: ArrayList<Recipe> = ArrayList()
+                        var item: ArrayList<RecipeModel> = ArrayList()
                         if (!res!!.equals(null)) {
                             for(json in res){
                                 var jsonObject = json.asJsonObject
-                                var gson = Gson().fromJson(jsonObject, Recipe::class.java)
+                                var gson = Gson().fromJson(jsonObject, RecipeModel::class.java)
                                 item.add(gson)
                             }
                             _userFavoriteLiveData.postValue(item)

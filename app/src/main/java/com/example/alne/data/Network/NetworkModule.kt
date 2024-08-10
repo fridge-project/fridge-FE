@@ -1,6 +1,7 @@
-package com.example.alne.Network
+package com.example.alne.data.Network
 import android.util.Log
 import com.example.alne.GlobalApplication
+import com.example.alne.utils.BASE_URL
 import com.google.gson.GsonBuilder
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
@@ -17,7 +18,6 @@ import java.util.concurrent.TimeUnit
 
 
 // http://ec2-54-175-121-98.compute-1.amazonaws.com:8080/
-const val BASE_URL = "http://10.0.2.2:3000"
 
 fun getRetrofit(): Retrofit {
 

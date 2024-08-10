@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alne.databinding.ItemRecipeRankBinding
-import com.example.alne.room.model.recipe
+import com.example.alne.domain.model.recipe
 
 
 class HomeRecipeRankRVAdapter(var context: Context): RecyclerView.Adapter<HomeRecipeRankRVAdapter.ViewHolder>() {

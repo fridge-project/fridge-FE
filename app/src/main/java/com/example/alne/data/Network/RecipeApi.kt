@@ -1,6 +1,6 @@
-package com.example.alne.Network
+package com.example.alne.data.Network
 
-import com.example.alne.data.model.Recipe
+import com.example.alne.data.model.RecipeModel
 import com.example.alne.data.model.addComment
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
@@ -18,7 +18,7 @@ interface RecipeApi {
 
     @GET(API.RECIPE_LIST)
     @Headers("Auth: false")
-    fun getAllRecipe(): Call<ArrayList<Recipe>>
+    fun getAllRecipe(): Call<ArrayList<RecipeModel>>
 
     @POST(API.ADD_COMMENT)
     fun addUserComment(
@@ -26,17 +26,20 @@ interface RecipeApi {
         @Body comment: addComment
     ): Call<JsonElement>
 
+    @GET(API.INGREDIENTS_ALL)
+    @Headers("Auth: false")
+    fun ingredientsList(): Call<JsonArray>
+
     @PUT(API.UPDATE_COMMENT)
     fun updateUserComment(
         @Path(value = "id") commentId: String,
         @Body comment: addComment
     ): Call<JsonElement>
 
-    @GET(API.RECIPE_PROECSS)
-    @Headers("Auth: false")
-    fun getRecipeProcess(
+    @GET(API.RECIPE_PROCESS)
+    fun getRecipeDetail(
         @Path("recipe_code") recipeCode: Int,
-    ): Call<JsonArray>
+    ): Call<RecipeDetailResponse>
 
     @POST(API.FAVORITE)
     fun favoriteRecipe(
@@ -60,4 +63,7 @@ interface RecipeApi {
     //사용자가 즐겨찾기 한 모든 레시피 정보 가져오기
     @GET(API.FAVORITE_LIST)
     fun userFavoriteList(): Call<JsonArray>
+
+    @GET(API.COMMENT_LIST)
+    fun userCommentList(): Call<JsonArray>
 }

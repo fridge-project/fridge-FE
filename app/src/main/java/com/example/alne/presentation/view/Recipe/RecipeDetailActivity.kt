@@ -5,23 +5,26 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.alne.R
 import com.example.alne.databinding.ActivityRecipeDetailBinding
-import com.example.alne.room.model.recipe
-import com.example.alne.domain.utils.RESPONSE_STATUS
+import com.example.alne.domain.model.recipe
 import com.example.alne.presentation.view.Recipe.CategoryRVAdapter
+import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.viewmodel.RecipeDetailViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecipeDetailActivity : AppCompatActivity() {
 
+
+    private val viewModel: RecipeDetailViewModel by viewModels()
     lateinit var binding: ActivityRecipeDetailBinding
-    lateinit var viewModel: RecipeDetailViewModel
     private val information = arrayListOf("순서 및 후기", "재료","참고 영상")
     var globalrecipe: recipe? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +35,8 @@ class RecipeDetailActivity : AppCompatActivity() {
         globalrecipe = Gson().fromJson(intent.getStringExtra("recipe"), recipe::class.java)
 
         Log.d("RecipeDetailActivity_recipe", globalrecipe.toString())
-        viewModel = ViewModelProvider(this).get(RecipeDetailViewModel::class.java)
+
+
         viewModel.getRecipeProcess(globalrecipe!!.recipe_code, completion = {responseStatus ->
             when(responseStatus){
                 RESPONSE_STATUS.OKAY -> {
