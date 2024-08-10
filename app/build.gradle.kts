@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.gms.google-services")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -39,6 +40,10 @@ android {
 
     buildFeatures {
         viewBinding = true
+    }
+
+    kapt {
+        correctErrorTypes = true
     }
 }
 
@@ -87,6 +92,13 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-ads:22.6.0")
 
+    //Hilt
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+
+    implementation ("androidx.activity:activity-ktx:1.1.0")
+    implementation ("androidx.fragment:fragment-ktx:1.2.5")
 
 
 }
