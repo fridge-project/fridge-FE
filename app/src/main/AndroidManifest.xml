@@ -81,21 +81,6 @@
             android:name=".view.Splash.StartActivity"
             android:exported="false"
             android:theme="@style/Theme.ALNE" />
-        <activity
-            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
-                <data
-                    android:host="oauth"
-                    android:scheme="kakaoee52fc7baab1b48b61bcf3e7f3b617f0" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
