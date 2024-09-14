@@ -39,10 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    android:padding="25dp"
-                    android:src="@drawable/camera"
-
-                    />
+                    android:src="@drawable/camera" />
             </androidx.cardview.widget.CardView>
 
             <TextView

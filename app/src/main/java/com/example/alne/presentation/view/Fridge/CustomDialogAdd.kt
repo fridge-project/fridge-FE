@@ -39,11 +39,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState
 import com.example.alne.databinding.ItemFoodaddBinding
 import com.example.alne.data.model.FridgeIngredient
+import com.example.alne.utils.S3Util
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -106,8 +110,10 @@ class CustomDialogAdd(context: Context, myCustomDialogInterface: MyCustomDialogI
                 Toast.makeText(requireContext(), "재료를 선택해주세요.", Toast.LENGTH_SHORT).show()
             }else{
                 myCustomDialogInterface?.onSubmitBtnClicked(
-                    FridgeIngredient(null, title, binding.foodMemoTv.text.toString(), storage!!,date + " " + time, addDate, "" )
+                    FridgeIngredient(null, title, binding.foodMemoTv.text.toString(), storage!!,date + " " + time, addDate, photoFile?.name.toString()),
+                    photoFile!!
                 )
+
             }
 
 //            FridgeIngredient(jwt.userId,title,date + " " + time, addDate, binding
@@ -349,5 +355,5 @@ class CustomDialogAdd(context: Context, myCustomDialogInterface: MyCustomDialogI
 
 interface MyCustomDialogInterface {
     //fun onSubmitBtnClicked(food: FridgeIngredient, photoFile: File?)
-    fun onSubmitBtnClicked(food: FridgeIngredient)
+    fun onSubmitBtnClicked(food: FridgeIngredient, photoFile: File)
 }

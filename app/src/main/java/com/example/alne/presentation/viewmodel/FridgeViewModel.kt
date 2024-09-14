@@ -1,16 +1,20 @@
 package com.example.alne.viewmodel
 
-import android.app.Application
+import android.content.Context
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState
+import com.amazonaws.services.s3.model.S3Object
 import com.example.alne.GlobalApplication
 import com.example.alne.data.Network.FridgePostResponse
 import com.example.alne.data.model.FridgeIngredient
 import com.example.alne.domain.repository.fridgeRepository
 import com.example.alne.utils.RESPONSE_STATUS
+import com.example.alne.utils.S3Util
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
@@ -22,13 +26,16 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.text.FieldPosition
 import javax.inject.Inject
+
 
 @HiltViewModel
 class FridgeViewModel @Inject constructor(
-    private val repository: fridgeRepository
+    private val repository: fridgeRepository,
 ): ViewModel() {
+
+    val folderName = "fridge"
+    val bucketName = "alne"
 
     //재료 등록 정보
     private val _getFridgeLiveData = MutableLiveData<ArrayList<FridgeIngredient>>()
@@ -60,7 +67,7 @@ class FridgeViewModel @Inject constructor(
     }
 
 
-    fun addFridgeDataTest(food: FridgeIngredient, completion: (RESPONSE_STATUS) -> Unit){
+    fun addFridgeDataTest(food: FridgeIngredient){
         repository.addFridgeDataTest(food).enqueue(object: Callback<JsonElement> {
             override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
                 var res = response.body()
@@ -69,22 +76,73 @@ class FridgeViewModel @Inject constructor(
                         var _id = res?.asJsonObject?.get("_id")?.asString
                         food._id = _id
                         addItem(food)
-                        completion(RESPONSE_STATUS.OKAY)
+
                     }
 
                     500 -> {
-                        completion(RESPONSE_STATUS.FAIL)
+
                     }
                 }
                 Log.d("addFridgeDataTest", res.toString())
             }
 
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
-                completion(RESPONSE_STATUS.NETWORK_ERROR)
+
             }
 
         })
     }
+
+    fun addAWSS3Image(food: FridgeIngredient, context: Context, photoFile: File) {
+        S3Util.instance
+            .uploadWithTransferUtility(
+                context,
+                bucketName,
+                folderName,
+                photoFile!!,
+                object : TransferListener {
+                    override fun onStateChanged(id: Int, state: TransferState?) {
+                        if (state === TransferState.COMPLETED) {
+                            // 업로드 완료 시 URL 가져오기
+                            var fileUrl = getS3ObjectUrl(bucketName, folderName+'/'+photoFile.name)
+                            Toast.makeText(
+                                context,
+                                "Upload Completed! URL: $fileUrl", Toast.LENGTH_SHORT
+                            ).show()
+                            food.imageURL = fileUrl
+                            addFridgeDataTest(food)
+                            Log.d("onStateChanged", "Upload Completed! URL: $fileUrl")
+                        } else if (state === TransferState.FAILED) {
+                            // 업로드 실패 시 처리
+                            Toast.makeText(
+                                context,
+                                "Upload Failed!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    override fun onProgressChanged(id: Int, bytesCurrent: Long, bytesTotal: Long) {
+                        // 진행 상황 업데이트
+                        // 진행 상황 업데이트
+                        val percentDone = bytesCurrent.toFloat() / bytesTotal.toFloat() * 100
+                        Log.d("YourActivity", "Progress: $percentDone%")
+                    }
+
+                    override fun onError(id: Int, ex: Exception?) {
+                        Log.d("S3Util", ex.toString())
+                    }
+                }
+            )
+    }
+
+    fun getS3ObjectUrl(bucketName: String, key: String): String {
+        return S3Util.instance.s3Client.getUrl(bucketName, key).toString();
+    }
+
+    fun getAWSGetPresignedURl(key: String) = S3Util.instance.getPresignedURl(bucketName,
+        "$folderName/$key"
+    )
 
     fun addFridgeData(food: FridgeIngredient, photoFile: File?){
         var fileBody: RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(), photoFile!!)

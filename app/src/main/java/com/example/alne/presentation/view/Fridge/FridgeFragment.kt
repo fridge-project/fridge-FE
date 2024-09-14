@@ -7,14 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.alne.databinding.FragmentFridgeBinding
 import com.example.alne.data.model.FridgeIngredient
 import com.example.alne.utils.RESPONSE_STATUS
 import com.example.alne.viewmodel.FridgeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 @AndroidEntryPoint
 class FridgeFragment : Fragment(), MyCustomDialogInterface{
@@ -50,23 +49,10 @@ class FridgeFragment : Fragment(), MyCustomDialogInterface{
 //    }
 
     // 재료 추가버튼 클릭 시
-    override fun onSubmitBtnClicked(food: FridgeIngredient) {
-        viewModel.addFridgeDataTest(food, completion = { responseState ->
-                when (responseState) {
-                    RESPONSE_STATUS.OKAY -> {
-                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.OKAY")
-                    }
-
-                    RESPONSE_STATUS.FAIL -> {
-                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.FAIL")
-                    }
-
-                    RESPONSE_STATUS.NETWORK_ERROR -> {
-                        Log.d("onSubmitBtnDetailClicked.OKAY", "RESPONSE_STATUS.NETWORK_ERROR")
-                    }
-                }
-            }
-        )
+    override fun onSubmitBtnClicked(food: FridgeIngredient, photoFile: File) {
+        Log.d("onSubmitBtnClicked", food.imageURL!!)
+        viewModel.addAWSS3Image(food, requireContext(), photoFile)
+        Log.d("onSubmitBtnClicked", food.imageURL!!)
     }
     override fun onDestroy() {
         super.onDestroy()
